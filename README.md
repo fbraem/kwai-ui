@@ -36,8 +36,9 @@ Installation
 
 Clone this repository. Change the configuration in `site/config/production.js`.
 
-Make sure package manager [npm](https://www.npmjs.com/) is installed and run:
+Make sure package manager [npm](https://www.npmjs.com/) is installed and run the following commands in the directory where you cloned the repository:
 
+    npm install
     npm run build
 
 The result is a build directory. Copy this directory with all its contents to your host.
