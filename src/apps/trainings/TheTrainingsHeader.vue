@@ -20,20 +20,22 @@ export default {
     ImageHeader
   },
   i18n: messages,
-  data() {
-    return {
-      pictures: {
-        '1024w': 'files/images/trainings/training_lg.jpg',
-        '768w': 'files/images/trainings/training_md.jpg',
-        '640w': 'files/images/trainings/training_sm.jpg',
-      }
-    };
-  },
   computed: {
+    category() {
+      return this.$store.getters['category/categoryApp'](this.$route.meta.app);
+    },
     logo() {
-      const category
-        = this.$store.getters['category/categoryApp'](this.$route.meta.app);
-      return category.icon_picture;
+      return this.category?.icon_picture;
+    },
+    pictures() {
+      if (this.category && this.category.header_images) {
+        return {
+          '1024w': this.category.header_images.lg,
+          '768w': this.category.header_images.md,
+          '640w': this.category.header_images.sm,
+        };
+      }
+      return null;
     },
     toolbar() {
       const buttons = [];
