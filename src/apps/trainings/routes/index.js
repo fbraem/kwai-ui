@@ -115,7 +115,6 @@ var routes = [
         path: '',
         meta: {
           app: CATEGORY_APP,
-          image: require('@/apps/trainings/images/sport-3468115_1920.jpg')
         },
         components: {
           hero: TrainingsHeader,
