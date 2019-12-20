@@ -104,21 +104,26 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.fetchData(to.params);
+      await vm.fetchCategory(to.params);
       if (vm.category.app) {
         vm.$router.replace({ path: '/' + vm.category.app });
+      } else {
+        vm.fetchData(to.params);
       }
     });
   },
   async beforeRouteUpdate(to, from, next) {
+    this.fetchCategory(to.params);
     this.fetchData(to.params);
     next();
   },
   methods: {
-    async fetchData(params) {
+    async fetchCategory(params) {
       await this.$store.dispatch('category/read', {
         id: params.id
       });
+    },
+    async fetchData(params) {
       this.$store.dispatch('category/news/browse', {
         category: params.id,
         featured: true
