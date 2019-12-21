@@ -14,8 +14,6 @@
 <script>
 import ImageHeader from '@/components/ImageHeader';
 
-import Category from '@/models/Category';
-
 import messages from './lang';
 
 /**
@@ -46,14 +44,6 @@ export default {
     },
     toolbar() {
       const buttons = [];
-      if (this.$can('create', Category.type())) {
-        buttons.push({
-          icon: 'fas fa-plus',
-          route: {
-            name: 'categories.create'
-          }
-        });
-      }
       if (this.$can('update', this.category)) {
         buttons.push({
           icon: 'fas fa-edit',
