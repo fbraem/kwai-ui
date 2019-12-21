@@ -24,9 +24,6 @@ export default {
     category() {
       return this.$store.getters['category/categoryApp'](this.$route.meta.app);
     },
-    logo() {
-      return this.category?.icon_picture;
-    },
     pictures() {
       if (this.category && this.category.header_images) {
         return {
