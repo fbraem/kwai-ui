@@ -25,7 +25,7 @@ export default {
       return this.$store.getters['category/categoryApp'](this.$route.meta.app);
     },
     pictures() {
-      if (this.category && this.category.header_images) {
+      if (this.category?.header_images) {
         return {
           '1024w': this.category.header_images.lg,
           '768w': this.category.header_images.md,
