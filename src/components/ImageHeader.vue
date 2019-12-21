@@ -1,18 +1,19 @@
 <template>
   <div class="double-color text-gray-500 pb-3">
     <div
-      class="relative pt-8"
+      class="relative pt-8 container mx-auto"
       style="z-index:2;"
     >
-      <div class="container mx-auto">
+      <div>
         <img
+          v-if="picture || srcset"
           class="p-3 sm:p-5 shadow-lg bg-gray-300 mx-auto"
           :src="picture"
           :srcset="srcset"
           sizes="(max-width: 768px) 75vw, 66vw"
         />
       </div>
-      <div class="container mx-auto mt-3 p-2">
+      <div class="mt-3 p-2 dark-color">
         <div class="flex justify-center">
           <h2 class="text-white font-extrabold text-3xl md:text-6xl">
             {{ title }}
@@ -48,6 +49,10 @@
 </template>
 
 <style scoped>
+.dark-color {
+  @apply bg-gray-800;
+}
+
 .double-color {
   @apply bg-gray-800 w-full relative;
 }
