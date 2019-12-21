@@ -53,7 +53,7 @@ async function readApp({ dispatch, getters, commit }, { app }) {
     return;
   }
 
-  dispatch('wait/start', 'categories.read', { root: true });
+  // dispatch('wait/start', 'categories.read', { root: true });
   try {
     var api = new JSONAPI({ source: Category });
     api.where('app', app);
@@ -63,7 +63,7 @@ async function readApp({ dispatch, getters, commit }, { app }) {
     commit('error', error);
     throw error;
   } finally {
-    dispatch('wait/end', 'categories.read', { root: true });
+    // dispatch('wait/end', 'categories.read', { root: true });
   }
 }
 
