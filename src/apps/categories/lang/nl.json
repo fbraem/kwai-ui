@@ -18,14 +18,13 @@
       "placeholder": "Geef een opmerking in"
     },
     "short_description": {
-      "label": "Kort Omschrijving",
+      "label": "Korte Omschrijving",
       "placeholder": "Geef een korte omschrijving in",
       "required": "Korte omschrijving is verplicht in te vullen"
     },
-    "slug": {
-      "label": "Slug",
-      "placeholder": "Geef een slug in",
-      "required": "Slug is verplicht in te vullen"
+    "app": {
+      "label": "App",
+      "placeholder": "Geef een app in"
     }
   },
   "more_news": "Meer nieuws ...",
