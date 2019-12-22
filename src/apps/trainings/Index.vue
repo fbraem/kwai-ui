@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     category() {
-      return this.$store.getters['category/categoryApp'](this.$route.meta.app);
+      return this.$store.getters['category/categoryApp']('trainings');
     },
     stories() {
       return this.$store.state.training.news.all || [];
@@ -112,24 +112,32 @@ export default {
     this.$store.unregisterModule(['training', 'page']);
   },
   beforeRouteEnter(to, from, next) {
+    console.log('bre - trainings');
     next(async(vm) => {
       await vm.fetchData(to.params);
       next();
     });
   },
   async beforeRouteUpdate(to, from, next) {
+    console.log('bru - trainings');
     await this.fetchData(to.params);
     next();
   },
+  watch: {
+    category(nv, ov) {
+      if (nv) {
+        this.$store.dispatch('training/news/browse', {
+          category: nv.id,
+          featured: true
+        });
+        this.$store.dispatch('training/page/browse', {
+          category: nv.id
+        });
+      }
+    }
+  },
   methods: {
     async fetchData(params) {
-      this.$store.dispatch('training/news/browse', {
-        category: this.category.id,
-        featured: true
-      });
-      this.$store.dispatch('training/page/browse', {
-        category: this.category.id
-      });
       this.$store.dispatch('training/browse', {
         year: this.year,
         month: this.month
