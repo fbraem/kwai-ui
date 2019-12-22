@@ -2,7 +2,9 @@
   <ImageHeader
     :title="$t('training.events.title')"
     :toolbar="toolbar"
-    :pictures="pictures">
+    :pictures="pictures"
+  >
+    {{ description }}
   </ImageHeader>
 </template>
 
@@ -23,6 +25,9 @@ export default {
   computed: {
     category() {
       return this.$store.getters['category/categoryApp'](this.$route.meta.app);
+    },
+    description() {
+      return this.category?.description;
     },
     pictures() {
       if (this.category?.header_images) {
