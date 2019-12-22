@@ -117,13 +117,6 @@ export default {
       type: Object
     },
     /**
-     * Sub title
-     */
-    subtitle: {
-      type: String,
-      required: false
-    },
-    /**
      * toolbar
      */
     toolbar: {
