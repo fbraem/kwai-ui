@@ -53,6 +53,7 @@
 <script>
 import moment from 'moment';
 
+import Category from '@/models/Category';
 import newsStore from '@/apps/news/store';
 import pageStore from '@/apps/pages/store';
 
@@ -68,6 +69,11 @@ export default {
     Calendar,
     CoachListCard
   },
+  props: {
+    category: {
+      type: Category
+    }
+  },
   data() {
     return {
       year: moment().year(),
@@ -75,9 +81,6 @@ export default {
     };
   },
   computed: {
-    category() {
-      return this.$store.getters['category/categoryApp']('trainings');
-    },
     stories() {
       return this.$store.state.training.news.all || [];
     },
