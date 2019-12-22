@@ -46,27 +46,6 @@ async function read({ dispatch, getters, commit, state }, { id }) {
   }
 }
 
-async function readApp({ dispatch, getters, commit }, { app }) {
-  var category = getters['categoryApp'](app);
-  if (category) { // already read
-    commit('active', category);
-    return;
-  }
-
-  // dispatch('wait/start', 'categories.read', { root: true });
-  try {
-    var api = new JSONAPI({ source: Category });
-    api.where('app', app);
-    var result = await api.get();
-    commit('active', result.data[0]);
-  } catch (error) {
-    commit('error', error);
-    throw error;
-  } finally {
-    // dispatch('wait/end', 'categories.read', { root: true });
-  }
-}
-
 async function save({ commit }, category) {
   try {
     var api = new JSONAPI({ source: Category });
@@ -90,7 +69,6 @@ function create({ commit}) {
 export const actions = {
   browse,
   read,
-  readApp,
   save,
   reset,
   create
