@@ -42,8 +42,6 @@ const ThePresencesHeader = () =>
     '@/apps/trainings/ThePresencesHeader.vue'
   );
 
-const CATEGORY_APP = 'trainings';
-
 var routes = [
   {
     path: '/trainings',
@@ -72,9 +70,6 @@ var routes = [
           default: TrainingBrowse
         },
         name: 'trainings.browse',
-        meta: {
-          app: CATEGORY_APP
-        },
         props: {
           default: (route) => {
             const year = route.params.year
@@ -113,9 +108,6 @@ var routes = [
       },
       {
         path: '',
-        meta: {
-          app: CATEGORY_APP,
-        },
         components: {
           hero: TrainingsHeader,
           default: TrainingIndex
@@ -126,13 +118,8 @@ var routes = [
   },
 ];
 
-routes = routes.concat(definitionsRouter);
-routes = routes.concat(coachesRouter);
-
-for (let route of routes) {
-  let meta = route.meta || {};
-  meta.app = CATEGORY_APP;
-  route.meta = meta;
-}
+routes = routes
+  .concat(definitionsRouter)
+  .concat(coachesRouter);
 
 export default routes;
