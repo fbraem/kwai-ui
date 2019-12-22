@@ -42,3 +42,7 @@ Make sure package manager [npm](https://www.npmjs.com/) is installed and run the
     npm run build
 
 The result is a build directory. Copy this directory with all its contents to your host.
+
+Credits
+=======
++ [Pixabay](https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=984393) for free images.
