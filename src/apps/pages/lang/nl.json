@@ -27,6 +27,9 @@
       }
     },
     "page": {
+      "enabled": {
+        "label": "Actief"
+      },
       "category": {
         "label": "Categorie",
         "required": "Categorie is verplicht"

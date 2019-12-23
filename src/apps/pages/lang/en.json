@@ -27,7 +27,10 @@
       }
     },
     "page": {
-      "category": {
+      "enabled": {
+        "label": "Actief"
+     },
+     "category": {
         "label": "Category",
         "required": "Category is required"
       },
