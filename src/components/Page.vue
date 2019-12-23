@@ -1,12 +1,10 @@
 <template>
-  <div class="container mx-auto">
-    <div class="page-container">
-      <div style="grid-area: page-content;">
-        <slot></slot>
-      </div>
-      <div style="grid-area: page-sidebar">
-        <slot name="sidebar"></slot>
-      </div>
+  <div class="page-container">
+    <div style="grid-area: page-content;">
+      <slot></slot>
+    </div>
+    <div style="grid-area: page-sidebar">
+      <slot name="sidebar"></slot>
     </div>
   </div>
 </template>
