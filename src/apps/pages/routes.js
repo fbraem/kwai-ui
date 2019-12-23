@@ -12,10 +12,6 @@ const PageCategoryHeader = () => import(
   /* webpackChunkName: "pages_chunck" */
   '@/apps/pages/ThePageCategoryHeader.vue'
 );
-const PageFormHeader = () => import(
-  /* webpackChunkName: "pages_chunck" */
-  '@/apps/pages/ThePageFormHeader.vue'
-);
 const PageRead = () => import(
   /* webpackChunkName: "pages_chunck" */
   '@/apps/pages/PageRead.vue'
@@ -52,28 +48,18 @@ export default [
       },
       {
         path: 'create',
-        components: {
-          hero: PageFormHeader,
-          default: PageForm
-        },
+        component: PageForm,
         props: {
-          hero: {
-            creating: true
-          }
+          creating: true
         },
         name: 'pages.create',
       },
       {
         path: 'update/:id(\\d+)',
         name: 'pages.update',
-        components: {
-          hero: PageFormHeader,
-          default: PageForm
-        },
+        component: PageForm,
         props: {
-          hero: {
-            creating: false
-          }
+          creating: false
         },
       },
       {
