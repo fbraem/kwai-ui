@@ -1,6 +1,10 @@
 <template>
   <div>
-    <router-view name="hero"></router-view>
+    <router-view
+      name="hero"
+      :category="category"
+    >
+    </router-view>
     <div class="container mx-auto p-4 lg:p-6">
       <router-view :category="category"></router-view>
     </div>

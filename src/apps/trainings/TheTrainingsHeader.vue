@@ -12,20 +12,23 @@
 import Training from '@/models/trainings/Training';
 import Coach from '@/models/trainings/Coach';
 import Team from '@/models/Team';
+import Category from '@/models/Category';
 
 import ImageHeader from '@/components/ImageHeader';
 
 import messages from './lang';
 
 export default {
+  props: {
+    category: {
+      type: Category
+    }
+  },
   components: {
     ImageHeader
   },
   i18n: messages,
   computed: {
-    category() {
-      return this.$store.getters['category/categoryApp'](this.$route.meta.app);
-    },
     description() {
       return this.category?.description;
     },
