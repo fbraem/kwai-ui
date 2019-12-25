@@ -28,7 +28,7 @@ export default {
   i18n: messages,
   computed: {
     abilities() {
-      return this.$store.state.user.ability.abilities || [];
+      return this.$store.state.user.ability.all || [];
     }
   },
   beforeRouteEnter(to, from, next) {

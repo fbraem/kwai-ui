@@ -33,7 +33,7 @@ export default {
       return require('@/apps/users/images/no_avatar.png');
     },
     users() {
-      return this.$store.state.user.users;
+      return this.$store.state.user.all;
     },
   },
   beforeRouteEnter(to, from, next) {
