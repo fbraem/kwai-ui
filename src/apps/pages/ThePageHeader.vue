@@ -75,13 +75,13 @@ export default {
     },
     pictures() {
       const pictures = {};
-      if (this.page.images.crop_lg) {
+      if (this.page.images?.crop_lg) {
         pictures['1024w'] = this.page.images.crop_lg;
       }
-      if (this.page.images.crop_md) {
+      if (this.page.images?.crop_md) {
         pictures['768w'] = this.page.images.crop_md;
       }
-      if (this.page.images.crop_sm) {
+      if (this.page.images?.crop_sm) {
         pictures['640w'] = this.page.images.crop_sm;
       }
       return pictures;
