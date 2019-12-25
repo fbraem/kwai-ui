@@ -118,6 +118,10 @@ export default {
     console.log('bre - trainings');
     next(async(vm) => {
       await vm.fetchData(to.params);
+      if (vm.category?.id) {
+        vm.fetchNews(vm.category.id);
+        vm.fetchPages(vm.category.id);
+      }
       next();
     });
   },
@@ -129,13 +133,8 @@ export default {
   watch: {
     category(nv, ov) {
       if (nv) {
-        this.$store.dispatch('training/news/browse', {
-          category: nv.id,
-          featured: true
-        });
-        this.$store.dispatch('training/page/browse', {
-          category: nv.id
-        });
+        this.fetchNews(nv.id);
+        this.fetchPages(nv.id);
       }
     }
   },
@@ -146,6 +145,17 @@ export default {
         month: this.month
       });
       this.$store.dispatch('training/coach/browse');
+    },
+    fetchNews(categoryId) {
+      this.$store.dispatch('training/news/browse', {
+        category: categoryId,
+        featured: true
+      });
+    },
+    fetchPages(categoryId) {
+      this.$store.dispatch('training/page/browse', {
+        category: categoryId
+      });
     },
     prevYear() {
       this.year -= 1;
