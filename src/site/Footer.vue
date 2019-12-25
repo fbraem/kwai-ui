@@ -4,7 +4,7 @@
       <div class="flex flex-wrap text-gray-300">
 
         <!-- ABOUT COLUMN -->
-        <div class="w-full md:w-1/3 p-5 border-r border-gray-700 text-center">
+        <div class="w-full md:w-1/3 p-5 border-b sm:border-b-0 sm:border-r border-gray-700 text-center">
           <h1><span class="uppercase">Judokwai Kemzeke</span> vzw</h1>
           <p>
             {{ $t('message.info') }}
@@ -12,7 +12,7 @@
         </div>
 
         <!-- CONTACT US -->
-        <div class="w-full md:w-1/3 p-5 border-r border-gray-700 text-center">
+        <div class="w-full md:w-1/3 p-5 border-b sm:border-b-0 sm:border-r border-gray-700 text-center">
           <h1 class="uppercase">Contacteer ons</h1>
           <p>
             <strong>Judokwai Kemzeke vzw</strong><br />
