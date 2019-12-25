@@ -114,6 +114,10 @@ export default function makeModelStore({
       },
       set({dispatch, commit}, entity) {
         commit('set', entity);
+      },
+      create({ commit }) {
+        /*eslint new-cap: ["error", { "newIsCap": false }]*/
+        commit('active', new model);
       }
     }
   };
