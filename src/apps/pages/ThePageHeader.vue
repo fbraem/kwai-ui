@@ -4,10 +4,32 @@
     v-if="page"
     :title="page.content.title"
     :toolbar="toolbar"
-    :badge="badge"
     :picture="picture"
     :pictures="pictures"
   >
+    <p class="text-xs sm:text-base text-gray-600">
+      {{
+        $t('published', {
+          publishDate: page.localPublishDate
+        })
+      }}
+      <span v-if="page.localUpdatedAt">
+        &nbsp;|&nbsp;
+        {{
+          $t('modified', {
+            modificationDate: page.localUpdatedAt
+          })
+        }}
+      </span>
+      <br />
+      Gepubliceerd in
+      <router-link
+        :to="categoryLink"
+        class="font-bold"
+      >
+        {{ page.category.name }}
+      </router-link>
+    </p>
     <div v-html="page.content.html_summary">
     </div>
     <AreYouSure
@@ -68,18 +90,12 @@ export default {
       if (this.picture) return 'ImageHeader';
       return 'Header';
     },
-    categoryRoute() {
+    categoryLink() {
       return {
-        name: 'pages.category',
+        name: 'categories.read',
         params: {
-          category: this.page.category.id
+          id: this.page.category.id
         }
-      };
-    },
-    badge() {
-      return {
-        name: this.page.category.name,
-        route: this.categoryRoute
       };
     },
     toolbar() {

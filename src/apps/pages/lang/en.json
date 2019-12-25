@@ -44,6 +44,7 @@
   "page": "Information",
   "pages": "Information",
   "published": "Written on {publishDate}",
+  "modified": "Modified on {modificationDate}",
   "save": "Save",
   "update": "Edit a page"
 }

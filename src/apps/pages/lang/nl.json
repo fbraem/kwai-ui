@@ -44,6 +44,7 @@
   "page": "Informatie",
   "pages": "Informatie",
   "published": "Geschreven op {publishDate}",
+  "modified": "Laatst gewijzigd op {modificationDate}",
   "save": "Bewaar",
   "update": "Wijzig de pagina"
 }
