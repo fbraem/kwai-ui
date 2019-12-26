@@ -23,10 +23,10 @@ module.exports = (env, argv) => {
       site: resolve('src/site/main.js'),
     },
     output: {
-      path: path.join(__dirname, 'build'),
+      path: path.join(__dirname, 'build', 'build'),
       filename: '[name].[chunkhash].js',
       chunkFilename: '[name].[chunkhash].js',
-      publicPath: '/'
+      publicPath: '/build/'
     },
     optimization: {
       runtimeChunk: 'single',
@@ -148,7 +148,7 @@ module.exports = (env, argv) => {
         ]
       }),
       new HtmlPlugin({
-        filename: 'index.html',
+        filename: '../index.html',
         template: './src/index.template.html',
         chunksSortMode: 'dependency'
       }),
