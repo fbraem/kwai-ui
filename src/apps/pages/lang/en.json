@@ -27,7 +27,10 @@
       }
     },
     "page": {
-      "category": {
+      "enabled": {
+        "label": "Actief"
+     },
+     "category": {
         "label": "Category",
         "required": "Category is required"
       },
@@ -41,6 +44,7 @@
   "page": "Information",
   "pages": "Information",
   "published": "Written on {publishDate}",
+  "modified": "Modified on {modificationDate}",
   "save": "Save",
   "update": "Edit a page"
 }

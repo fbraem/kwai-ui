@@ -145,25 +145,25 @@ export default {
   i18n: messages,
   computed: {
     user() {
-      return this.$store.getters['user/user'](this.$route.params.id);
+      return this.$store.state.user.active;
     },
     stories() {
-      return this.$store.state.news.stories;
+      return this.$store.state.user.news.all;
     },
     storiesMeta() {
-      return this.$store.state.news.meta;
+      return this.$store.state.user.news.meta;
     },
     hasStories() {
       return this.stories && this.stories.length > 0;
     },
     pages() {
-      return this.$store.state.page.pages;
+      return this.$store.state.user.page.all;
     },
     hasPages() {
       return this.pages && this.pages.length > 0;
     },
     pagesMeta() {
-      return this.$store.state.page.meta;
+      return this.$store.state.user.page.meta;
     },
     noAvatarImage() {
       return require('@/apps/users/images/no_avatar.png');
@@ -198,7 +198,7 @@ export default {
       this.loadPages(0);
     },
     loadStories(offset) {
-      this.$store.dispatch('news/browse', {
+      this.$store.dispatch('user/news/browse', {
         user: this.$route.params.id,
         offset
       }).catch((error) => {
@@ -206,7 +206,7 @@ export default {
       });
     },
     loadPages(offset) {
-      this.$store.dispatch('page/browse', {
+      this.$store.dispatch('user/page/browse', {
         user: this.$route.params.id,
         offset
       }).catch((error) => {

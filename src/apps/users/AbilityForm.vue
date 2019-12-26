@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import Ability from '@/models/users/Ability';
-
 import KwaiForm from '@/components/forms/KwaiForm';
 import KwaiField from '@/components/forms/KwaiField';
 import KwaiInputText from '@/components/forms/KwaiInputText';
@@ -74,10 +72,7 @@ export default {
   },
   i18n: messages,
   data() {
-    var ability = new Ability();
-    ability.rules = [];
     return {
-      ability,
       form: makeAbilityForm({
         name: makeField({
           required: true,
@@ -94,16 +89,19 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch('user/ability/browseRules');
+    await this.$store.dispatch('user/rule/browse');
   },
   computed: {
+    ability() {
+      return this.$store.state.user.ability.active;
+    },
     error() {
       return this.$store.state.user.ability.error;
     },
     rules() {
       var options = [];
-      if (this.$store.state.user.ability.rules) {
-        for (let rule of this.$store.state.user.ability.rules) {
+      if (this.$store.state.user.rule.all) {
+        for (let rule of this.$store.state.user.rule.all) {
           var option = options.find((r) => {
             return r.subject === rule.subject.name;
           });
@@ -126,17 +124,24 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      if (to.params.id) await vm.fetchData(to.params.id);
+      await vm.setupForm(to.params);
       next();
     });
   },
+  async beforeRouteUpdate(to, from, next) {
+    await this.setupForm(to.params);
+    next();
+  },
   methods: {
-    async fetchData(id) {
-      this.ability
-        = await this.$store.dispatch('user/ability/read', {
-          id: id
+    async setupForm(params) {
+      if (params.id) {
+        await this.$store.dispatch('user/ability/read', {
+          id: params.id
         });
-      this.form.writeForm(this.ability);
+        this.form.writeForm(this.ability);
+      } else {
+        this.$store.dispatch('user/ability/create');
+      }
     },
     submit() {
       this.form.clearErrors();

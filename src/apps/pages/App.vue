@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view name="hero"></router-view>
-    <router-view></router-view>
+    <router-view class="container mx-auto p-4 lg:p-6"></router-view>
     <CategoryCards
       v-if="categories"
       :categories="categories"

@@ -20,44 +20,29 @@ export async function browse({ dispatch, commit }, payload) {
   }
 }
 
-async function read({ dispatch, getters, commit }, { id }) {
+async function read({ dispatch, getters, commit, state }, { id }) {
+  // Don't read it again when it is active ...
+  if (state.active?.id === id) {
+    return;
+  }
+
   var category = getters['category'](id);
   if (category) { // already read
-    return category;
+    commit('active', category);
+    return;
   }
 
   dispatch('wait/start', 'categories.read', { root: true });
   try {
     var api = new JSONAPI({ source: Category });
     var result = await api.get(id);
-    commit('category', result);
+    commit('active', result.data);
     return result.data;
   } catch (error) {
     commit('error', error);
     throw error;
   } finally {
     dispatch('wait/end', 'categories.read', { root: true });
-  }
-}
-
-async function readApp({ dispatch, getters, commit }, { app }) {
-  var category = getters['categoryApp'](app);
-  if (category) { // already read
-    return category;
-  }
-
-  // dispatch('wait/start', 'categories.read', { root: true });
-  try {
-    var api = new JSONAPI({ source: Category });
-    api.where('app', app);
-    var result = await api.get();
-    commit('category', { data: result.data[0]});
-    return result.data[0];
-  } catch (error) {
-    commit('error', error);
-    throw error;
-  } finally {
-    // dispatch('wait/end', 'categories.read', { root: true });
   }
 }
 
@@ -84,7 +69,6 @@ function create({ commit}) {
 export const actions = {
   browse,
   read,
-  readApp,
   save,
   reset,
   create

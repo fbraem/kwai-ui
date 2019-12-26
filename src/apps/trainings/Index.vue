@@ -53,6 +53,7 @@
 <script>
 import moment from 'moment';
 
+import Category from '@/models/Category';
 import newsStore from '@/apps/news/store';
 import pageStore from '@/apps/pages/store';
 
@@ -68,6 +69,11 @@ export default {
     Calendar,
     CoachListCard
   },
+  props: {
+    category: {
+      type: Category
+    }
+  },
   data() {
     return {
       year: moment().year(),
@@ -75,9 +81,6 @@ export default {
     };
   },
   computed: {
-    category() {
-      return this.$store.getters['category/categoryApp'](this.$route.meta.app);
-    },
     stories() {
       return this.$store.state.training.news.all || [];
     },
@@ -112,29 +115,47 @@ export default {
     this.$store.unregisterModule(['training', 'page']);
   },
   beforeRouteEnter(to, from, next) {
+    console.log('bre - trainings');
     next(async(vm) => {
       await vm.fetchData(to.params);
+      if (vm.category?.id) {
+        vm.fetchNews(vm.category.id);
+        vm.fetchPages(vm.category.id);
+      }
       next();
     });
   },
   async beforeRouteUpdate(to, from, next) {
+    console.log('bru - trainings');
     await this.fetchData(to.params);
     next();
   },
+  watch: {
+    category(nv, ov) {
+      if (nv) {
+        this.fetchNews(nv.id);
+        this.fetchPages(nv.id);
+      }
+    }
+  },
   methods: {
     async fetchData(params) {
-      this.$store.dispatch('training/news/browse', {
-        category: this.category.id,
-        featured: true
-      });
-      this.$store.dispatch('training/page/browse', {
-        category: this.category.id
-      });
       this.$store.dispatch('training/browse', {
         year: this.year,
         month: this.month
       });
       this.$store.dispatch('training/coach/browse');
+    },
+    fetchNews(categoryId) {
+      this.$store.dispatch('training/news/browse', {
+        category: categoryId,
+        featured: true
+      });
+    },
+    fetchPages(categoryId) {
+      this.$store.dispatch('training/page/browse', {
+        category: categoryId
+      });
     },
     prevYear() {
       this.year -= 1;

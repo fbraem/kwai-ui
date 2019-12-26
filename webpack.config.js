@@ -23,10 +23,10 @@ module.exports = (env, argv) => {
       site: resolve('src/site/main.js'),
     },
     output: {
-      path: path.join(__dirname, 'build'),
+      path: path.join(__dirname, 'build', 'build'),
       filename: '[name].[chunkhash].js',
       chunkFilename: '[name].[chunkhash].js',
-      publicPath: '/ui/build/'
+      publicPath: '/build/'
     },
     optimization: {
       runtimeChunk: 'single',
@@ -105,7 +105,7 @@ module.exports = (env, argv) => {
         {
           test: /\.(png|jpe?g|gif)$/i,
           loaders: [
-            'file-loader?name=assets/[name]_[hash].[ext]&publicPath=ui/build/',
+            'file-loader?name=assets/[name]_[hash].[ext]',
             {
               loader: 'image-webpack-loader',
               query: {
@@ -139,8 +139,7 @@ module.exports = (env, argv) => {
       new CleanWebpackPlugin(),
       new VueLoaderPlugin(),
       new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css',
-        publicPath: './build',
+        filename: '[name].[contenthash].css'
       }),
       new MomentLocalesPlugin({
         localesToKeep: [
@@ -149,8 +148,8 @@ module.exports = (env, argv) => {
         ]
       }),
       new HtmlPlugin({
-        filename: '../../index.html',
-        template: 'src/index.template.html',
+        filename: '../index.html',
+        template: './src/index.template.html',
         chunksSortMode: 'dependency'
       }),
       new MinifyPlugin(),

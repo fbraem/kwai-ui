@@ -18,9 +18,7 @@ export default {
   i18n: messages,
   computed: {
     user() {
-      return this.$store.getters['user/user'](
-        this.$route.params.id
-      );
+      return this.$store.state.user.active;
     },
     subtitle() {
       if (this.user) {

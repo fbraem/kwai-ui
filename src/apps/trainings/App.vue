@@ -1,8 +1,12 @@
 <template>
   <div>
-    <router-view name="hero"></router-view>
+    <router-view
+      name="hero"
+      :category="category"
+    >
+    </router-view>
     <div class="container mx-auto p-4 lg:p-6">
-      <router-view></router-view>
+      <router-view :category="category"></router-view>
     </div>
   </div>
 </template>
@@ -16,6 +20,11 @@ import seasonStore from '@/apps/seasons/store';
 import memberStore from '@/apps/members/store';
 
 export default {
+  computed: {
+    category() {
+      return this.$store.getters['category/categoryApp']('trainings');
+    }
+  },
   beforeCreate() {
     this.$store.registerModule('training', trainingStore);
     this.$store.registerModule(['training', 'coach'], coachStore);

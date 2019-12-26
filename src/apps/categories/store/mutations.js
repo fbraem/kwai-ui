@@ -15,14 +15,14 @@ function categories(state, { meta, data }) {
  * Set category
  */
 function category(state, { data }) {
-  if (!state.all) state.all = [];
-  var index = state.all.findIndex((c) => c.id === data.id);
-  if (index !== -1) {
-    Vue.set(state.all, index, data);
-  } else {
-    state.all.push(data);
-  }
   state.error = null;
+  if (state.all) {
+    var index = state.all.findIndex((c) => c.id === data.id);
+    if (index !== -1) {
+      Vue.set(state.all, index, data);
+    }
+  }
+  state.active = data;
 }
 
 function deleteCategory(state, category) {
@@ -31,6 +31,11 @@ function deleteCategory(state, category) {
   });
   state.error = null;
 }
+
+const active = (state, data) => {
+  state.error = null;
+  state.active = data;
+};
 
 function error(state, error) {
   state.error = error;
@@ -47,6 +52,7 @@ export const mutations = {
   categories,
   category,
   deleteCategory,
+  active,
   error,
   reset,
 };

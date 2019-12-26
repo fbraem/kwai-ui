@@ -16,10 +16,6 @@ const NewsArchiveHeader = () => import(
   /* webpackChunkName: "news_chunck" */
   '@/apps/news/TheNewsArchiveHeader.vue'
 );
-const NewsFormHeader = () => import(
-  /* webpackChunkName: "news_admin" */
-  '@/apps/news/TheNewsFormHeader.vue'
-);
 const NewsRead = () => import(
   /* webpackChunkName: "news_chunck" */
   '@/apps/news/NewsRead.vue'
@@ -64,27 +60,17 @@ export default [
       },
       {
         path: 'create',
-        components: {
-          hero: NewsFormHeader,
-          default: NewsForm
-        },
+        component: NewsForm,
         props: {
-          hero: {
-            creating: true
-          }
+          creating: true
         },
         name: 'news.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: NewsFormHeader,
-          default: NewsForm
-        },
+        component: NewsForm,
         props: {
-          hero: {
-            creating: false
-          }
+          creating: false
         },
         name: 'news.update',
       },

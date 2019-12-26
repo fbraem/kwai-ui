@@ -1,5 +1,6 @@
 <template>
   <Header
+    v-if="ability"
     :title="$t('rules.title')"
     :toolbar="toolbar"
   />
@@ -19,9 +20,7 @@ export default {
   i18n: messages,
   computed: {
     ability() {
-      return this.$store.getters['user/ability'](
-        this.$route.params.id
-      );
+      return this.$store.state.user.ability.active;
     },
     toolbar() {
       const buttons = [];
@@ -29,7 +28,10 @@ export default {
         buttons.push({
           icon: 'fas fa-edit',
           route: {
-            name: 'users.abilities.update'
+            name: 'users.abilities.update',
+            params: {
+              id: this.ability.id
+            }
           }
         });
       }

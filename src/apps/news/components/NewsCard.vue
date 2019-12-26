@@ -114,9 +114,9 @@ export default {
     },
     categoryLink() {
       return {
-        name: 'news.category',
+        name: 'categories.read',
         params: {
-          category: this.story.category.id
+          id: this.story.category.id
         }
       };
     },

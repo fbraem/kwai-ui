@@ -2,68 +2,93 @@
   <div class="container mx-auto my-3">
     <KwaiForm
       :form="form"
+      :title="$t('category')"
       :error="error"
       :save="$t('save')"
       @submit="submit"
     >
-      <KwaiField
-        name="name"
-        :label="$t('form.name.label')"
-      >
-        <KwaiInputText :placeholder="$t('form.name.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="slug"
-        :label="$t('form.slug.label')"
-      >
-        <KwaiInputText :placeholder="$t('form.slug.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="short_description"
-        :label="$t('form.short_description.label')"
-      >
-        <KwaiTextarea :placeholder="$t('form.short_description.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="description"
-        :label="$t('form.description.label')"
-      >
-        <KwaiTextarea
-          :placeholder="$t('form.description.placeholder')"
-          :rows="5"
-        />
-      </KwaiField>
-      <KwaiField
-        name="remark"
-        :label="$t('form.remark.label')"
-      >
-        <KwaiTextarea
-          :placeholder="$t('form.remark.placeholder')"
-          :rows="5"
-        />
-      </KwaiField>
+      <KwaiFieldset :title="$t('category')">
+        <template slot="description">
+          Geef de categorie een naam. De korte omschrijving zal gebruikt
+          als de categorie in een lijst wordt getoond. De omschrijving zal op
+          de start pagina van de categorie getoond worden.
+        </template>
+        <KwaiField
+          name="name"
+          class="mb-3"
+          :label="$t('form.name.label')"
+        >
+          <KwaiInputText :placeholder="$t('form.name.placeholder')" />
+        </KwaiField>
+        <KwaiField
+          name="short_description"
+          class="mb-3"
+          :label="$t('form.short_description.label')"
+        >
+          <KwaiTextarea
+            :placeholder="$t('form.short_description.placeholder')" />
+        </KwaiField>
+        <KwaiField
+          name="description"
+          :label="$t('form.description.label')"
+        >
+          <KwaiTextarea
+            :placeholder="$t('form.description.placeholder')"
+            :rows="5"
+          />
+        </KwaiField>
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('form.app.label')">
+        <template slot="description">
+          Een categorie kan aan een app gekoppeld worden. Wanneer naar deze
+          categorie gesurfd wordt, dan zal de gebruiker door gestuurd worden
+          naar deze app.
+        </template>
+        <KwaiField
+          name="app"
+          :label="$t('form.app.label')"
+        >
+          <KwaiInputText :placeholder="$t('form.app.placeholder')" />
+        </KwaiField>
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('form.remark.label')">
+        <template slot="description">
+          Geef eventueel nog een opmerking in over deze categorie. Een
+          opmerking zal niet getoond worden aan een bezoeker van de website.
+        </template>
+        <KwaiField
+          name="remark"
+        >
+          <KwaiTextarea
+            :label="$t('form.app.label')"
+            :placeholder="$t('form.remark.placeholder')"
+            :rows="5"
+          />
+        </KwaiField>
+      </KwaiFieldset>
     </KwaiForm>
   </div>
 </template>
 
 <script>
 import makeForm, { makeField, notEmpty } from '@/js/Form.js';
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiTextarea from '@/components/forms/KwaiTextarea.vue';
+import KwaiForm from '@/components/forms/KwaiForm';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import KwaiField from '@/components/forms/KwaiField';
+import KwaiInputText from '@/components/forms/KwaiInputText';
+import KwaiTextarea from '@/components/forms/KwaiTextarea';
 
 const makeCategoryForm = (fields) => {
   const writeForm = (category) => {
     fields.name.value = category.name;
-    fields.slug.value = category.app;
+    fields.app.value = category.app;
     fields.description.value = category.description;
     fields.remark.value = category.remark;
     fields.short_description.value = category.short_description;
   };
   const readForm = (category) => {
     category.name = fields.name.value;
-    category.app = fields.slug.value;
+    category.app = fields.app.value;
     category.description = fields.description.value;
     category.remark = fields.remark.value;
     category.short_description = fields.short_description.value;
@@ -79,6 +104,7 @@ import messages from './lang';
 export default {
   components: {
     KwaiForm,
+    KwaiFieldset,
     KwaiInputText,
     KwaiTextarea,
     KwaiField
@@ -96,15 +122,7 @@ export default {
             },
           ]
         }),
-        slug: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('form.slug.required'),
-            },
-          ]
-        }),
+        app: makeField(),
         description: makeField(),
         remark: makeField(),
         short_description: makeField({

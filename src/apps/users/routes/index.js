@@ -1,4 +1,4 @@
-import App from './App.vue';
+import App from '@/apps/users/App.vue';
 
 import abilitiesRouter from './abilities';
 

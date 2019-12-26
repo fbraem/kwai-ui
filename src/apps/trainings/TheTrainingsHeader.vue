@@ -2,7 +2,9 @@
   <ImageHeader
     :title="$t('training.events.title')"
     :toolbar="toolbar"
-    :pictures="pictures">
+    :pictures="pictures"
+  >
+    {{ description }}
   </ImageHeader>
 </template>
 
@@ -10,30 +12,35 @@
 import Training from '@/models/trainings/Training';
 import Coach from '@/models/trainings/Coach';
 import Team from '@/models/Team';
+import Category from '@/models/Category';
 
 import ImageHeader from '@/components/ImageHeader';
 
 import messages from './lang';
 
 export default {
+  props: {
+    category: {
+      type: Category
+    }
+  },
   components: {
     ImageHeader
   },
   i18n: messages,
-  data() {
-    return {
-      pictures: {
-        '1024w': 'files/images/trainings/training_lg.jpg',
-        '768w': 'files/images/trainings/training_md.jpg',
-        '640w': 'files/images/trainings/training_sm.jpg',
-      }
-    };
-  },
   computed: {
-    logo() {
-      const category
-        = this.$store.getters['category/categoryApp'](this.$route.meta.app);
-      return category.icon_picture;
+    description() {
+      return this.category?.description;
+    },
+    pictures() {
+      if (this.category?.header_images) {
+        return {
+          '1024w': this.category.header_images.lg,
+          '768w': this.category.header_images.md,
+          '640w': this.category.header_images.sm,
+        };
+      }
+      return null;
     },
     toolbar() {
       const buttons = [];

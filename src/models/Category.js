@@ -34,6 +34,24 @@ export default class Category extends Model {
           return category.images.icon;
         }
       },
+      /**
+       * Returns an object with all images which filename ends on _sm, _md or
+       * _lg. sm, md and lg are the properties of the object.
+       */
+      header_images(category) {
+        if (category.images) {
+          let images = {};
+          let re = /^.*_(sm|md|lg)$/;
+          Object.keys(category.images).forEach((imageName) => {
+            let matches = imageName.match(re);
+            if (matches) {
+              images[matches[1]] = category.images[imageName];
+            }
+          });
+          return images;
+        }
+        return {};
+      }
     };
   }
 }

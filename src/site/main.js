@@ -43,14 +43,6 @@ import routes from './routes';
 const router = new VueRouter({
   routes
 });
-router.beforeEach(async(to, from, next) => {
-  if (to.meta.app) {
-    await store.dispatch('category/readApp', {
-      app: to.meta.app
-    });
-  }
-  next();
-});
 
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });

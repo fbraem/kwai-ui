@@ -16,7 +16,7 @@ export default {
   i18n: messages,
   computed: {
     ability() {
-      return this.$store.getters['user/ability/ability'](this.$route.params.id);
+      return this.$store.state.user.ability.active;
     }
   },
   beforeRouteEnter(to, from, next) {

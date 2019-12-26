@@ -22,10 +22,9 @@
       "placeholder": "Enter a short description",
       "required": "A short description is required"
     },
-    "slug": {
-      "label": "Slug",
-      "placeholder": "Enter a slug",
-      "required": "Slug is required"
+    "app": {
+      "label": "App",
+      "placeholder": "Enter an app"
     }
   },
   "more_news": "More news ...",

@@ -65,13 +65,13 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters['user/user'](this.$route.params.id);
+      return this.$store.state.user.active;
     },
     userAbilities() {
-      return this.user.abilities || [];
+      return this.user?.abilities ?? [];
     },
     abilities() {
-      return this.$store.state.user.ability.abilities || [];
+      return this.$store.state.user.ability.all ?? [];
     },
     /**
       Return all abilities which are not yet attached to this user

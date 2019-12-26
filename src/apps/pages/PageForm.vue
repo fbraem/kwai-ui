@@ -1,62 +1,82 @@
 <template>
-  <div class="container mx-auto my-3">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
-      @submit="submit"
-    >
-      <div style="display: flex;">
-        <div style="flex-grow: 1;">
+  <KwaiForm
+    :title="title"
+    :form="form"
+    :error="error"
+    :save="$t('save')"
+    @submit="submit"
+  >
+    <KwaiFieldset title="Inhoud">
+      <template slot="description">
+        Geef een titel voor het artikel. De samenvatting zal in overzichten
+        getoond worden. In de samenvatting en de inhoud kan je Markdown
+        gebruiken.
+      </template>
+      <div class="flex flex-wrap mb-3">
+        <div class="w-full sm:w-auto sm:flex-grow">
           <KwaiField
-            name="category"
-            :label="$t('form.page.category.label')"
+            name="title"
+            :label="$t('form.content.title.label')"
+            class="mb-3"
           >
-            <KwaiSelect :items="categories" />
+            <KwaiInputText
+              :placeholder="$t('form.content.title.placeholder')" />
           </KwaiField>
         </div>
-        <div style="align-self:flex-end;margin-left: 20px;">
-          <KwaiField name="enabled">
+        <div class="w-full sm:w-auto sm:pl-4 self-begin flex-none">
+          <KwaiField
+            name="enabled"
+            :label="$t('form.page.enabled.label')"
+          >
             <KwaiSwitch />
           </KwaiField>
         </div>
       </div>
-      <div>
-        <KwaiField
-          name="remark"
-          :label="$t('form.page.remark.label')"
-        >
-          <KwaiTextarea
-            :rows="5"
-            :placeholder="$t('form.page.remark.placeholder')"
-          />
-        </KwaiField>
-      </div>
-      <div>
-        <KwaiField
-          name="title"
-          :label="$t('form.content.title.label')"
-        >
-          <KwaiInputText :placeholder="$t('form.content.title.placeholder')" />
-        </KwaiField>
-        <KwaiField
-          name="summary"
-          :label="$t('form.content.summary.label')"
-        >
-          <KwaiTextarea
-            :placeholder="$t('form.content.summary.placeholder')"
-            :rows="5"
-          />
-        </KwaiField>
-        <KwaiField name="content" :label="$t('form.content.content.label')">
-          <KwaiTextarea
-            :placeholder="$t('form.content.content.placeholder')"
-            :rows="15"
-          />
-        </KwaiField>
-      </div>
-    </KwaiForm>
-  </div>
+      <KwaiField
+        name="summary"
+        :label="$t('form.content.summary.label')"
+        class="mb-3"
+      >
+        <KwaiTextarea
+          :placeholder="$t('form.content.summary.placeholder')"
+          :rows="5"
+        />
+      </KwaiField>
+      <KwaiField
+        name="content"
+        :label="$t('form.content.content.label')"
+        class="mb-3"
+      >
+        <KwaiTextarea
+          :placeholder="$t('form.content.content.placeholder')"
+          :rows="15"
+        />
+      </KwaiField>
+    </KwaiFieldset>
+    <KwaiFieldset :title="$t('form.page.category.label')">
+      <template slot="description">
+        Tot welke categorie behoort dit artikel?
+      </template>
+      <KwaiField
+        name="category"
+        :label="$t('form.page.category.label')"
+      >
+        <KwaiSelect :items="categories" />
+      </KwaiField>
+    </KwaiFieldset>
+    <KwaiFieldset :title="$t('form.page.remark.label')">
+      <template slot="description">
+        Geef een eventuele opmerking in. Een opmerking is niet zichtbaar voor
+        een bezoeker van de website.
+      </template>
+      <KwaiField name="remark" :label="$t('form.page.remark.label')">
+        <KwaiTextarea
+          :rows="5"
+          :placeholder="$t('form.page.remark.placeholder')"
+        />
+      </KwaiField>
+    </KwaiFieldset>
+  </KwaiForm>
 </template>
 
 <script>
@@ -97,22 +117,29 @@ const makePageForm = (fields) => {
   };
 };
 
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiSelect from '@/components/forms/KwaiSelect.vue';
-import KwaiTextarea from '@/components/forms/KwaiTextarea.vue';
-import KwaiSwitch from '@/components/forms/KwaiSwitch.vue';
+import KwaiForm from '@/components/forms/KwaiForm';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import KwaiField from '@/components/forms/KwaiField';
+import KwaiInputText from '@/components/forms/KwaiInputText';
+import KwaiSelect from '@/components/forms/KwaiSelect';
+import KwaiTextarea from '@/components/forms/KwaiTextarea';
+import KwaiSwitch from '@/components/forms/KwaiSwitch';
 
 export default {
   i18n: messages,
   components: {
     KwaiForm,
+    KwaiFieldset,
     KwaiField,
     KwaiInputText,
     KwaiSwitch,
     KwaiSelect,
     KwaiTextarea,
+  },
+  props: {
+    creating: {
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -171,6 +198,10 @@ export default {
     };
   },
   computed: {
+    title() {
+      if (this.creating) return this.$t('create');
+      return this.$t('update');
+    },
     page() {
       return this.$store.state.page.active;
     },

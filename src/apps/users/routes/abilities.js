@@ -1,4 +1,4 @@
-import App from './App.vue';
+import App from '@/apps/users/App.vue';
 
 const UserAbilitiesHeader = () =>
   import(/* webpackChunkName: "user_admin_chunck" */

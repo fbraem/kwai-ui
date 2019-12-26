@@ -1,20 +1,18 @@
 <template>
-  <Header
+  <ImageHeader
     v-if="category"
     :title="category.name"
     :toolbar="toolbar"
     :picture="picture"
-    :logo="category.icon_picture"
+    :pictures="pictures"
   >
     <div v-html="category.description">
     </div>
-  </Header>
+  </ImageHeader>
 </template>
 
 <script>
-import Header from '@/components/Header';
-
-import Category from '@/models/Category';
+import ImageHeader from '@/components/ImageHeader';
 
 import messages from './lang';
 
@@ -23,7 +21,7 @@ import messages from './lang';
  */
 export default {
   components: {
-    Header
+    ImageHeader
   },
   i18n: messages,
   computed: {
@@ -31,19 +29,21 @@ export default {
       return this.$store.getters['category/category'](this.$route.params.id);
     },
     picture() {
-      if (this.category) return this.category.header_picture;
+      return this.category?.header_picture;
+    },
+    pictures() {
+      if (this.category?.header_images
+        && Object.keys(this.category.header_images).length > 0) {
+        return {
+          '1024w': this.category.header_images.lg,
+          '768w': this.category.header_images.md,
+          '640w': this.category.header_images.sm,
+        };
+      }
       return null;
     },
     toolbar() {
       const buttons = [];
-      if (this.$can('create', Category.type())) {
-        buttons.push({
-          icon: 'fas fa-plus',
-          route: {
-            name: 'categories.create'
-          }
-        });
-      }
       if (this.$can('update', this.category)) {
         buttons.push({
           icon: 'fas fa-edit',
