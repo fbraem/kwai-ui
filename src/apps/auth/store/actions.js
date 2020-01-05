@@ -21,7 +21,7 @@ async function login({ commit, dispatch }, payload) {
       scope: 'basic'
     };
     const json = await http
-      .url('/auth/access_token')
+      .url('auth/access_token')
       .formData(form)
       .post()
       .json()
