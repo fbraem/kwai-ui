@@ -60,10 +60,10 @@
             {{ rule.name }}
           </td>
           <td class="py-2 px-3 text-gray-700">
-            {{ rule.subject.name }}
+            {{ rule.subject }}
           </td>
           <td class="py-2 px-3 text-gray-700">
-            {{ rule.action.name }}
+            {{ rule.action }}
           </td>
         </tr>
       </table>
