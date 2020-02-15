@@ -3,8 +3,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
-import config from 'config';
-
 import { http, http_auth } from '@/js/http';
 
 import JSONAPI from '@/js/JSONAPI';
@@ -14,14 +12,11 @@ async function login({ commit, dispatch }, payload) {
   dispatch('wait/start', 'auth.login', { root: true });
   try {
     const form = {
-      grant_type: 'password',
-      client_id: config.clientId,
       username: payload.email,
       password: payload.password,
-      scope: 'basic'
     };
     const json = await http
-      .url('auth/access_token')
+      .url('auth/login')
       .formData(form)
       .post()
       .json()
@@ -65,8 +60,6 @@ async function logout({ commit, state }) {
 async function refresh({ commit, state }, failedRequest) {
   if (state.tokenStore.refresh_token) {
     const form = {
-      grant_type: 'refresh_token',
-      client_id: config.clientId,
       refresh_token: state.tokenStore.refresh_token
     };
     const json = await http
