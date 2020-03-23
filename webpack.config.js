@@ -13,12 +13,17 @@ function resolve(dir) {
 
 module.exports = (env, argv) => {
 
-  const isDev = (argv.mode === 'development');
+  let mode = 'development';
+  if (argv && argv.mode) {
+    mode = argv.mode;
+  }
+
+  const isDev = (mode === 'development');
   process.env.NODE_ENV = isDev ? 'development' : 'production';
 
-  var config = {
+  return {
     watch: isDev,
-    mode: argv.mode,
+    mode,
     entry: {
       site: resolve('src/site/main.js'),
     },
@@ -45,6 +50,7 @@ module.exports = (env, argv) => {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name(module) {
+              // eslint-disable-next-line max-len
               const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
               return `npm.${packageName.replace('@', '')}`;
             },
@@ -104,11 +110,11 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpe?g|gif)$/i,
-          loaders: [
+          use: [
             'file-loader?name=assets/[name]_[hash].[ext]',
             {
               loader: 'image-webpack-loader',
-              query: {
+              options: {
                 bypassOnDebug: true,
                 gifsicle: {
                   interlaced: false
@@ -131,7 +137,7 @@ module.exports = (env, argv) => {
       alias: {
         vue$: isDev ? 'vue/dist/vue.common.js' : 'vue/dist/vue.common.prod.js',
         '@': resolve('src'),
-        config: path.join(__dirname, 'src', 'site', 'config', argv.mode),
+        config: path.join(__dirname, 'src', 'site', 'config', mode),
       },
       mainFiles: [ 'index' ],
     },
@@ -155,6 +161,4 @@ module.exports = (env, argv) => {
       new MinifyPlugin(),
     ]
   };
-
-  return config;
 };
