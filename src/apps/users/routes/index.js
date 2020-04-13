@@ -3,24 +3,23 @@ import App from '@/apps/users/App.vue';
 import abilitiesRouter from './abilities';
 
 const UserRead = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/UserRead.vue'
 );
 const UserHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUserHeader.vue'
 );
 const UsersHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUsersHeader.vue'
 );
 const UserBrowse = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/UserBrowse.vue'
 );
 
 const UserInviteHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
   '@/apps/users/TheUserInviteHeader.vue'
 );
 
@@ -60,7 +59,7 @@ var routes = [
         name: 'users.register.invite',
       },
       {
-        path: ':id(\\d+)',
+        path: ':id',
         components: {
           hero: UserHeader,
           default: UserRead
