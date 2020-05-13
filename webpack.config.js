@@ -84,15 +84,6 @@ module.exports = (env, argv) => {
           loader: 'babel-loader'
         },
         {
-          test: /\.scss$/,
-          use: [
-            'vue-style-loader',
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
-          ]
-        },
-        {
           test: /\.css$/,
           use: [
             MiniCssExtractPlugin.loader,
@@ -111,7 +102,7 @@ module.exports = (env, argv) => {
         {
           test: /\.(png|jpe?g|gif)$/i,
           use: [
-            'file-loader?name=assets/[name]_[hash].[ext]',
+            'file-loader?name=assets/[name]_[hash].[ext]&esModule=false',
             {
               loader: 'image-webpack-loader',
               options: {
@@ -155,8 +146,7 @@ module.exports = (env, argv) => {
       }),
       new HtmlPlugin({
         filename: '../index.html',
-        template: './src/index.template.html',
-        chunksSortMode: 'dependency'
+        template: './src/index.template.html'
       }),
       new MinifyPlugin(),
     ]

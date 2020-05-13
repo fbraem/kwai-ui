@@ -1,6 +1,5 @@
 {
     "extends" : [
-        "strongloop",
         "plugin:vue/essential"
     ],
     "parserOptions" : {
