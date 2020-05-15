@@ -39,11 +39,9 @@ import Notifications from 'vue-notification';
 Vue.use(Notifications);
 
 import routes from './routes';
-
 const router = new VueRouter({
   routes
 });
-
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });
 
@@ -54,4 +52,4 @@ new Vue({
     useVuex: true,
   }),
   i18n,
-}).$mount('#clubmanApp');
+}).$mount('#kwai');
