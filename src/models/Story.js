@@ -50,10 +50,7 @@ export default class Story extends Model {
     return {
       content(story) {
         if (story.contents) {
-          let content = story.contents.find((o) => {
-            return o.locale === 'nl';
-          });
-          return content || story.contents[0];
+          return story.contents['nl'];
         }
         return null;
       },
