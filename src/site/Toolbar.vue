@@ -36,13 +36,13 @@ export default {
   },
   computed: {
     title() {
-      return this.$store.state.site?.page.title;
+      return this.$store.state.kwai?.page.title;
     },
     subTitle() {
-      return this.$store.state.site?.page.subTitle;
+      return this.$store.state.kwai?.page.subTitle;
     },
     facebook() {
-      return this.$store.state.site?.facebook;
+      return this.$store.state.kwai?.facebook;
     }
   },
 };

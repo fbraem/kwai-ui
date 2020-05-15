@@ -311,10 +311,10 @@ export default {
   },
   computed: {
     stories() {
-      return this.$store.state.site.news.all;
+      return this.$store.state.site.news?.data;
     },
     storiesMeta() {
-      return this.$store.state.site.news.meta;
+      return this.$store.state.site.news?.meta;
     },
     categories() {
       return this.$store.state.category.all;
@@ -336,7 +336,7 @@ export default {
     },
     async loadStories(offset) {
       try {
-        await this.$store.dispatch('site/news/browse', {
+        await this.$store.dispatch('site/load', {
           offset: offset, featured: true
         });
       } catch (error) {

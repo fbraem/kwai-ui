@@ -7,15 +7,13 @@
 
 <script>
 import store from './store';
-import newsStore from '@/apps/news/store';
 
 export default {
   beforeCreate() {
     this.$store.registerModule('site', store);
-    this.$store.registerModule(['site', 'news'], newsStore);
+    this.$store.dispatch('category/browse');
   },
   beforeDestroy() {
-    this.$store.unregisterModule(['site', 'news']);
     this.$store.unregisterModule('site');
   }
 };

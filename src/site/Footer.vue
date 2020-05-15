@@ -81,16 +81,16 @@ export default {
   i18n: messages,
   computed: {
     facebook() {
-      return this.$store.state.site?.facebook;
+      return this.$store.state.kwai?.facebook;
     },
     mail() {
-      return this.$store.state.site?.mail;
+      return this.$store.state.kwai?.mail;
     },
     site() {
-      return this.$store.state.site?.url;
+      return this.$store.state.kwai?.url;
     },
     location() {
-      return this.$store.state.site?.location;
+      return this.$store.state.kwai?.location;
     }
   }
 };
