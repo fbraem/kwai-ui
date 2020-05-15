@@ -40,14 +40,20 @@ class JSONAPI {
    * @param {Model} [config.target]
    *                The model which is used to return the data. When omitted, it
    *                is set to config.source.
+   * @param {string} [config.app]
    */
-  constructor({source, target = source}) {
+  constructor({source, target = source, app = ''}) {
     this.source = source;
     this.target = target;
     this.base_uri = new URI('');
+    let segments = [];
+    if (app.length > 0) {
+      segments.push(app);
+    }
     if (source.namespace().length > 0) {
-      var segments = [];
       segments = segments.concat(source.namespace());
+    }
+    if (segments.length > 0) {
       this.base_uri.segment(segments);
     }
     this.reset();
