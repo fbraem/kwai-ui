@@ -136,7 +136,7 @@
             </div>
             <div class="self-center p-3 mt-2 bg-white">
               <img
-                :src="require('./images/goud_jeugdsport_2019.jpg')"
+                :src="require('../../site/images/goud_jeugdsport_2019.jpg')"
                 style="height:125px"
                 alt=""
               />
@@ -156,7 +156,7 @@
             </div>
             <div class="self-center mt-2">
               <img
-                :src="require('./images/sporthal.jpg')"
+                :src="require('../../site/images/sporthal.jpg')"
                 style="height:125px"
                 alt=""
               />
@@ -176,7 +176,7 @@
             </div>
             <div class="self-center mt-2">
               <img
-                :src="require('./images/kim_ono.png')"
+                :src="require('../../site/images/kim_ono.png')"
                 style="height:125px;"
                 alt=""
               />
@@ -196,7 +196,7 @@
             </div>
             <div class="self-center mt-2 p-2 bg-white">
               <img
-                :src="require('./images/hartveilig.jpg')"
+                :src="require('../../site/images/hartveilig.jpg')"
                 alt=""
               />
             </div>
@@ -215,7 +215,7 @@
             </div>
             <div class="self-center mt-2 p-2 bg-white">
               <img
-                :src="require('./images/gezond.jpg')"
+                :src="require('../../site/images/gezond.jpg')"
                 style="height:125px"
                 alt=""
               />
@@ -236,7 +236,7 @@
             </div>
             <div class="self-center mt-2 p-2 bg-white">
               <img
-                :src="require('./images/panathlon.jpg')"
+                :src="require('../../site/images/panathlon.jpg')"
                 style="height:125px"
                 alt=""
               />
@@ -290,7 +290,7 @@ import AreYouSure from '@/components/AreYouSure.vue';
 import CategoryCard from '@/apps/categories/components/CategoryCard.vue';
 import CategoryList from '@/apps/categories/components/CategoryList.vue';
 
-import messages from './lang';
+import messages from '../../site/lang';
 
 export default {
   i18n: messages,

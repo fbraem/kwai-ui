@@ -1,3 +1,4 @@
+import siteRouter from './site/routes';
 import newsRouter from './news/routes';
 import categoriesRouter from './categories/routes';
 import pagesRouter from './pages/routes';
@@ -9,8 +10,8 @@ import eventsRouter from './events/routes';
 import trainingsRouter from './trainings/routes';
 
 function makeRoutes() {
-  let routes = [];
-  return routes
+  return []
+    .concat(siteRouter)
     .concat(newsRouter)
     .concat(categoriesRouter)
     .concat(pagesRouter)
@@ -20,6 +21,6 @@ function makeRoutes() {
     .concat(teamsRouter)
     .concat(eventsRouter)
     .concat(trainingsRouter);
-};
+}
 
 export default makeRoutes;
