@@ -23,6 +23,7 @@ module.exports = (env, argv) => {
 
   return {
     watch: isDev,
+    devtool: isDev ? 'eval-cheap-source-map' : false,
     mode,
     entry: {
       site: resolve('src/site/main.js'),
