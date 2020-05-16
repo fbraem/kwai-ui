@@ -3,12 +3,13 @@ Site
 
 This application is responsible for showing the home page of the website.
 
-List Applications
+List categories
 ---
-:x: A list with all available applications will be shown.
-> In a previous version, the application was named "category".
+:x: A list with all available categories will be shown.
+When a category links to an application, the user can
+be forwarded to the application.
 
-News Stories
+News stories
 ---
 :x: A list with all promoted news stories will be shown.
 
