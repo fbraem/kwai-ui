@@ -8,6 +8,7 @@
     <div style="grid-area: hero-text; display: flex; flex-direction: column; justify-content: center;align-items: center">
       <div>
         <img
+          alt="logo"
           :src="require('@/site/images/logo2.png')"
           style="width:121px;height:121px;" />
       </div>
