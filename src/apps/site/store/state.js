@@ -3,6 +3,5 @@
  */
 export const state = () => {
   return {
-    news: null
   };
 };

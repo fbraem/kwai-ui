@@ -85,10 +85,9 @@
       </h2>
       <div class="flex justify-center">
         <Paginator
-          v-if="storiesMeta"
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="storiesPaginator.count"
+          :limit="storiesPaginator.limit"
+          :offset="storiesPaginator.offset"
           @page="loadStories"
         />
       </div>
@@ -107,10 +106,9 @@
       </div>
       <div class="flex justify-center">
         <Paginator
-          v-if="storiesMeta"
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="storiesPaginator.count"
+          :limit="storiesPaginator.limit"
+          :offset="storiesPaginator.offset"
           @page="loadStories"
         />
       </div>
@@ -310,11 +308,18 @@ export default {
     };
   },
   computed: {
-    stories() {
-      return this.$store.state.site.news?.data;
+    storiesPaginator() {
+      return {
+        offset: this.$store.state.site.news.offset,
+        count: this.$store.state.site.news.count,
+        limit: 10
+      }
     },
-    storiesMeta() {
-      return this.$store.state.site.news?.meta;
+    storiesOffset() {
+      return this.$store.state.site.news.offset;
+    },
+    stories() {
+      return this.$store.getters['site/news/stories'](this.storiesOffset);
     },
     categories() {
       return this.$store.state.category.all;
@@ -336,8 +341,8 @@ export default {
     },
     async loadStories(offset) {
       try {
-        await this.$store.dispatch('site/load', {
-          offset: offset, featured: true
+        await this.$store.dispatch('site/news/load', {
+          offset: offset
         });
       } catch (error) {
         console.log(error);
