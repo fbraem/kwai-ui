@@ -3,7 +3,7 @@
     <Spinner v-if="$wait.is('news.read')" />
     <article
       v-if="story"
-      class="container mx-auto"
+      class="markdown container mx-auto"
     >
       <h1 class="hidden lg:block">{{ story.content.title }}</h1>
       <blockquote>
@@ -28,20 +28,6 @@
 </template>
 
 <style>
-blockquote {
-  @apply bg-gray-200 border-l-8 border-solid border-gray-600 ml-2 mb-4 p-2;
-}
-
-.news-content ul {
-    list-style-position: inside;
-    margin-bottom: 20px;
-}
-
-.news-content blockquote {
-  @apply bg-gray-200 border-l-8 border-solid border-gray-600 ml-2 mb-4 p-2;
-  quotes: "\201C""\201D""\2018""\2019";
-}
-
 .news-content .gallery {
     background: #eee;
     column-count: 1;

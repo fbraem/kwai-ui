@@ -102,4 +102,15 @@ a {
     @apply text-gray-600 text-sm;
 }
 
+.markdown blockquote {
+    @apply bg-gray-200 border-l-8 border-solid border-gray-600 ml-2 mb-4 p-2;
+    quotes: "\201C""\201D""\2018""\2019";
+}
+
+.markdown ul {
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-bottom: 20px;
+}
+
 @tailwind utilities;
