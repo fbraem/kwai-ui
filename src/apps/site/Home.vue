@@ -118,150 +118,85 @@
         </router-link>
       </div>
     </div>
-    <div class="container mx-auto message-card-container">
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Jeugdvriendelijke Judoclub</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                Voor het vijfde jaar op rij verdient onze club goud
-                bij de proclomatie van het jeugdjudofonds!
-              </p>
-            </div>
-            <div class="self-center p-3 mt-2 bg-white">
-              <img
-                :src="require('../../site/images/goud_jeugdsport_2019.jpg')"
-                style="height:125px"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Locatie</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                Wij trainen in de gevechtssportzaal van sportcentrum
-                <strong>"De Sportstek"</strong> in Stekene, Nieuwstraat 60D.
-              </p>
-            </div>
-            <div class="self-center mt-2">
-              <img
-                :src="require('../../site/images/sporthal.jpg')"
-                style="height:125px"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Eens proberen?</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                De <a href="https://www.vjf.be">Vlaamse Judo Federatie</a> en
-                Judokwai Kemzeke bieden u 4 gratis proeflessen aan.
-              </p>
-            </div>
-            <div class="self-center mt-2">
-              <img
-                :src="require('../../site/images/kim_ono.png')"
-                style="height:125px;"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Hartveilig</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                Onze club is hartveilig. 10% van onze medewerkers zijn getraind
-                in reanimatie.
-              </p>
-            </div>
-            <div class="self-center mt-2 p-2 bg-white">
-              <img
-                :src="require('../../site/images/hartveilig.jpg')"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Gezond sporten</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                Onze club draagt <a href="https://www.vjf.be/nl/aanvulling-en-aanpassing-vjf-website-gezond-en-ethisch-sporten">Gezond Sporten</a>
-                hoog in het het vaandel.
-              </p>
-            </div>
-            <div class="self-center mt-2 p-2 bg-white">
-              <img
-                :src="require('../../site/images/gezond.jpg')"
-                style="height:125px"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="message-card">
-        <div class="message-card-content">
-          <h2>Panathlon Verklaring</h2>
-          <div class="flex flex-col">
-            <div>
-              <p>
-                Onze club onderschrijft de
-                <a href="http://panathlonvlaanderen.be">Panathlon</a>
-                verklaring.
-              </p>
-            </div>
-            <div class="self-center mt-2 p-2 bg-white">
-              <img
-                :src="require('../../site/images/panathlon.jpg')"
-                style="height:125px"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+      <MessageCard
+        title="Jeugdvriendelijke Judoclub"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/sporthal.jpg')"
+        class="message-card-content"
+      >
+        <p>
+          Voor het vijfde jaar op rij verdient onze club goud
+          bij de proclomatie van het jeugdjudofonds!
+        </p>
+      </MessageCard>
+      <MessageCard
+        title="Locatie"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/sporthal.jpg')"
+        class="message-card-content"
+      >
+        <p>
+          Wij trainen in de gevechtssportzaal van sportcentrum
+          <strong>"De Sportstek"</strong> in Stekene, Nieuwstraat 60D.
+        </p>
+      </MessageCard>
+      <MessageCard
+        title="Eens proberen?"
+        class="message-card-content"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/kim_ono.png')"
+      >
+        <p>
+          De <a href="https://www.vjf.be">Vlaamse Judo Federatie</a> en
+          Judokwai Kemzeke bieden u 4 gratis proeflessen aan.
+        </p>
+      </MessageCard>
+      <MessageCard
+        title="Hartveilig"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/hartveilig.jpg')"
+        class="message-card-content"
+      >
+        <p>
+          Onze club is hartveilig. 10% van onze medewerkers zijn getraind
+          in reanimatie.
+        </p>
+      </MessageCard>
+      <MessageCard
+        title="Gezond sporten"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/gezond.jpg')"
+        class="message-card-content"
+      >
+        <p>
+          Onze club draagt <a href="https://www.vjf.be/nl/aanvulling-en-aanpassing-vjf-website-gezond-en-ethisch-sporten">Gezond Sporten</a>
+          hoog in het het vaandel.
+        </p>
+      </MessageCard>
+      <MessageCard
+        title="Panathlon Verklaring"
+        fg-color="text-white"
+        bg-color="bg-tatami"
+        :image="require('@/site/images/panathlon.jpg')"
+        class="message-card-content"
+      >
+        <p>
+          Onze club onderschrijft de
+          <a href="http://panathlonvlaanderen.be">Panathlon</a>
+          verklaring.
+        </p>
+      </MessageCard>
     </div>
   </div>
 </template>
 
 <style scoped>
-.message-card-container {
-  display: grid;
-  grid-gap: 30px;
-  grid-template-columns: 1fr;
-  grid-auto-rows: 1fr;
-}
-@screen md {
-  .message-card-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.message-card {
-  @apply w-full text-white;
-}
-.message-card-content {
-  @apply bg-tatami p-5 h-full rounded-lg;
-}
-
 .message-card-content a {
   @apply text-white font-bold;
 }
@@ -272,9 +207,9 @@ import NewsCard from '@/apps/news/components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
 import Spinner from '@/components/Spinner.vue';
 import IconCard from '@/components/IconCard.vue';
-import AreYouSure from '@/components/AreYouSure.vue';
 import CategoryCard from '@/apps/categories/components/CategoryCard.vue';
 import CategoryList from '@/apps/categories/components/CategoryList.vue';
+import MessageCard from './MessageCard';
 
 import messages from '../../site/lang';
 
@@ -286,7 +221,8 @@ export default {
     Spinner,
     IconCard,
     CategoryCard,
-    CategoryList
+    CategoryList,
+    MessageCard
   },
   computed: {
     storiesPaginator() {
