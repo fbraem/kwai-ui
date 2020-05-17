@@ -98,10 +98,7 @@
           :key="story.id"
           class="p-2 md:p-4 w-full xl:w-1/2"
         >
-          <NewsCard
-            :story="story"
-            @deleteStory="deleteStory"
-          />
+          <NewsCard :story="story" />
         </div>
       </div>
       <div class="flex justify-center">
@@ -243,15 +240,6 @@
         </div>
       </div>
     </div>
-    <AreYouSure
-      :show="showAreYouSure"
-      @close="close"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="doDeleteStory"
-    >
-      {{ $t('are_you_sure') }}
-    </AreYouSure>
   </div>
 </template>
 
@@ -297,15 +285,8 @@ export default {
     Paginator,
     Spinner,
     IconCard,
-    AreYouSure,
     CategoryCard,
     CategoryList
-  },
-  data() {
-    return {
-      storyToDelete: null,
-      showAreYouSure: false
-    };
   },
   computed: {
     storiesPaginator() {
@@ -347,19 +328,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    deleteStory(story) {
-      this.storyToDelete = story;
-      this.showAreYouSure = true;
-    },
-    doDeleteStory() {
-      this.showAreYouSure = false;
-      this.$store.dispatch('site/news/remove', {
-        story: this.storyToDelete
-      });
-    },
-    close() {
-      this.showAreYouSure = false;
     }
   }
 };
