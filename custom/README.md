@@ -1,7 +1,7 @@
 Custom
 ======
 
-This folder can contain HTML code which can be plugged in into the code.
+This folder can contain HTML code which can be plugged into the code.
 
 site
 ----
