@@ -78,7 +78,18 @@ module.exports = (env, argv) => {
         {
           test: /\.html$/,
           exclude: /node_modules/,
-          loader: 'html-loader'
+          loader: 'html-loader',
+          options: {
+            attributes: {
+              list: [
+                {
+                  tag: 'message-card',
+                  attribute: 'image',
+                  type: 'src'
+                },
+              ]
+            }
+          }
         },
         {
           test: /\.vue$/,
