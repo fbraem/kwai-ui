@@ -76,6 +76,11 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.html$/,
+          exclude: /node_modules/,
+          loader: 'html-loader'
+        },
+        {
           test: /\.vue$/,
           loader: 'vue-loader',
         },
@@ -130,6 +135,7 @@ module.exports = (env, argv) => {
         vue$: isDev ? 'vue/dist/vue.common.js' : 'vue/dist/vue.common.prod.js',
         '@': resolve('src'),
         config: path.join(__dirname, 'src', 'site', 'config', mode),
+        'custom': resolve('custom')
       },
       mainFiles: [ 'index' ],
     },
