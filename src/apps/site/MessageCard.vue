@@ -7,7 +7,7 @@
           <slot>
           </slot>
         </div>
-        <div class="self-center mt-2 p-2 bg-white">
+        <div v-if="image" class="self-center mt-2 p-2 bg-white">
           <img
             :src="image"
             style="height:125px"

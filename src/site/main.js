@@ -45,6 +45,11 @@ const router = new VueRouter({
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });
 
+import vueCustomElement from 'vue-custom-element';
+Vue.use(vueCustomElement);
+import MessageCard from '@/apps/site/MessageCard';
+Vue.customElement('message-card', MessageCard);
+
 new Vue({
   router,
   store,
