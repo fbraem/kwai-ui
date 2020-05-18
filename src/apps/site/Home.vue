@@ -118,89 +118,10 @@
         </router-link>
       </div>
     </div>
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-      <MessageCard
-        title="Jeugdvriendelijke Judoclub"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/sporthal.jpg')"
-        class="message-card-content"
-      >
-        <p>
-          Voor het vijfde jaar op rij verdient onze club goud
-          bij de proclomatie van het jeugdjudofonds!
-        </p>
-      </MessageCard>
-      <MessageCard
-        title="Locatie"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/sporthal.jpg')"
-        class="message-card-content"
-      >
-        <p>
-          Wij trainen in de gevechtssportzaal van sportcentrum
-          <strong>"De Sportstek"</strong> in Stekene, Nieuwstraat 60D.
-        </p>
-      </MessageCard>
-      <MessageCard
-        title="Eens proberen?"
-        class="message-card-content"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/kim_ono.png')"
-      >
-        <p>
-          De <a href="https://www.vjf.be">Vlaamse Judo Federatie</a> en
-          Judokwai Kemzeke bieden u 4 gratis proeflessen aan.
-        </p>
-      </MessageCard>
-      <MessageCard
-        title="Hartveilig"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/hartveilig.jpg')"
-        class="message-card-content"
-      >
-        <p>
-          Onze club is hartveilig. 10% van onze medewerkers zijn getraind
-          in reanimatie.
-        </p>
-      </MessageCard>
-      <MessageCard
-        title="Gezond sporten"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/gezond.jpg')"
-        class="message-card-content"
-      >
-        <p>
-          Onze club draagt <a href="https://www.vjf.be/nl/aanvulling-en-aanpassing-vjf-website-gezond-en-ethisch-sporten">Gezond Sporten</a>
-          hoog in het het vaandel.
-        </p>
-      </MessageCard>
-      <MessageCard
-        title="Panathlon Verklaring"
-        fg-color="text-white"
-        bg-color="bg-tatami"
-        :image="require('@/site/images/panathlon.jpg')"
-        class="message-card-content"
-      >
-        <p>
-          Onze club onderschrijft de
-          <a href="http://panathlonvlaanderen.be">Panathlon</a>
-          verklaring.
-        </p>
-      </MessageCard>
+    <div v-if="footerHtml" v-html="footerHtml">
     </div>
   </div>
 </template>
-
-<style scoped>
-.message-card-content a {
-  @apply text-white font-bold;
-}
-</style>
 
 <script>
 import NewsCard from '@/apps/news/components/NewsCard.vue';
@@ -209,9 +130,12 @@ import Spinner from '@/components/Spinner.vue';
 import IconCard from '@/components/IconCard.vue';
 import CategoryCard from '@/apps/categories/components/CategoryCard.vue';
 import CategoryList from '@/apps/categories/components/CategoryList.vue';
-import MessageCard from './MessageCard';
 
 import messages from '../../site/lang';
+
+let htmlFragments = {};
+const importAll = requireContext => requireContext.keys().forEach(key => htmlFragments[key] = requireContext(key));
+importAll(require.context('custom/site', false, /.html$/));
 
 export default {
   i18n: messages,
@@ -221,8 +145,12 @@ export default {
     Spinner,
     IconCard,
     CategoryCard,
-    CategoryList,
-    MessageCard
+    CategoryList
+  },
+  data() {
+    return {
+      footerHtml: htmlFragments['./footer.html']
+    };
   },
   computed: {
     storiesPaginator() {
