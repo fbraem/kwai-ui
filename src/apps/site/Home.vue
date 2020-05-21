@@ -133,10 +133,6 @@ import CategoryList from '@/apps/categories/components/CategoryList.vue';
 
 import messages from '../../site/lang';
 
-let htmlFragments = {};
-const importAll = requireContext => requireContext.keys().forEach(key => htmlFragments[key] = requireContext(key));
-importAll(require.context('custom/site', false, /.html$/));
-
 export default {
   i18n: messages,
   components: {
@@ -149,7 +145,7 @@ export default {
   },
   data() {
     return {
-      footerHtml: htmlFragments['./footer.html']
+      footerHtml: this.$route.meta.html['./footer.html']
     };
   },
   computed: {

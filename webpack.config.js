@@ -87,6 +87,16 @@ module.exports = (env, argv) => {
                   attribute: 'image',
                   type: 'src'
                 },
+                {
+                  tag: 'img',
+                  attribute: 'src',
+                  type: 'src'
+                },
+                {
+                  tag: 'img',
+                  attribute: 'srcset',
+                  type: 'srcset'
+                },
               ]
             }
           }
