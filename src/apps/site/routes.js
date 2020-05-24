@@ -3,8 +3,15 @@ import Header from './Header';
 import HomeApp from './Home';
 
 let html = {};
-const importAll = requireContext => requireContext.keys().forEach(key => html[key] = requireContext(key));
-importAll(require.context('custom/site', false, /.html$/));
+const importAllHtml = requireContext => requireContext.keys().forEach(key => html[key] = requireContext(key));
+importAllHtml(require.context('custom/site', false, /.html$/));
+
+let icons = {};
+const importAllSvg = requireContext => requireContext.keys().forEach(
+  key => icons[key.split('/')[1]] = requireContext(key).default
+);
+importAllSvg(require.context('custom', true, /icon.svg$/));
+console.log(icons);
 
 export default [
   {
@@ -19,7 +26,8 @@ export default [
           default: HomeApp
         },
         meta: {
-          html
+          html,
+          icons
         }
       },
     ]
