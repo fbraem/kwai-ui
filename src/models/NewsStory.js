@@ -3,7 +3,7 @@ import {
   Attribute, DateAttribute, ObjectAttribute, ArrayAttribute
 } from './Attribute';
 
-import Category from './Category';
+import Application from './Application';
 import moment from 'moment-timezone';
 
 /**
@@ -120,7 +120,7 @@ export default class NewsStory extends Model {
 
   static relationships() {
     return {
-      category: Category
+      application: Application
     };
   }
 }

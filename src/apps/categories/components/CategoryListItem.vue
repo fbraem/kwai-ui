@@ -34,6 +34,7 @@
 import InlineSvg from 'vue-inline-svg';
 
 import Category from '@/models/Category';
+import Application from '@/models/Application';
 
 /**
  * Component for showing a category in the list of categories
@@ -47,7 +48,7 @@ export default {
      * The category
      */
     category: {
-      type: Category,
+      type: [Category, Application],
       required: true
     }
   },

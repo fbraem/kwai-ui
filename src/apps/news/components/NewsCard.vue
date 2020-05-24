@@ -34,13 +34,13 @@
         </router-link>
       </h2>
       <p class="text-xs text-gray-600">
-        <span v-if="showCategory">
+        <span v-if="application">
           Gepubliceerd in
           <router-link
-            :to="categoryLink"
+            :to="applicationLink"
             class="font-bold"
           >
-            {{ story.category.name }}
+            {{ application.name }}
           </router-link>
           &nbsp;|&nbsp;
         </span>
@@ -77,6 +77,7 @@
 <script>
 import Story from '@/models/Story';
 import NewsStory from '@/models/NewsStory';
+import Application from '@/models/Application';
 import messages from '../lang';
 
 /**
@@ -93,11 +94,10 @@ export default {
       required: true
     },
     /**
-     * Show the category label?
+     * The application.
      */
-    showCategory: {
-      type: Boolean,
-      default: true
+    application: {
+      type: [Application, null]
     }
   },
   computed: {
@@ -109,23 +109,14 @@ export default {
         }
       };
     },
-    category() {
-      /* eslint-disable max-len */
-      return this.$store.getters['categoryModule/category'](this.story.category.id);
-    },
-    categoryLink() {
+    applicationLink() {
       return {
         name: 'categories.read',
         params: {
-          id: this.story.category.id
+          id: this.application.id
         }
       };
     },
-  },
-  methods: {
-    deleteStory() {
-      this.$emit('deleteStory', this.story);
-    }
   }
 };
 </script>

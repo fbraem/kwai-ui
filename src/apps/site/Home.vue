@@ -31,11 +31,11 @@
           </IconCard>
         </div>
         <div
-          v-for="category in categories"
-          :key="category.id"
+          v-for="application in applications"
+          :key="application.id"
           class="w-full sm:w-1/2 md:w-1/4"
         >
-          <CategoryCard :category="category" />
+          <CategoryCard :category="application" />
         </div>
       </div>
     </div>
@@ -75,8 +75,8 @@
         </IconCard>
       </div>
       <CategoryList
-        v-if="categories"
-        :categories="categories"
+        v-if="applications"
+        :categories="applications"
       />
     </div>
     <div class="container mx-auto">
@@ -98,7 +98,10 @@
           :key="story.id"
           class="p-2 md:p-4 w-full xl:w-1/2"
         >
-          <NewsCard :story="story" />
+          <NewsCard
+            :story="story"
+            :application="story.application"
+          />
         </div>
       </div>
       <div class="flex justify-center">
@@ -141,7 +144,7 @@ export default {
     Spinner,
     IconCard,
     CategoryCard,
-    CategoryList
+    CategoryList,
   },
   data() {
     return {
@@ -162,8 +165,8 @@ export default {
     stories() {
       return this.$store.getters['site/news/stories'](this.storiesOffset);
     },
-    categories() {
-      return this.$store.state.category.all;
+    applications() {
+      return this.$store.state.site.applications.all;
     }
   },
   beforeRouteEnter(to, from, next) {
