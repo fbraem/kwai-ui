@@ -11,7 +11,6 @@ const importAllSvg = requireContext => requireContext.keys().forEach(
   key => icons[key.split('/')[1]] = requireContext(key).default
 );
 importAllSvg(require.context('custom', true, /icon.svg$/));
-console.log(icons);
 
 export default [
   {
