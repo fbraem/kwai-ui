@@ -48,7 +48,7 @@ export default {
         'min-height': '150px',
         'background-image':
           'url('
-            + require('@/apps/news/images/exclamation-point-2620923_1920.jpg')
+            + require('custom/news/images/exclamation-point-2620923_1920.jpg')
             + ')'
       };
     },
