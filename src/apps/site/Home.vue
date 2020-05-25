@@ -3,80 +3,22 @@
   <div class="p-4">
     <div class="hidden sm:block container mx-auto bg-gray-100 mb-4">
       <div class="flex flex-row flex-wrap justify-center p-4">
-        <div class="w-full sm:w-1/2 md:w-1/4">
-          <IconCard :to="{ name : 'news.browse' }" title="Nieuws">
-            <template slot="icon">
-              <span class="text-red-700">
-                <i class="fas fa-newspaper fa-2x"></i>
-              </span>
-            </template>
-            <template slot="text">
-              Blijf op de hoogte over het reilen en zeilen van onze club.
-            </template>
-          </IconCard>
-        </div>
-        <div class="w-full sm:w-1/2 md:w-1/4">
-          <IconCard
-            to="https://www.judokwaikemzeke.be/oud/kalender.htm"
-            title="Kalender"
-          >
-            <template slot="icon">
-              <span class="text-red-700">
-                <i class="fas fa-calendar fa-2x"></i>
-              </span>
-            </template>
-            <template slot="text">
-              Bekijk onze kalender voor activiteiten en tornooien
-            </template>
-          </IconCard>
-        </div>
         <div
           v-for="application in applications"
           :key="application.id"
           class="w-full sm:w-1/2 md:w-1/4"
         >
-          <CategoryCard :category="application" />
+          <ApplicationCard
+            :application="application"
+            :icon="$route.meta.icons[application.name]"
+          />
         </div>
       </div>
     </div>
     <div class="block sm:hidden mb-4">
-      <div class="flex flex-wrap justify-center">
-        <IconCard
-          :to="{ name : 'news.browse' }"
-          title="Nieuws"
-        >
-          <template slot="icon">
-            <span class="text-red-700">
-              <i
-                class="fas fa-newspaper fa-2x h-8"
-              >
-              </i>
-            </span>
-          </template>
-          <template slot="text">
-            Blijf op de hoogte over het reilen en zeilen van onze club.
-          </template>
-        </IconCard>
-        <IconCard
-          to="https://www.judokwaikemzeke.be/oud/kalender.htm"
-          title="Kalender"
-        >
-          <template slot="icon">
-            <span class="text-red-700">
-              <i
-                class="fas fa-calendar fa-2x h-8"
-              >
-              </i>
-            </span>
-          </template>
-          <template slot="text">
-            Bekijk onze kalender voor activiteiten en tornooien
-          </template>
-        </IconCard>
-      </div>
-      <CategoryList
-        v-if="applications"
-        :categories="applications"
+      <ApplicationList
+        :applications="applications"
+        :icons="$route.meta.icons"
       />
     </div>
     <div class="container mx-auto">
@@ -130,9 +72,8 @@
 import NewsCard from '@/apps/news/components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
 import Spinner from '@/components/Spinner.vue';
-import IconCard from '@/components/IconCard.vue';
-import CategoryCard from '@/apps/categories/components/CategoryCard.vue';
-import CategoryList from '@/apps/categories/components/CategoryList.vue';
+import ApplicationCard from './components/ApplicationCard';
+import ApplicationList from '@/apps/site/components/ApplicationList';
 
 import messages from '../../site/lang';
 
@@ -142,9 +83,8 @@ export default {
     NewsCard,
     Paginator,
     Spinner,
-    IconCard,
-    CategoryCard,
-    CategoryList,
+    ApplicationCard,
+    ApplicationList,
   },
   data() {
     return {

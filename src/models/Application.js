@@ -16,7 +16,7 @@ export default class Application extends Model {
       remark: new Attribute(),
       images: new Attribute(true),
       short_description: new Attribute(),
-      application: new Attribute(),
+      name: new Attribute(),
       created_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true),
       updated_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true),
     };
