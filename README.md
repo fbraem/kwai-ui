@@ -46,3 +46,4 @@ The result is a build directory. Copy this directory with all its contents to yo
 Credits
 =======
 + [Pixabay](https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=984393) for free images.
++ [Font Awesome](https://fontawesome.com/) for free icons.
