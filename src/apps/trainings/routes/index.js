@@ -112,7 +112,7 @@ var routes = [
           hero: TrainingsHeader,
           default: TrainingIndex
         },
-        name: 'trainings.index'
+        name: 'trainings'
       },
     ]
   },
