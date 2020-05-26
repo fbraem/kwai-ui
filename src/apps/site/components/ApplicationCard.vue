@@ -46,7 +46,7 @@ export default {
   computed: {
     linkToApplication() {
       return {
-        name: 'categories.read',
+        name: this.application.name,
         params: {
           id: this.application.id
         }
