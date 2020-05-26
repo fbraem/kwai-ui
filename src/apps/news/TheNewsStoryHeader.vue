@@ -190,7 +190,7 @@ export default {
       this.$store.dispatch('news/remove', {
         story: this.story
       }).then(() => {
-        this.$router.push({ name: 'news.browse' });
+        this.$router.push({ name: 'news' });
       });
     },
     showModal() {

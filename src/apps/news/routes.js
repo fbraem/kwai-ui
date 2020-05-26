@@ -80,7 +80,7 @@ export default [
           hero: NewsHeader,
           default: NewsBrowse
         },
-        name: 'news.browse',
+        name: 'news',
       },
     ]
   },

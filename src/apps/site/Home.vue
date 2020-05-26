@@ -57,7 +57,7 @@
       <div class="block mb-6">
         <router-link
           class="red-button"
-          :to="{ name : 'news.browse' }"
+          :to="{ name : 'news' }"
         >
           {{ $t('more_news') }}
         </router-link>
