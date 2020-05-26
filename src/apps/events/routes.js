@@ -1,11 +1,21 @@
 import App from './App';
 
-const EventBrowse = () => import(/* webpackChunkName: "trainings_chunck" */
+const EventBrowse = () => import(/* webpackChunkName: "trainings_chunk" */
   '@/apps/events/EventBrowse'
 );
-const EventRead = () => import(/* webpackChunkName: "trainings_chunck" */
+const EventRead = () => import(/* webpackChunkName: "trainings_chunk" */
   '@/apps/events/EventRead'
 );
+
+let html = {};
+const importAllHtml = requireContext => requireContext.keys().forEach(key => html[key] = requireContext(key));
+importAllHtml(require.context('custom/events', false, /.html$/));
+
+let icons = {};
+const importAllSvg = requireContext => requireContext.keys().forEach(
+  key => icons[key.split('/')[1]] = requireContext(key).default
+);
+importAllSvg(require.context('custom', true, /icon.svg$/));
 
 export default [
   {
@@ -39,7 +49,11 @@ export default [
         components: {
           default: EventBrowse
         },
-        name: 'events.home'
+        name: 'events',
+        meta: {
+          html,
+          icons
+        }
       },
     ]
   },

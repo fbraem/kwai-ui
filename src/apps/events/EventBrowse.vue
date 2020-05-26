@@ -1,6 +1,9 @@
 <template>
   <!-- eslint-disable max-len -->
   <div class="m-4">
+    <Alert type="warning" class="m-4">
+      <div v-html="$route.meta.html['./header.html']"></div>
+    </Alert>
     <Spinner v-if="$wait.is('events.browse')" />
     <div v-else>
       <div class="calendar">
@@ -371,10 +374,12 @@ export default {
   },
   methods: {
     fetchData() {
+      /*
       this.$store.dispatch('event/browse', {
         year: this.year,
         month: this.month
       });
+       */
     }
   }
 };
