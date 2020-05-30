@@ -1,6 +1,20 @@
-import { state } from './state';
+import Vue from 'vue';
+import Vuex from 'vuex';
+Vue.use(Vuex);
 
-export default {
+import { abilityPlugin } from '@/js/ability';
+
+import kwai from './modules/kwai';
+import applications from './modules/applications';
+import authentication from './modules/authentication';
+export default new Vuex.Store({
   namespaced: true,
-  state
-}
+  modules: {
+    kwai,
+    applications,
+    authentication
+  },
+  plugins: [
+    abilityPlugin,
+  ]
+});

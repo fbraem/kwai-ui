@@ -3,7 +3,7 @@
   <div>
     <Modal
       :show="showLogin"
-      @close="showLogin = false;"
+      @close="showLogin = false"
     >
       <template slot="header">
         <h3>
@@ -138,10 +138,10 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters['auth/authenticated'];
+      return this.$store.getters['authentication/isLoggedIn'];
     },
     activeUser() {
-      return this.$store.state.auth.user;
+      return this.$store.state.authentication.user;
     }
   },
   methods: {

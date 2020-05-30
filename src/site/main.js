@@ -23,7 +23,7 @@ moment.locale('nl');
 /**
  * Initialize vuex
  */
-import store from '@/js/store';
+import store from '@/site/store';
 
 /**
  * Initialise casl
