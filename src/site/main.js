@@ -32,12 +32,21 @@ import { abilitiesPlugin } from '@casl/vue';
 import { ability } from '@/js/ability';
 Vue.use(abilitiesPlugin, ability);
 
+/**
+ * Initialise vue-wait
+ */
 import VueWait from 'vue-wait';
 Vue.use(VueWait);
 
+/**
+ * Initialise vue-notification
+ */
 import Notifications from 'vue-notification';
 Vue.use(Notifications);
 
+/**
+ * Initialise vue-router
+ */
 import routes from './routes';
 const router = new VueRouter({
   routes
@@ -45,11 +54,17 @@ const router = new VueRouter({
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });
 
+/**
+ * Initialise vue-custom-element
+ */
 import vueCustomElement from 'vue-custom-element';
 Vue.use(vueCustomElement);
 import MessageCard from '@/apps/site/MessageCard';
 Vue.customElement('message-card', MessageCard);
 
+/**
+ * Create Vue
+ */
 new Vue({
   router,
   store,
