@@ -121,7 +121,7 @@ const actions = {
     const form = {
       refresh_token: state.refresh_token
     };
-    dispatch('wait/start', 'core.authentication.logout', {root: true});
+    dispatch('wait/start', 'core.authentication.logout', { root: true });
     try {
       await http_auth
         .url('user/logout')
@@ -133,7 +133,7 @@ const actions = {
       commit('error');
       throw error;
     } finally {
-      dispatch('wait/end', 'core.authentication.logout', {root: true});
+      dispatch('wait/end', 'core.authentication.logout', { root: true });
     }
   },
 
