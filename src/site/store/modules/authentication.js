@@ -26,21 +26,23 @@ const mutations = {
   /**
    * Set the error
    */
-  error: (state, error) => {
+  setError: (state, error) => {
     state.error = error;
   },
   /**
    * Set the access and refresh token
    */
-  login: (state, { access_token, refresh_token }) => {
+  setLogin: (state, { access_token, refresh_token }) => {
     state.error = null;
     Lockr.set(ACCESS_TOKEN_KEY, access_token);
     state.access_token = access_token;
     Lockr.set(REFRESH_TOKEN_KEY, access_token);
     state.refresh_token = refresh_token;
   },
-
-  user: (state, { data }) => {
+  /**
+   * Set the current user with abilities
+   */
+  setUser: (state, { data }) => {
     state.error = null;
     let rules = [];
     if (data.abilities) {
@@ -77,6 +79,7 @@ const actions = {
    * Login a user with email/password.
    */
   async login({ commit, dispatch }, { email, password }) {
+    commit('setError', null);
     dispatch('wait/start', 'core.authentication.login', { root: true });
     try {
       const form = {
@@ -89,9 +92,9 @@ const actions = {
         .post()
         .json()
       ;
-      commit('login', json);
+      commit('setLogin', json);
     } catch (error) {
-      commit('error', error);
+      commit('setError', error);
       throw error;
     } finally {
       dispatch('wait/end', 'core.authentication.login', { root: true });
@@ -101,13 +104,14 @@ const actions = {
    * Get the current user
    */
   async user({ commit, dispatch }) {
+    commit('setError', null);
     dispatch('wait/start', 'core.authentication.user', { root: true });
     try {
       const api = new JSONAPI({ source: User });
       const result = await api.get();
-      commit('user', result);
+      commit('setUser', result);
     } catch (error) {
-      commit('error', error);
+      commit('setError', error);
       throw error;
     }
     finally {
@@ -118,6 +122,7 @@ const actions = {
    * Logout the user
    */
   async logout({ commit, dispatch, state }) {
+    commit('setError', null);
     const form = {
       refresh_token: state.refresh_token
     };
@@ -128,10 +133,9 @@ const actions = {
         .formData(form)
         .post()
       ;
-      commit('logout');
+      commit('setLogout');
     } catch (error) {
-      commit('error');
-      throw error;
+      console.log(error);
     } finally {
       dispatch('wait/end', 'core.authentication.logout', { root: true });
     }
@@ -148,7 +152,7 @@ const actions = {
         .post()
         .json()
       ;
-      commit('login', json);
+      commit('setLogin', json);
     }
   }
 };
