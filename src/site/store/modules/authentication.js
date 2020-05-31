@@ -60,7 +60,9 @@ const mutations = {
     Lockr.set(USER_KEY, user);
     state.user = user;
   },
-
+  /**
+   * Set all data to null
+   */
   logout: (state) => {
     state.error = null;
     Lockr.rm(USER_KEY);
@@ -140,7 +142,9 @@ const actions = {
       dispatch('wait/end', 'core.authentication.logout', { root: true });
     }
   },
-
+  /**
+   * Use the refresh token to get a new access token.
+   */
   async refresh({ commit, state }) {
     if (state.refresh_token) {
       const form = {
