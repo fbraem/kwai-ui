@@ -21,10 +21,10 @@ const Form = (fields, validators) => {
   };
 
   const validateField = (name, showErrors = true) => {
-    var field = fields[name];
+    const field = fields[name];
     field.errors.splice(0, field.errors.length);
-    var valid = field.validators.every((validator) => {
-      var vFn = validator.v.bind(field);
+    const valid = field.validators.every((validator) => {
+      const vFn = validator.v.bind(field);
       field.valid = vFn(field.value, validator.params);
       if (!field.valid && showErrors) {
         field.errors.push(validator.error);
@@ -50,10 +50,7 @@ const Form = (fields, validators) => {
 export default Form;
 
 
-export const makeField = ({value, validators, required} = {}) => {
-  if (typeof value === 'undefined') value = null;
-  if (!validators) validators = [];
-  if (typeof required === 'undefined') required = false;
+export const makeField = ({value = null, validators = [], required = false} = {}) => {
   let errors = [];
   let valid = true;
 
@@ -111,8 +108,7 @@ export function isInteger(value) {
  */
 export function isEmail(value) {
   if (value) {
-    var re = /^\S+@\S+$/;
-    return value.match(re);
+    return /^\S+@\S+$/.test(value);
   }
   return true;
 };

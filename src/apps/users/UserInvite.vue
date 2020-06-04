@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiEmail from '@/components/forms/KwaiEmail.vue';
+import KwaiForm from '@/components/forms/KwaiForm';
+import KwaiField from '@/components/forms/KwaiField';
+import KwaiInputText from '@/components/forms/KwaiInputText';
+import KwaiEmail from '@/components/forms/KwaiEmail';
 
 import makeForm, { makeField, isEmail, notEmpty } from '@/js/Form';
 const makeInviteForm = (fields) => {

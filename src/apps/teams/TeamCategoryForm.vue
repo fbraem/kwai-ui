@@ -79,12 +79,12 @@ const makeTeamTypeForm = (fields) => {
   return { ...makeForm(fields), writeForm, readForm };
 };
 
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiTextarea from '@/components/forms/KwaiTextarea.vue';
-import KwaiSelect from '@/components/forms/KwaiSelect.vue';
-import KwaiCheckbox from '@/components/forms/KwaiCheckbox.vue';
+import KwaiForm from '@/components/forms/KwaiForm';
+import KwaiField from '@/components/forms/KwaiField';
+import KwaiInputText from '@/components/forms/KwaiInputText';
+import KwaiTextarea from '@/components/forms/KwaiTextarea';
+import KwaiSelect from '@/components/forms/KwaiSelect';
+import KwaiCheckbox from '@/components/forms/KwaiCheckbox';
 
 import messages from './lang';
 

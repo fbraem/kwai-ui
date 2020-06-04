@@ -166,10 +166,10 @@ const makeAddMembersForm = (fields) => {
   return { ...makeForm(fields), writeForm, readForm };
 };
 
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiSelect from '@/components/forms/KwaiSelect.vue';
+import KwaiForm from '@/components/forms/KwaiForm';
+import KwaiField from '@/components/forms/KwaiField';
+import KwaiInputText from '@/components/forms/KwaiInputText';
+import KwaiSelect from '@/components/forms/KwaiSelect';
 import Spinner from '@/components/Spinner';
 import Modal from '@/components/Modal';
 
