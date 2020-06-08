@@ -1,5 +1,6 @@
 import Cache from './Cache';
 import Model from './Model';
+import Attribute from './Attribute';
 
 export default class Transformer {
   constructor() {
@@ -18,12 +19,14 @@ export default class Transformer {
 
     // Set all fields
     let current = this.cache.getModel(model, data.id);
-    Object.entries(model.fields()).forEach((entry) => {
-      const [key, attr] = entry;
-      if (attr in data.attributes) {
-        current[attr] = data.attributes[attr];
-      }
-    });
+    let fields = model.fields();
+    if (Array.isArray(fields)) {
+      fields.forEach(field => {
+        if (field in data.attributes) {
+          current[field] = data.attributes[field];
+        }
+      });
+    }
 
     // Set all relationships
     let createRelated = (relation, relationModel) => {
@@ -88,12 +91,14 @@ export default class Transformer {
 
     // Handle all fields
     json.data.attributes = Object.create(null);
-    Object.entries(modelClass.fields()).forEach(entry => {
-      const [key, attr] = entry;
-      if (attr in modelInstance) {
-        json.data.attributes[attr] = modelInstance[attr];
-      }
-    });
+    let fields = modelClass.fields();
+    if (Array.isArray(fields)) {
+      fields.forEach(field => {
+        if (field in modelInstance) {
+          json.data.attributes[field] = modelInstance[field];
+        }
+      });
+    }
 
     // Handle all relations
     let relationships = Object.create(null);
