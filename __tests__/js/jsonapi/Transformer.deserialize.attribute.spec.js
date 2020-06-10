@@ -1,5 +1,6 @@
 import Model from '@/js/jsonapi/Model';
 import Transformer from '@/js/jsonapi/Transformer';
+import Attribute from '@/js/jsonapi/Attribute';
 
 class Book extends Model {
   static type() {
@@ -7,10 +8,9 @@ class Book extends Model {
   }
 
   static fields() {
-    return [
-      'title',
-      'isbn', // To test an unused field
-    ];
+    return {
+      title: new Attribute(),
+    };
   }
 }
 
@@ -141,9 +141,9 @@ class Author extends Model {
   }
 
   static fields() {
-    return [
-      'name',
-    ];
+    return {
+      name: new Attribute()
+    };
   }
 }
 
@@ -153,9 +153,9 @@ class BookWithAuthor extends Model {
   }
 
   static fields() {
-    return [
-      'title',
-    ];
+    return {
+      title: new Attribute()
+    };
   }
 
   static relationships() {
@@ -179,7 +179,7 @@ class BookWithAuthor extends Model {
   }
 }
 
-describe('Transformer - Deserialize with relationship', () => {
+describe('Transformer - Attribute - Deserialize with relationship', () => {
   test('It should create a relationship as array and computed value',
     () => {
       let transformer = new Transformer();

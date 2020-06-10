@@ -26,6 +26,17 @@ export default class Transformer {
           current[field] = data.attributes[field];
         }
       });
+    } else {
+      Object.entries(fields).forEach(entry => {
+        const [key, attr] = entry;
+        if (key in data.attributes) {
+          if (attr instanceof Attribute) {
+            current[key] = attr.from(data.attributes[key]);
+          } else {
+            current[key] = data.attributes[key];
+          }
+        }
+      });
     }
 
     // Set all relationships
@@ -96,6 +107,15 @@ export default class Transformer {
       fields.forEach(field => {
         if (field in modelInstance) {
           json.data.attributes[field] = modelInstance[field];
+        }
+      });
+    } else {
+      Object.entries(fields).forEach(entry => {
+        const [key, attr] = entry;
+        if (!attr.isReadonly()) {
+          if (key in modelInstance) {
+            json.data.attributes[key] = attr.to(modelInstance[key]);
+          }
         }
       });
     }
