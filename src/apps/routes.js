@@ -9,6 +9,7 @@ import teamsRouter from './teams/routes';
 import eventsRouter from './events/routes';
 import trainingsRouter from './trainings/routes';
 import clubsRouter from './clubs/routes';
+import userRouter from './user/routes';
 
 function makeRoutes() {
   return []
@@ -23,6 +24,7 @@ function makeRoutes() {
     .concat(eventsRouter)
     .concat(trainingsRouter)
     .concat(clubsRouter)
+    .concat(userRouter)
   ;
 }
 
