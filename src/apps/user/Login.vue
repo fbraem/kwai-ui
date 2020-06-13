@@ -103,12 +103,6 @@ export default {
       })
         .then(() => {
           this.$router.push({ name: this.$route.meta.back ?? 'home' });
-/*
-          this.$store.dispatch('authentication/user')
-            .then(() => {
-              this.$router.push({ name: this.$route.meta.back ?? 'home' });
-            });
- */
         }).catch((e) => {
           this.form.fields.password.value = '';
           if (e.response?.status === 401) { // Not Authorized
