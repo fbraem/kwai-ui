@@ -1,0 +1,10 @@
+{
+  "password": {
+    "label": "Paswoord",
+    "help": "Geef jouw paswoord in"
+  },
+  "email": {
+    "label": "Email",
+    "help": "Geef jouw email adres in"
+  }
+}
