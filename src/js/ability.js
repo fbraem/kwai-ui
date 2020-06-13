@@ -29,6 +29,7 @@ export const abilityPlugin = (store) => {
       ability.update(state.authentication.rules);
       break;
     case 'authentication/setLogout':
+      console.log('The user has been logged out, clear the rules');
       ability.update([]);
       break;
     }
