@@ -51,6 +51,12 @@ import routes from './routes';
 const router = new VueRouter({
   routes
 });
+router.beforeEach((to, from, next) => {
+  if (from.name) {
+    to.meta.back = from.name;
+  }
+  next();
+});
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });
 
