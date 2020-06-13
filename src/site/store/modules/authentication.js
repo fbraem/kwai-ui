@@ -1,6 +1,6 @@
 import Lockr from 'lockr';
 import { http, http_auth } from '@/js/http';
-import JSONAPI from '@/js/JSONAPI';
+import Transformer from '@/js/jsonapi/Transformer';
 import User from '@/models/users/User';
 
 const USER_KEY = 'user';
@@ -42,12 +42,12 @@ const mutations = {
   /**
    * Set the current user with abilities
    */
-  setUser: (state, { data }) => {
+  setUser: (state, user) => {
     state.error = null;
     let rules = [];
-    if (data.abilities) {
-      for(let ability of data.abilities) {
-        for(let rule of ability.rules) {
+    if (user.abilities) {
+      for (let ability of user.abilities) {
+        for (let rule of ability.rules) {
           rules.push({
             actions: rule.action.name,
             subject: rule.subject.name
@@ -63,7 +63,7 @@ const mutations = {
   /**
    * Set all data to null
    */
-  logout: (state) => {
+  setLogout: (state) => {
     state.error = null;
     Lockr.rm(USER_KEY);
     state.user = null;
@@ -109,14 +109,17 @@ const actions = {
     commit('setError', null);
     dispatch('wait/start', 'core.authentication.user', { root: true });
     try {
-      const api = new JSONAPI({ source: User });
-      const result = await api.get();
-      commit('setUser', result);
+      const json = await http_auth
+        .url('user')
+        .get()
+        .json()
+      ;
+      let user = new Transformer().deserialize(User, json);
+      commit('setUser', user);
     } catch (error) {
       commit('setError', error);
       throw error;
-    }
-    finally {
+    } finally {
       dispatch('wait/end', 'core.authentication.user', { root: true });
     }
   },
