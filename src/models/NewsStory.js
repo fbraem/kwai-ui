@@ -1,7 +1,8 @@
-import Model from './Model';
-import {
-  Attribute, DateAttribute, ObjectAttribute, ArrayAttribute
-} from './Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
+import ObjectAttribute from '@/js/jsonapi/ObjectAttribute';
+import ArrayAttribute from '@/js/jsonapi/ArrayAttribute';
 
 import Application from './Application';
 import moment from 'moment-timezone';

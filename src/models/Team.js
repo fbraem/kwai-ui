@@ -1,5 +1,6 @@
-import Model from './Model';
-import { Attribute, DateAttribute } from './Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
 
 import TeamCategory from './TeamCategory';
 import Member from './Member';

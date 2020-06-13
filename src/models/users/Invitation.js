@@ -1,5 +1,6 @@
-import Model from '@/models/Model';
-import { Attribute, DateAttribute } from '@/models/Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
 
 /**
  * Invitation model
