@@ -1,6 +1,7 @@
 <template>
   <div class="mt-6">
-    <Spinner v-if="$wait.is('users.browse')" />
+    <Spinner v-if="$wait.is('users.browse')">
+    </Spinner>
     <div v-else
       class="flex flex-wrap"
     >

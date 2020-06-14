@@ -3,7 +3,7 @@
     <Spinner
       v-if="$wait.is('teams.browse')"
       class="text-center"
-    />
+    ></Spinner>
     <div v-else-if="teams && teams.length == 0">
       {{ $t('no_teams') }}
     </div>

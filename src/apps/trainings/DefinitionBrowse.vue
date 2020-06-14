@@ -5,7 +5,7 @@
     <Spinner
       v-if="$wait.is('training.definitions.browse')"
       class="text-center"
-    />
+    ></Spinner>
     <div v-else>
       <Alert
         v-if="noData"

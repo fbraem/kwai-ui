@@ -4,7 +4,8 @@
     <Alert type="warning" class="m-4">
       <div v-html="$route.meta.html['./header.html']"></div>
     </Alert>
-    <Spinner v-if="$wait.is('events.browse')" />
+    <Spinner v-if="$wait.is('events.browse')">
+    </Spinner>
     <div v-else>
       <div class="calendar">
         <div class="title">

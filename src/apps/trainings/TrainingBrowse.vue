@@ -1,6 +1,7 @@
 <template>
   <div class="container mx-auto mt-6">
-    <Spinner v-if="$wait.is('training.browse')" />
+    <Spinner v-if="$wait.is('training.browse')">
+    </Spinner>
     <div v-else>
       <Calendar
         :year="year"

@@ -12,7 +12,8 @@
     >
       {{ $t('not_found') }}
     </Alert>
-    <Spinner v-if="$wait.is('teams.read')" />
+    <Spinner v-if="$wait.is('teams.read')">
+    </Spinner>
     <div
       v-else-if="team"
       class="p-2"

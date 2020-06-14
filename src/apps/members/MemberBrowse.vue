@@ -3,7 +3,7 @@
     <Spinner
        v-if="$wait.is('members.browse')"
        class="text-center"
-    />
+    ></Spinner>
     <div v-else-if="members">
       <Alert
         v-if="members.length == 0"

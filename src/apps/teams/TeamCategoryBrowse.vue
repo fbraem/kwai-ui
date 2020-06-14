@@ -1,6 +1,7 @@
 <template>
   <AdminPage :toolbar="toolbar">
-    <Spinner v-if="$wait.is('team_category.browse')" />
+    <Spinner v-if="$wait.is('team_category.browse')">
+    </Spinner>
     <Alert
       v-else-if="noCategories"
       type="warning"

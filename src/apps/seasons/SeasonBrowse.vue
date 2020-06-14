@@ -1,6 +1,7 @@
 <template>
   <div class="container mx-auto mt-3">
-    <Spinner v-if="$wait.is('seasons.browse')" />
+    <Spinner v-if="$wait.is('seasons.browse')">
+    </Spinner>
     <div v-else>
       <Alert
         v-if="noSeasons"

@@ -9,7 +9,7 @@
       <NewsSummaryList
         v-if="hasStories"
         :stories="stories"
-      />
+      ></NewsSummaryList>
       <div
         v-else
       >
