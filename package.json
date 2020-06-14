@@ -44,6 +44,8 @@
     "moment-locales-webpack-plugin": "^1.2.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
+    "posthtml-include": "^1.4.3",
+    "posthtml-loader": "^1.0.2",
     "vue-loader": "^15.9.2",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.43.0",

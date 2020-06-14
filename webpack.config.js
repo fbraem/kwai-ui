@@ -78,32 +78,46 @@ module.exports = (env, argv) => {
         {
           test: /\.html$/,
           exclude: /node_modules/,
-          loader: 'html-loader',
-          options: {
-            attributes: {
-              list: [
-                {
-                  tag: 'message-card',
-                  attribute: 'image',
-                  type: 'src'
-                },
-                {
-                  tag: 'img',
-                  attribute: 'src',
-                  type: 'src'
-                },
-                {
-                  tag: 'img',
-                  attribute: 'srcset',
-                  type: 'srcset'
-                },
-              ]
-            }
-          }
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                attributes: {
+                  list: [
+                    {
+                      tag: 'message-card',
+                      attribute: 'image',
+                      type: 'src'
+                    },
+                    {
+                      tag: 'img',
+                      attribute: 'src',
+                      type: 'src'
+                    },
+                    {
+                      tag: 'img',
+                      attribute: 'srcset',
+                      type: 'srcset'
+                    },
+                  ]
+                }
+              }
+            },
+          ]
         },
         {
           test: /\.vue$/,
-          loader: 'vue-loader',
+          use: [
+            'vue-loader',
+            {
+              loader: 'posthtml-loader',
+              options: {
+                plugins: [
+                  require('posthtml-include')(),
+                ]
+              }
+            },
+          ]
         },
         {
           test: /\.js$/,
@@ -156,7 +170,7 @@ module.exports = (env, argv) => {
         vue$: isDev ? 'vue/dist/vue.common.js' : 'vue/dist/vue.common.prod.js',
         '@': resolve('src'),
         config: path.join(__dirname, 'src', 'site', 'config', mode),
-        'custom': resolve('custom')
+        custom: resolve('custom')
       },
       mainFiles: [ 'index' ],
     },
