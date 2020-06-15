@@ -18,7 +18,26 @@
               >
                 <i class="fab fa-facebook-f"></i>
               </a>
-              <Login />
+              <router-link
+                v-if="isLoggedIn"
+                class="icon-button text-red-300 hover-bg-red-900"
+                :to="{ name: 'users.read', params: { id: activeUser.id } }">
+                <i class="fas fa-user"></i>
+              </router-link>
+              <a
+                v-if="isLoggedIn"
+                class="icon-button text-red-300 hover-bg-red-900"
+                @click="logout"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+              </a>
+              <router-link
+                v-else
+                class="icon-button text-red-300 hover-bg-red-900"
+                :to="{ name: 'user.login'}"
+              >
+                <i class="fas fa-lock"></i>
+              </router-link>
             </div>
           </div>
         </div>
@@ -28,22 +47,32 @@
 </template>
 
 <script>
-import Login from '@/apps/auth/components/Login.vue';
-
 export default {
-  components: {
-    Login
-  },
   computed: {
     title() {
-      return this.$store.state.kwai?.page.title;
+      return this.$store.state.kwai.page.title;
     },
     subTitle() {
-      return this.$store.state.kwai?.page.subTitle;
+      return this.$store.state.kwai.page.subTitle;
     },
     facebook() {
-      return this.$store.state.kwai?.facebook;
+      return this.$store.state.kwai.facebook;
+    },
+    isLoggedIn() {
+      return this.$store.getters['authentication/isLoggedIn'];
+    },
+    activeUser() {
+      return this.$store.state.authentication.user;
     }
   },
+  methods: {
+    logout() {
+      this.$store.dispatch('authentication/logout')
+        .then(() => {
+          this.$router.push('/', () => {});
+        })
+      ;
+    }
+  }
 };
 </script>
