@@ -8,12 +8,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import VueI18n from 'vue-i18n';
-Vue.use(VueI18n);
-const i18n = new VueI18n({
-  locale: 'nl',
-  fallbackLocale: 'nl',
-});
+import { i18n } from '@/js/i18n';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
