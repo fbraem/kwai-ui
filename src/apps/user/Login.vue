@@ -1,16 +1,18 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="h-screen flex justify-center items-center">
+  <div class="h-screen w-full max-w-sm mx-auto flex justify-center items-center">
     <div>
-      <h1 class="font-hairline mb-6 text-center">Login to our Website</h1>
+      <h1 class="font-hairline mb-6 text-center">
+        {{ $t('login.title') }}
+      </h1>
       <div class="border-red-700 p-8 border-t-8 bg-white mb-6 rounded-lg shadow-lg">
         <ValidationObserver v-slot="{ invalid }">
           <form @submit.prevent="login" class="flex flex-col">
             <Field
               rules="required|email"
-              label="Email"
+              :label="$t('login.form.email.label')"
               id="login_email"
-              name="Email"
+              :name="$t('login.form.email.label')"
               v-slot="{ valid, required }"
             >
               <InputField
@@ -23,9 +25,9 @@
             </Field>
             <Field
               rules="required"
-              label="Password"
+              :label="$t('login.form.password.label')"
               id="login_password"
-              name="Password"
+              :name="$t('login.form.password.label')"
               v-slot="{ valid, required }"
             >
               <InputField
@@ -37,17 +39,25 @@
               />
             </Field>
             <Alert
+              v-if="invalidCredentials"
+              type="danger"
+            >
+              {{ $t('login.form.invalidCredentials') }}
+            </Alert>
+            <Alert
               v-if="error"
               type="danger"
             >
-              Can't login. Please check your credentials.
+              {{ $t('login.form.error', { code: error.code, message: error.message })}}
+              <br />
+              <span class="text-sm">{{ $t('login.form.contact') }}</span>
             </Alert>
             <div class="flex justify-end mt-3">
               <button
                 class="red-button disabled:opacity-50 disabled:cursor-not-allowed"
                 :disabled="invalid"
               >
-                <i class="fas fa-unlock"></i>&nbsp; Login
+                <i class="fas fa-unlock"></i>&nbsp; {{ $t('login.form.submit') }}
               </button>
             </div>
           </form>
@@ -61,20 +71,23 @@
 </style>
 
 <script>
-import messages from './lang';
+import lang from './lang';
 import InputField from '@/components/forms/InputField';
 import Field from '@/components/forms/Field';
 import Alert from '@/components/Alert';
 import { extend, ValidationObserver } from 'vee-validate';
 import { required, email } from 'vee-validate/dist/rules';
 
+import { i18n } from '@/js/i18n';
+i18n.setLocaleMessage('nl', lang.messages.nl);
+
 extend('required', {
   ...required,
-  message: '{_field_} is required'
+  message: i18n.t('login.form.required')
 });
 extend('email', {
   ...email,
-  message: 'Enter a valid email'
+  message: i18n.t('login.form.email.invalid')
 });
 
 export default {
@@ -84,7 +97,8 @@ export default {
         email: '',
         password: ''
       },
-      error: false
+      invalidCredentials: false,
+      error: null
     };
   },
   components: {
@@ -93,10 +107,11 @@ export default {
     Alert,
     ValidationObserver
   },
-  i18n: messages,
+  i18n: lang,
   methods: {
     login() {
-      this.error = false;
+      this.invalidCredentials = false;
+      this.error = null;
       this.$store.dispatch('authentication/login', {
         email: this.form.email,
         password: this.form.password
@@ -104,11 +119,18 @@ export default {
         .then(() => {
           this.$router.push({ name: this.$route.meta.back ?? 'home' });
         }).catch((e) => {
-          this.form.fields.password.value = '';
+          this.form.password = '';
           if (e.response?.status === 401) { // Not Authorized
-            this.error = true;
+            this.invalidCredentials = true;
           } else {
-            console.log(e);
+            if (e.response) {
+              this.error = {
+                code: e.response.status,
+                message: e.response.statusText
+              };
+            } else {
+              console.log(e);
+            }
           }
         });
     }

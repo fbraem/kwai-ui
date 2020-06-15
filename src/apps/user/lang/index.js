@@ -3,7 +3,7 @@ import nl from './nl.json';
 
 export default {
   messages: {
-    en: en,
-    nl: nl,
+    en,
+    nl,
   },
 };
