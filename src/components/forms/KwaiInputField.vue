@@ -1,3 +1,4 @@
+<!--suppress HtmlFormInputWithoutLabel -->
 <template>
   <!-- eslint-disable max-len -->
   <input
