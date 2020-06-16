@@ -7,36 +7,36 @@
     <template>
       <ValidationObserver v-slot="{ invalid }">
         <form @submit.prevent="login" class="flex flex-col">
-          <Field
+          <KwaiField
             rules="required|email"
             :label="$t('login.form.email.label')"
             id="login_email"
             :name="$t('login.form.email.label')"
             v-slot="{ valid, required }"
           >
-            <InputField
+            <KwaiInputField
               id="login_email"
               type="email"
               :required="required"
               :valid="valid"
               v-model="form.email"
             />
-          </Field>
-          <Field
+          </KwaiField>
+          <KwaiField
             rules="required"
             :label="$t('login.form.password.label')"
             id="login_password"
             :name="$t('login.form.password.label')"
             v-slot="{ valid, required }"
           >
-            <InputField
+            <KwaiInputField
               id="login_password"
               type="password"
               :required="required"
               :valid="valid"
               v-model="form.password"
             />
-          </Field>
+          </KwaiField>
           <Alert
             v-if="invalidCredentials"
             type="danger"
@@ -71,8 +71,8 @@
 
 <script>
 import lang from './lang';
-import InputField from '@/components/forms/InputField';
-import Field from '@/components/forms/Field';
+import KwaiInputField from '@/components/forms/KwaiInputField';
+import KwaiField from '@/components/forms/KwaiField';
 import Alert from '@/components/Alert';
 import KwaiButton from '@/components/forms/KwaiButton';
 import Dialog from '@/components/Dialog';
@@ -103,8 +103,8 @@ export default {
     };
   },
   components: {
-    InputField,
-    Field,
+    KwaiInputField,
+    KwaiField,
     Alert,
     Dialog,
     ValidationObserver,
