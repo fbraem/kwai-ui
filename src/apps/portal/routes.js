@@ -4,7 +4,7 @@ import HomeApp from './Home';
 
 let html = {};
 const importAllHtml = requireContext => requireContext.keys().forEach(key => html[key] = requireContext(key));
-importAllHtml(require.context('custom/site', false, /.html$/));
+importAllHtml(require.context('custom/portal', false, /.html$/));
 
 let icons = {};
 const importAllSvg = requireContext => requireContext.keys().forEach(

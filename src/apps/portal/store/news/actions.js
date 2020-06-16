@@ -2,7 +2,7 @@ import JSONAPI from '@/js/JSONAPI';
 import NewsStory from '@/models/NewsStory';
 
 async function load({ dispatch, commit, getters }, payload = {}) {
-  dispatch('wait/start', 'site.news.load', { root: true });
+  dispatch('wait/start', 'portal.news.load', { root: true });
 
   // First check if the stories were already loaded.
   let offset = payload.offset ?? 0;
@@ -21,7 +21,7 @@ async function load({ dispatch, commit, getters }, payload = {}) {
     commit('error', error);
     throw error;
   } finally {
-    dispatch('wait/end', 'site.news.load', { root: true });
+    dispatch('wait/end', 'portal.news.load', { root: true });
   }
 }
 

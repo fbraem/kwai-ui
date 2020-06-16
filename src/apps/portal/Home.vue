@@ -73,7 +73,7 @@ import NewsCard from '@/apps/news/components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
 import Spinner from '@/components/Spinner.vue';
 import ApplicationCard from './components/ApplicationCard';
-import ApplicationList from '@/apps/site/components/ApplicationList';
+import ApplicationList from '@/apps/portal/components/ApplicationList';
 
 import messages from '../../site/lang';
 
@@ -103,7 +103,7 @@ export default {
       return this.$store.state.site.news.offset;
     },
     stories() {
-      return this.$store.getters['site/news/stories'](this.storiesOffset);
+      return this.$store.getters['portal/news/stories'](this.storiesOffset);
     },
     applications() {
       return this.$store.state.site.applications.all;
@@ -125,7 +125,7 @@ export default {
     },
     async loadStories(offset) {
       try {
-        await this.$store.dispatch('site/news/load', {
+        await this.$store.dispatch('portal/news/load', {
           offset: offset
         });
       } catch (error) {

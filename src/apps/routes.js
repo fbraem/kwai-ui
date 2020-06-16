@@ -1,4 +1,4 @@
-import siteRouter from './site/routes';
+import portalRouter from './portal/routes';
 import newsRouter from './news/routes';
 import categoriesRouter from './categories/routes';
 import pagesRouter from './pages/routes';
@@ -13,7 +13,7 @@ import userRouter from './user/routes';
 
 function makeRoutes() {
   return []
-    .concat(siteRouter)
+    .concat(portalRouter)
     .concat(newsRouter)
     .concat(categoriesRouter)
     .concat(pagesRouter)
