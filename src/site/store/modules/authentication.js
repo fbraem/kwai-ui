@@ -36,7 +36,7 @@ const mutations = {
     state.error = null;
     Lockr.set(ACCESS_TOKEN_KEY, access_token);
     state.access_token = access_token;
-    Lockr.set(REFRESH_TOKEN_KEY, access_token);
+    Lockr.set(REFRESH_TOKEN_KEY, refresh_token);
     state.refresh_token = refresh_token;
   },
   /**
@@ -82,7 +82,7 @@ const actions = {
    */
   async login({ commit, dispatch }, { email, password }) {
     commit('setError', null);
-    dispatch('wait/start', 'core.authentication.login', { root: true });
+    dispatch('wait/start', 'authentication.login', { root: true });
     try {
       const form = {
         username: email,
@@ -99,7 +99,7 @@ const actions = {
       commit('setError', error);
       throw error;
     } finally {
-      dispatch('wait/end', 'core.authentication.login', { root: true });
+      dispatch('wait/end', 'authentication.login', { root: true });
     }
   },
   /**
@@ -107,7 +107,7 @@ const actions = {
    */
   async user({ commit, dispatch }) {
     commit('setError', null);
-    dispatch('wait/start', 'core.authentication.user', { root: true });
+    dispatch('wait/start', 'authentication.user', { root: true });
     try {
       const json = await http_auth
         .url('user')
@@ -120,7 +120,7 @@ const actions = {
       commit('setError', error);
       throw error;
     } finally {
-      dispatch('wait/end', 'core.authentication.user', { root: true });
+      dispatch('wait/end', 'authentication.user', { root: true });
     }
   },
   /**
@@ -131,7 +131,7 @@ const actions = {
     const form = {
       refresh_token: state.refresh_token
     };
-    dispatch('wait/start', 'core.authentication.logout', { root: true });
+    dispatch('wait/start', 'authentication.logout', { root: true });
     try {
       await http_auth
         .url('user/logout')
@@ -140,9 +140,14 @@ const actions = {
       ;
       commit('setLogout');
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      if (error.response.status === 401) {
+        commit('setLogout');
+      } else {
+        console.log(error);
+      }
     } finally {
-      dispatch('wait/end', 'core.authentication.logout', { root: true });
+      dispatch('wait/end', 'authentication.logout', { root: true });
     }
   },
   /**
