@@ -10,7 +10,7 @@
       "email": {
         "label": "Email",
         "help": "Geef jouw email adres in",
-        "invalid": "Email addres is niet geldig"
+        "invalid": "Email is niet geldig"
       },
       "invalidCredentials": "Inloggen mislukt. Controleer de inloggegevens.",
       "error": "HTTP ERROR {code} - {message}",
