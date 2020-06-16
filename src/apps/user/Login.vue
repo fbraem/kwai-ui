@@ -1,70 +1,69 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="h-screen w-full max-w-sm mx-auto flex justify-center items-center">
-    <div>
-      <h1 class="font-hairline mb-6 text-center">
-        {{ $t('login.title') }}
-      </h1>
-      <div class="border-red-700 p-8 border-t-8 bg-white mb-6 rounded-lg shadow-lg">
-        <ValidationObserver v-slot="{ invalid }">
-          <form @submit.prevent="login" class="flex flex-col">
-            <Field
-              rules="required|email"
-              :label="$t('login.form.email.label')"
+  <Dialog>
+    <template slot="title">
+      {{ $t('login.title') }}
+    </template>
+    <template>
+      <ValidationObserver v-slot="{ invalid }">
+        <form @submit.prevent="login" class="flex flex-col">
+          <Field
+            rules="required|email"
+            :label="$t('login.form.email.label')"
+            id="login_email"
+            :name="$t('login.form.email.label')"
+            v-slot="{ valid, required }"
+          >
+            <InputField
               id="login_email"
-              :name="$t('login.form.email.label')"
-              v-slot="{ valid, required }"
-            >
-              <InputField
-                id="login_email"
-                type="email"
-                :required="required"
-                :valid="valid"
-                v-model="form.email"
-              />
-            </Field>
-            <Field
-              rules="required"
-              :label="$t('login.form.password.label')"
+              type="email"
+              :required="required"
+              :valid="valid"
+              v-model="form.email"
+            />
+          </Field>
+          <Field
+            rules="required"
+            :label="$t('login.form.password.label')"
+            id="login_password"
+            :name="$t('login.form.password.label')"
+            v-slot="{ valid, required }"
+          >
+            <InputField
               id="login_password"
-              :name="$t('login.form.password.label')"
-              v-slot="{ valid, required }"
+              type="password"
+              :required="required"
+              :valid="valid"
+              v-model="form.password"
+            />
+          </Field>
+          <Alert
+            v-if="invalidCredentials"
+            type="danger"
+          >
+            {{ $t('login.form.invalidCredentials') }}
+          </Alert>
+          <Alert
+            v-if="error"
+            type="danger"
+          >
+            {{ $t('login.form.error', { code: error.code, message: error.message })}}
+            <br />
+            <span class="text-sm">{{ $t('login.form.contact') }}</span>
+          </Alert>
+          <div class="flex justify-end mt-3">
+            <KwaiButton
+              icon="fas fa-unlock"
+              :disabled="invalid"
+              type="submit"
             >
-              <InputField
-                id="login_password"
-                type="password"
-                :required="required"
-                :valid="valid"
-                v-model="form.password"
-              />
-            </Field>
-            <Alert
-              v-if="invalidCredentials"
-              type="danger"
-            >
-              {{ $t('login.form.invalidCredentials') }}
-            </Alert>
-            <Alert
-              v-if="error"
-              type="danger"
-            >
-              {{ $t('login.form.error', { code: error.code, message: error.message })}}
-              <br />
-              <span class="text-sm">{{ $t('login.form.contact') }}</span>
-            </Alert>
-            <div class="flex justify-end mt-3">
-              <button
-                class="red-button disabled:opacity-50 disabled:cursor-not-allowed"
-                :disabled="invalid"
-              >
-                <i class="fas fa-unlock"></i>&nbsp; {{ $t('login.form.submit') }}
-              </button>
-            </div>
-          </form>
-        </ValidationObserver>
-      </div>
-    </div>
-  </div>
+              {{ $t('login.form.submit') }}
+            </KwaiButton>
+          </div>
+        </form>
+      </ValidationObserver>
+    </template>
+  </Dialog>
 </template>
 
 <style scoped>
@@ -75,11 +74,13 @@ import lang from './lang';
 import InputField from '@/components/forms/InputField';
 import Field from '@/components/forms/Field';
 import Alert from '@/components/Alert';
+import KwaiButton from '@/components/forms/KwaiButton';
+import Dialog from '@/components/Dialog';
 import { extend, ValidationObserver } from 'vee-validate';
 import { required, email } from 'vee-validate/dist/rules';
 
 import { i18n } from '@/js/i18n';
-i18n.setLocaleMessage('nl', lang.messages.nl);
+i18n.setLocaleMessage(i18n.locale, lang.messages.nl);
 
 extend('required', {
   ...required,
@@ -105,7 +106,9 @@ export default {
     InputField,
     Field,
     Alert,
-    ValidationObserver
+    Dialog,
+    ValidationObserver,
+    KwaiButton
   },
   i18n: lang,
   methods: {
