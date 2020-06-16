@@ -82,7 +82,7 @@ const actions = {
    */
   async login({ commit, dispatch }, { email, password }) {
     commit('setError', null);
-    dispatch('wait/start', 'authentication.login', { root: true });
+    dispatch('wait/start', 'site.authentication.login', { root: true });
     try {
       const form = {
         username: email,
@@ -99,7 +99,7 @@ const actions = {
       commit('setError', error);
       throw error;
     } finally {
-      dispatch('wait/end', 'authentication.login', { root: true });
+      dispatch('wait/end', 'site.authentication.login', { root: true });
     }
   },
   /**
@@ -107,7 +107,7 @@ const actions = {
    */
   async user({ commit, dispatch }) {
     commit('setError', null);
-    dispatch('wait/start', 'authentication.user', { root: true });
+    dispatch('wait/start', 'site.authentication.user', { root: true });
     try {
       const json = await http_auth
         .url('user')
@@ -120,7 +120,7 @@ const actions = {
       commit('setError', error);
       throw error;
     } finally {
-      dispatch('wait/end', 'authentication.user', { root: true });
+      dispatch('wait/end', 'site.authentication.user', { root: true });
     }
   },
   /**
@@ -131,7 +131,7 @@ const actions = {
     const form = {
       refresh_token: state.refresh_token
     };
-    dispatch('wait/start', 'authentication.logout', { root: true });
+    dispatch('wait/start', 'site.authentication.logout', { root: true });
     try {
       await http_auth
         .url('user/logout')
@@ -147,7 +147,7 @@ const actions = {
         console.log(error);
       }
     } finally {
-      dispatch('wait/end', 'authentication.logout', { root: true });
+      dispatch('wait/end', 'site.authentication.logout', { root: true });
     }
   },
   /**
