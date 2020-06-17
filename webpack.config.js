@@ -108,15 +108,7 @@ module.exports = (env, argv) => {
         {
           test: /\.vue$/,
           use: [
-            'vue-loader',
-            {
-              loader: 'posthtml-loader',
-              options: {
-                plugins: [
-                  require('posthtml-include')(),
-                ]
-              }
-            },
+            'vue-loader'
           ]
         },
         {
