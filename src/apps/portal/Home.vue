@@ -33,7 +33,8 @@
           @page="loadStories"
         />
       </div>
-      <Spinner v-if="$wait.is('news.browse')"/>
+      <Spinner v-if="$wait.is('news.browse')">
+      </Spinner>
       <div class="flex flex-wrap justify-center mb-4">
         <div
           v-for="story in stories"
@@ -88,25 +89,23 @@ export default {
   },
   data() {
     return {
-      footerHtml: this.$route.meta.html['./footer.html']
+      footerHtml: this.$route.meta.html['./footer.html'],
+      offset: 0
     };
   },
   computed: {
     storiesPaginator() {
       return {
-        offset: this.$store.state.site.news.offset,
-        count: this.$store.state.site.news.count,
+        offset: this.offset,
+        count: this.$store.state.portal.news.count,
         limit: 10
-      }
-    },
-    storiesOffset() {
-      return this.$store.state.site.news.offset;
+      };
     },
     stories() {
-      return this.$store.getters['portal/news/stories'](this.storiesOffset);
+      return this.$store.state.portal.news.cache[this.offset];
     },
     applications() {
-      return this.$store.state.site.applications.all;
+      return this.$store.state.applications.all;
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -126,8 +125,9 @@ export default {
     async loadStories(offset) {
       try {
         await this.$store.dispatch('portal/news/load', {
-          offset: offset
+          offset
         });
+        this.offset = offset;
       } catch (error) {
         console.log(error);
       }

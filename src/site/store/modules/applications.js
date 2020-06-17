@@ -1,5 +1,6 @@
 import Application from '@/models/Application';
-import JSONAPI from '@/js/JSONAPI';
+import Transformer from '@/js/jsonapi/Transformer';
+import { http_auth } from '@/js/http';
 
 const initialize = () => ({
   all: [],
@@ -33,22 +34,24 @@ const actions = {
       return;
     }
 
-    dispatch('wait/start', 'core.applications.load', { root: true });
+    dispatch('wait/start', 'site.applications.load', { root: true });
     try {
-      let api = new JSONAPI({
-        source: Application,
-        app: 'site'
+      const json = await http_auth
+        .url('site/applications')
+        .get()
+        .json()
+      ;
+      commit('setApplications', {
+        data: new Transformer().deserialize(Application, json),
+        meta: json.meta
       });
-      let result = await api.get();
-      commit('setApplications', result);
-    } catch(error) {
+    } catch (error) {
       commit('setError', error);
-    }
-    finally {
-      dispatch('wait/end', 'core.applications.load', { root: true });
+    } finally {
+      dispatch('wait/end', 'site.applications.load', { root: true });
     }
   }
-}
+};
 
 export default {
   namespaced: true,
