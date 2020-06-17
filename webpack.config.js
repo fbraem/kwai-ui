@@ -21,6 +21,8 @@ module.exports = (env, argv) => {
   const isDev = (mode === 'development');
   process.env.NODE_ENV = isDev ? 'development' : 'production';
 
+  let config = require('./kwai.' + mode);
+
   return {
     watch: isDev,
     devtool: isDev ? 'eval-cheap-source-map' : false,
@@ -161,8 +163,8 @@ module.exports = (env, argv) => {
       alias: {
         vue$: isDev ? 'vue/dist/vue.common.js' : 'vue/dist/vue.common.prod.js',
         '@': resolve('src'),
-        config: path.join(__dirname, 'src', 'site', 'config', mode),
-        custom: resolve('custom')
+        config: resolve('kwai.' + mode + '.js'),
+        custom: config.custom
       },
       mainFiles: [ 'index' ],
     },
