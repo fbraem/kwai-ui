@@ -59,7 +59,7 @@ const actions = {
   async load({ state, commit, dispatch }, { offset = 0 }) {
     if (state.cache[offset]) return;
 
-    let uri = new URI('site/stories');
+    let uri = new URI('portal/stories');
     if (offset > 0) {
       uri.query({ 'page[offset]': offset });
     }

@@ -37,7 +37,7 @@ const actions = {
     dispatch('wait/start', 'site.applications.load', { root: true });
     try {
       const json = await http_auth
-        .url('site/applications')
+        .url('portal/applications')
         .get()
         .json()
       ;
