@@ -1,14 +1,8 @@
 import Site from './Site';
-import Toolbar from './Toolbar';
-import Footer from './Footer';
 
 let routes = {
   path: '/',
-  components: {
-    toolbar: Toolbar,
-    default: Site,
-    footer: Footer
-  },
+  component: Site
 };
 
 import makeRoutes from '@/apps/routes';

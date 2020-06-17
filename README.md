@@ -63,6 +63,8 @@ In several places it is possible to add custom HTML. Each application can be
 customized. Create a folder and make sure the configuration file contains
 the `custom` property.
 
++ `footer.html` will be loaded as footer on each page.
+
 portal
 ------
 Portal is the home page.
