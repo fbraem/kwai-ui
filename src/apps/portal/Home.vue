@@ -64,7 +64,7 @@
         </router-link>
       </div>
     </div>
-    <div v-if="footerHtml" v-html="footerHtml">
+    <div v-if="aboutHtml" v-html="aboutHtml">
     </div>
   </div>
 </template>
@@ -89,7 +89,7 @@ export default {
   },
   data() {
     return {
-      footerHtml: this.$route.meta.html['./footer.html'],
+      aboutHtml: this.$route.meta.html['./about.html'],
       offset: 0
     };
   },
