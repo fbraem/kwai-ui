@@ -108,7 +108,7 @@ module.exports = (env, argv) => {
         {
           test: /\.vue$/,
           use: [
-            'vue-loader'
+            'vue-loader',
           ]
         },
         {
