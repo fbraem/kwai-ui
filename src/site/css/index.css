@@ -35,19 +35,6 @@ a {
 
 @tailwind components;
 
-.cover {
-    @apply absolute inset-0;
-}
-
-.header-line {
-    @apply flex w-full justify-center items-center text-center;
-}
-
-.header-line:after {
-    content: '';
-    @apply border-t border-solid ml-4 flex-grow flex-shrink-0;
-}
-
 .default-button {
     @apply bg-white text-gray-700 py-2 px-4 border border-gray-400 rounded;
 }
