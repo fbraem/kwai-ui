@@ -1,9 +1,7 @@
 <template>
   <!-- eslint-disable max-len -->
   <div>
-    <h3 class="header-line">
-      {{ $t('archive') }}
-    </h3>
+    <HeaderLine tag="h3" :content="$t('archive')" />
     <template v-for="(year) in archiveYears">
       <div :key="year">
         <h4>{{ year }}</h4>
@@ -14,10 +12,7 @@
             class="pt-2 last:pb-2"
           >
             <div class="relative">
-              <router-link
-                :to="{ name : 'news.archive', params : { year : year, month : month.month }}"
-                class="cover"
-              />
+              <CoverLink :to="{ name : 'news.archive', params : { year : year, month : month.month }}" />
               <span class="text-blue-600">
                 {{ month.monthName }} {{ year }}
               </span>
@@ -37,8 +32,14 @@
 
 <script>
 import messages from './lang';
+import CoverLink from '@/components/CoverLink';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
+  components: {
+    HeaderLine,
+    CoverLink
+  },
   i18n: messages,
   computed: {
     categories() {

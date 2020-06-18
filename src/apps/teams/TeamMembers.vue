@@ -1,6 +1,6 @@
 <template>
   <div v-if="team">
-    <h2 class="header-line">Leden</h2>
+    <HeaderLine tag="h2" content="Leden" />
     <Alert
       v-if="team.season"
       type="warning"
@@ -143,9 +143,11 @@ import AreYouSure from '@/components/AreYouSure.vue';
 import Alert from '@/components/Alert';
 
 import Member from '@/models/Member';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   components: {
+    HeaderLine,
     AddMembersDialog,
     AreYouSure,
     Alert,

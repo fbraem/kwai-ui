@@ -24,9 +24,7 @@
     <div class="w-full p-3">
       <div class="flex flex-row">
         <div class="flex-grow">
-          <h3 class="header-line mb-4">
-            Kalender
-          </h3>
+          <HeaderLine tag="h3" content="Kalender" />
         </div>
         <div>
           <router-link
@@ -61,9 +59,11 @@ import NewsListCard from '@/apps/news/components/NewsListCard';
 import PageListCard from '@/apps/pages/components/PageListCard';
 import Calendar from '@/apps/trainings/Calendar';
 import CoachListCard from './components/CoachListCard';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   components: {
+    HeaderLine,
     NewsListCard,
     PageListCard,
     Calendar,

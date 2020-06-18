@@ -1,9 +1,7 @@
 <template>
   <!-- eslint-disable max-len -->
   <div>
-    <h1 class="text-xl header-line font-medium mb-0">
-      Trainingsmoment
-    </h1>
+    <HeaderLine tag="h1" content="Trainingsmoment" />
     <Spinner v-if="$wait.is('training.definitions.read')" />
     <Alert
       v-if="notAllowed"
@@ -72,9 +70,11 @@ import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 import Attributes from '@/components/Attributes';
 import IconButtons from '@/components/IconButtons';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   components: {
+    HeaderLine,
     Spinner,
     TrainingGeneratorForm,
     Alert,

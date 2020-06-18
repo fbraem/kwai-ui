@@ -60,11 +60,7 @@
       </div>
       <div class="w-full">
         <div>
-          <h4 class="header-line">
-            <span>
-              {{ $t('news') }}
-            </span>
-          </h4>
+          <HeaderLine tag="h4" :content="$t('news')" />
           <p class="text-sm">
             {{ $t('news_info') }}
           </p>
@@ -92,11 +88,7 @@
         </div>
       </div>
       <div class="w-full">
-        <h4 class="header-line">
-          <span>
-            {{ $t('information') }}
-          </span>
-        </h4>
+        <HeaderLine tag="h4" :content="$t('information')" />
         <p class="text-sm">
           {{ $t('information_info') }}
         </p>
@@ -135,9 +127,11 @@ import messages from './lang';
 import Paginator from '@/components/Paginator';
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   components: {
+    HeaderLine,
     Paginator,
     Spinner,
     Alert

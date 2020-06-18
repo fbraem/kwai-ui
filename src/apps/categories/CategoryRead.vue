@@ -1,9 +1,7 @@
 <template>
   <div class="container mx-auto flex flex-col p-3">
     <div class="block">
-      <h4 class="header-line">
-        {{ $t('featured_news') }}
-      </h4>
+      <HeaderLine tag="h4" :content="$t('featured_news')" />
       <Spinner v-if="$wait.is('news.browse')" />
       <div v-if="storyCount == 0">
         {{ $t('no_featured_news') }}
@@ -28,9 +26,7 @@
       class="block"
       v-if="pageCount > 0"
     >
-      <h4 class="header-line">
-        Informatie
-      </h4>
+      <HeaderLine tag="h4" content="Informatie" />
       <div class="flex flex-wrap">
         <div
           v-for="page in pages"
@@ -56,6 +52,7 @@ import messages from './lang';
 import NewsSlider from '@/apps/news/components/NewsSlider';
 import PageSummary from '@/apps/pages/components/PageSummary';
 import Spinner from '@/components/Spinner';
+import HeaderLine from '@/components/HeaderLine';
 
 /**
  * Page for showing category news and information
@@ -63,6 +60,7 @@ import Spinner from '@/components/Spinner';
 export default {
   i18n: messages,
   components: {
+    HeaderLine,
     NewsSlider,
     PageSummary,
     Spinner

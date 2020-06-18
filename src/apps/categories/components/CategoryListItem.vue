@@ -2,10 +2,7 @@
   <!-- eslint-disable max-len -->
   <li class="mb-4">
     <div class="flex flex-no-wrap relative items-center">
-      <router-link
-        :to="linkToCategory"
-        class="cover"
-      />
+      <CoverLink :to="linkToCategory" />
       <div
         v-if="category.icon_picture"
         class="mr-3 text-red-700"
@@ -32,6 +29,7 @@
 
 <script>
 import InlineSvg from 'vue-inline-svg';
+import CoverLink from '@/components/CoverLink';
 
 import Category from '@/models/Category';
 import Application from '@/models/Application';
@@ -41,7 +39,8 @@ import Application from '@/models/Application';
  */
 export default {
   components: {
-    InlineSvg
+    InlineSvg,
+    CoverLink
   },
   props: {
     /**

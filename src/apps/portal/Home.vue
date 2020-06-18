@@ -22,9 +22,7 @@
       />
     </div>
     <div class="container mx-auto">
-      <h2 class="header-line">
-        Belangrijk Nieuws
-      </h2>
+      <HeaderLine tag="h2" content="Belangrijk Nieuws" />
       <div class="flex justify-center">
         <Paginator
           :count="storiesPaginator.count"
@@ -77,10 +75,12 @@ import ApplicationCard from './components/ApplicationCard';
 import ApplicationList from '@/apps/portal/components/ApplicationList';
 
 import messages from '../../site/lang';
+import HeaderLine from '@/components/HeaderLine';
 
 export default {
   i18n: messages,
   components: {
+    HeaderLine,
     NewsCard,
     Paginator,
     Spinner,
