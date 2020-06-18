@@ -26,6 +26,7 @@
         Belangrijk Nieuws
       </h2>
       <div class="flex justify-center">
+        {{ stories }}
         <Paginator
           :count="storiesPaginator.count"
           :limit="storiesPaginator.limit"
@@ -33,7 +34,7 @@
           @page="loadStories"
         />
       </div>
-      <Spinner v-if="$wait.is('news.browse')">
+      <Spinner v-if="$wait.is('portal.news.load')">
       </Spinner>
       <div class="flex flex-wrap justify-center mb-4">
         <div
