@@ -18,6 +18,9 @@ export default class Application extends Model {
       images: new Attribute(true),
       short_description: new Attribute(),
       name: new Attribute(),
+      news: new Attribute(),
+      events: new Attribute(),
+      pages: new Attribute(),
       created_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true),
       updated_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true),
     };
