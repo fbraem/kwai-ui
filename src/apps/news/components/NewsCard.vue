@@ -16,12 +16,11 @@
       </router-link>
     </div>
     <div class="w-full p-2 md:px-4 flex flex-col md:h-48 bg-gray-100 relative">
-      <span
+      <Badge
         v-if="story.isNew"
-        class="ml-2 mt-2 mr-4 mb-1 badge right-0 top-0 absolute red-badge"
-      >
-        Nieuw
-      </span>
+        class="bg-red-700 text-red-300 right-0 top-0 absolute"
+        content="Nieuw"
+      />
       <h2
         class="font-bold text-lg font-bold mb-0"
         :class="{ 'w-3/4': story.isNew, 'sm:w-4/5': story.isNew }"
@@ -68,21 +67,17 @@
   </div>
 </template>
 
-<style scoped>
-.red-badge {
-  @apply bg-red-700 text-red-300;
-}
-</style>
-
 <script>
 import Story from '@/models/Story';
 import Application from '@/models/Application';
 import messages from '../lang';
+import Badge from '@/components/Badge';
 
 /**
  * Component for a news story card
  */
 export default {
+  components: {Badge},
   i18n: messages,
   props: {
     /**

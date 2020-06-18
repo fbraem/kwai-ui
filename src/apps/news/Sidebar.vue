@@ -16,12 +16,10 @@
               <span class="text-blue-600">
                 {{ month.monthName }} {{ year }}
               </span>
-              <span
-                class="badge bg-red-700 text-red-300"
-                style="float:right"
-              >
-                {{ month.count }}
-              </span>
+              <Badge
+                class="bg-red-700 text-red-300 float-right"
+                :content="month.count"
+              />
             </div>
           </li>
         </ul>
@@ -34,21 +32,19 @@
 import messages from './lang';
 import CoverLink from '@/components/CoverLink';
 import HeaderLine from '@/components/HeaderLine';
+import Badge from '@/components/Badge';
 
 export default {
   components: {
+    Badge,
     HeaderLine,
     CoverLink
   },
   i18n: messages,
   computed: {
-    categories() {
-      return this.$store.state.category.all;
-    },
     archiveYears() {
-      var archive = this.$store.state.news.archive;
-      var sorted = Object.keys(archive).reverse();
-      return sorted;
+      const archive = this.$store.state.news.archive;
+      return Object.keys(archive).reverse();
     },
     archive() {
       return this.$store.state.news.archive;
