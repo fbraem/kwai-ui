@@ -1,9 +1,7 @@
 <template>
   <div class="flex flex-col">
     <div>
-      <h3 class="header-line">
-        {{ $t('overview') }}
-      </h3>
+      <HeaderLine tag="h3" :content="$t('overview')" />
     </div>
     <div>
       <ul class="pl-0">
@@ -22,6 +20,7 @@
 import messages from '../lang';
 
 import ApplicationListItem from './ApplicationListItem.vue';
+import HeaderLine from '@/components/HeaderLine';
 
 /**
  * Component for showing a list of applications
@@ -41,6 +40,7 @@ export default {
     }
   },
   components: {
+    HeaderLine,
     ApplicationListItem
   },
   i18n: messages

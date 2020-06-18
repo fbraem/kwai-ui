@@ -1,10 +1,7 @@
 <template>
   <li class="mb-4">
     <div class="flex flex-no-wrap relative items-center">
-      <router-link
-        :to="linkToApplication"
-        class="cover"
-      />
+      <CoverLink :to="linkToApplication" />
       <div
         v-if="icon"
         class="mr-3 text-red-700"
@@ -34,12 +31,14 @@ import InlineSvg from 'vue-inline-svg';
 
 import Category from '@/models/Category';
 import Application from '@/models/Application';
+import CoverLink from '@/components/CoverLink';
 
 /**
  * Component for showing an application in the list of applications
  */
 export default {
   components: {
+    CoverLink,
     InlineSvg
   },
   props: {

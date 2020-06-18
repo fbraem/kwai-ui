@@ -1,15 +1,6 @@
 <template>
   <div class="m-2 p-3 relative h-full hover:shadow text-center">
-    <a
-      v-if="isLink"
-      :href="to"
-      class="cover"
-    >
-    </a>
-    <router-link v-else
-      class="cover"
-      :to="to"
-    />
+    <CoverLink :to="to" />
     <div>
       <slot name="icon"></slot>
     </div>
@@ -28,7 +19,12 @@
 /**
  * Component that show an icon card
  */
+import CoverLink from '@/components/CoverLink';
+
 export default {
+  components: {
+    CoverLink
+  },
   props: {
     title: {
       type: String,
@@ -36,11 +32,6 @@ export default {
     },
     to: {
       type: [ String, Object ]
-    }
-  },
-  computed: {
-    isLink() {
-      return typeof this.to === 'string';
     }
   }
 };
