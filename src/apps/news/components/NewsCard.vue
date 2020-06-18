@@ -40,7 +40,7 @@
             :to="applicationLink"
             class="font-bold"
           >
-            {{ application.name }}
+            {{ application.title }}
           </router-link>
           &nbsp;|&nbsp;
         </span>
