@@ -26,7 +26,6 @@
         Belangrijk Nieuws
       </h2>
       <div class="flex justify-center">
-        {{ stories }}
         <Paginator
           :count="storiesPaginator.count"
           :limit="storiesPaginator.limit"
