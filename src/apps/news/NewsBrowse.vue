@@ -1,58 +1,40 @@
 <template>
   <Page>
     <div>
-      <div
-        v-if="storiesMeta"
-        class="flex justify-center mb-4"
-      >
+      <div class="flex justify-center mb-4">
         <Paginator
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="paginator.count"
+          :limit="paginator.limit"
+          :offset="paginator.offset"
           @page="readPage"
         />
       </div>
       <div class="flex flex-wrap justify-center mb-4">
-        <Spinner v-if="$wait.is('news.browse')" />
+        <Spinner v-if="$wait.is('news.load')" />
         <div
           v-for="story in stories"
           :key="story.id"
           class="p-2 w-full"
         >
-          <NewsCard
-            :story="story"
-            @deleteStory="deleteStory"
-          />
+          <NewsCard :story="story" />
         </div>
       </div>
-      <div
-        v-if="storiesMeta"
-        class="flex justify-center mb-4"
-      >
+      <div class="flex justify-center mb-4">
         <Paginator
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="paginator.count"
+          :limit="paginator.limit"
+          :offset="paginator.offset"
           @page="readPage"
         />
       </div>
     </div>
     <div
-      v-if="! $wait.is('news.browse') && newsCount == 0"
+      v-if="! $wait.is('news.load') && newsCount === 0"
     >
       <Alert type="danger">
         {{ $t('no_news') }}
       </Alert>
     </div>
-    <AreYouSure
-      :show="showAreYouSure"
-      @close="showAreYouSure = false;"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="doDeleteStory"
-    >
-      {{ $t('are_you_sure') }}
-    </AreYouSure>
     <template slot="sidebar">
       <Sidebar />
     </template>
@@ -64,7 +46,6 @@ import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import NewsCard from './components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
-import AreYouSure from '@/components/AreYouSure.vue';
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 
@@ -76,28 +57,29 @@ export default {
     Page,
     NewsCard,
     Paginator,
-    AreYouSure,
     Spinner,
     Alert,
     Sidebar
   },
   data() {
     return {
-      showAreYouSure: false,
-      storyToDelete: null,
+      offset: 0,
       categoryId: null
     };
   },
   computed: {
-    stories() {
-      return this.$store.state.news.all;
+    paginator() {
+      return {
+        offset: this.offset,
+        count: this.$store.state.news.count,
+        limit: 10
+      };
     },
-    storiesMeta() {
-      return this.$store.state.news.meta;
+    stories() {
+      return this.$store.state.news.cache[this.offset];
     },
     newsCount() {
-      if (this.stories) return this.stories.length;
-      return -1;
+      return this.$store.state.news.count;
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -115,30 +97,22 @@ export default {
       if (params.category) {
         this.categoryId = params.category;
       }
-      await this.$store.dispatch('news/browse', {
+      await this.$store.dispatch('news/load', {
         year: params.year,
         month: params.month,
         category: params.category,
         featured: params.featured
       });
     },
-    deleteStory(story) {
-      this.storyToDelete = story;
-      this.showAreYouSure = true;
-    },
-    doDeleteStory() {
-      this.$store.dispatch('news/remove', {
-        story: this.storyToDelete
-      });
-    },
     async readPage(offset) {
-      await this.$store.dispatch('news/browse', {
+      await this.$store.dispatch('news/load', {
         offset: offset,
         year: this.year,
         month: this.month,
         category: this.categoryId,
         featured: this.featured
       });
+      this.offset = offset;
     }
   }
 };
