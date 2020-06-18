@@ -4,8 +4,8 @@
     <router-view class="container mx-auto p-4 lg:p-6">
     </router-view>
     <CategoryCards
-      v-if="categories"
-      :categories="categories"
+      v-if="applications"
+      :categories="applications"
     />
   </div>
 </template>
@@ -19,8 +19,10 @@ export default {
     CategoryCards
   },
   computed: {
-    categories() {
-      return this.$store.state.category.all;
+    applications() {
+      return this.$store.state.applications.all.filter(
+        app => app.news
+      );
     }
   },
   beforeCreate() {
@@ -33,7 +35,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.meta.active) {
-        vm.$store.dispatch('news/set', to.meta.active);
+        vm.$store.dispatch('news/setCurrent', to.meta.active);
       }
     });
   }
