@@ -76,7 +76,6 @@
 
 <script>
 import Story from '@/models/Story';
-import NewsStory from '@/models/NewsStory';
 import Application from '@/models/Application';
 import messages from '../lang';
 
@@ -90,7 +89,7 @@ export default {
      * The story
      */
     story: {
-      type: [Story, NewsStory],
+      type: Story,
       required: true
     },
     /**

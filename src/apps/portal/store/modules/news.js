@@ -2,7 +2,7 @@ import Vue from 'vue';
 import URI from 'urijs';
 import { http_auth} from '@/js/http';
 import Transformer from '@/js/jsonapi/Transformer';
-import NewsStory from '@/models/NewsStory';
+import Story from '@/models/Story';
 
 /**
  * Initializes the state.
@@ -74,7 +74,7 @@ const actions = {
       const transformer = new Transformer();
       commit('setStories', {
         meta: json.meta,
-        data: transformer.deserialize(NewsStory, json)
+        data: transformer.deserialize(Story, json)
       });
     } catch (error) {
       commit('setError', error);

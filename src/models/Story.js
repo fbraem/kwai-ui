@@ -4,19 +4,15 @@ import DateAttribute from '@/js/jsonapi/DateAttribute';
 import ObjectAttribute from '@/js/jsonapi/ObjectAttribute';
 import ArrayAttribute from '@/js/jsonapi/ArrayAttribute';
 
-import Category from './Category';
+import Application from './Application';
 import moment from 'moment-timezone';
 
 /**
- * Story model
+ * News model
  */
-export default class Story extends Model {
+export default class NewsStory extends Model {
   static type() {
     return 'stories';
-  }
-
-  static namespace() {
-    return ['news'];
   }
 
   static fields() {
@@ -125,7 +121,7 @@ export default class Story extends Model {
 
   static relationships() {
     return {
-      category: Category
+      application: Application
     };
   }
 }
