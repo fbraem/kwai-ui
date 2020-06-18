@@ -1,15 +1,17 @@
-Site
+Portal
 ====
 
 This application is responsible for showing the home page of the website.
+It's the portal to all other applications.
 
-List categories
+List applications
 ---
-:x: A list with all available categories will be shown.
-When a category links to an application, the user can
-be forwarded to the application.
+:heavy_check_mark: A list with all available applications will be shown.
 
 News stories
 ---
-:x: A list with all promoted news stories will be shown.
+:heavy_check_mark: A list with all promoted news stories will be shown.
 
+Events
+------
+:x: A list with upcoming events will be shown.
