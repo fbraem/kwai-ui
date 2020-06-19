@@ -14,6 +14,12 @@ export default {
   },
   beforeDestroy() {
     this.$store.unregisterModule('portal');
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'news.story') {
+      to.meta.active = this.$store.getters['portal/news/story'](to.params.id);
+    }
+    next();
   }
 };
 </script>
