@@ -20,7 +20,7 @@ const getters = {
    * Search a story in the cache
    */
   story: (state) => (id) => {
-    for (const stories of state.cache) {
+    for (const [, stories] of Object.entries(state.cache)) {
       const story = stories.find(s => s.id === id);
       if (story) return story;
     }
@@ -81,6 +81,12 @@ const actions = {
     } finally {
       dispatch('wait/end', 'portal.news.load', { root: true });
     }
+  },
+  /**
+   * Reset the state
+   */
+  reset({ commit }) {
+    commit('reset');
   }
 };
 
