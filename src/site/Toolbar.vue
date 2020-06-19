@@ -19,7 +19,7 @@
                 <i class="fab fa-facebook-f"></i>
               </a>
               <router-link
-                v-if="isLoggedIn"
+                v-if="isLoggedIn && activeUser"
                 class="icon-button text-red-300 hover-bg-red-900"
                 :to="{ name: 'users.read', params: { id: activeUser.id } }">
                 <i class="fas fa-user"></i>
