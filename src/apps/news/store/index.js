@@ -26,7 +26,7 @@ const getters = {
    * Get story from the list
    */
   story: (state) => (id) => {
-    for (const stories of state.cache) {
+    for (const [, stories] of Object.entries(state.cache)) {
       const story = stories.find(s => s.id === id);
       if (story) return story;
     }
@@ -125,8 +125,8 @@ const actions = {
       commit('setStories', {
         meta: json.meta,
         data: transformer.deserialize(Story, json)
-      })
-    } catch(error) {
+      });
+    } catch (error) {
       commit('setError', error);
     } finally {
       dispatch('wait/end', 'news.load', {root: true});
@@ -184,11 +184,11 @@ const actions = {
     }
   },
   /**
-   * When a story was read in another instance of this module, set can be
+   * When a story was read in another instance of this module, setCurrent can be
    * used to make it available in the current instance.
    */
-  set({ commit }, story) {
-    commit('setCurrent', { data: story });
+  setCurrent({ commit }, story) {
+    commit('setCurrent', story);
   },
   /**
    * Reset the state
