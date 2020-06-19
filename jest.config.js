@@ -9,5 +9,9 @@ module.exports = {
     '^@/(.*)$': path.join(__dirname, 'src', '$1'),
     '^config$': path.join(__dirname, 'kwai.development'),
     '^custom/(.*)$': path.join(config.custom, '$1')
+  },
+  transform: {
+    '^.+\\vue$': 'vue-jest',
+    '^.+\\.[t|j]sx?$': 'babel-jest'
   }
 };
