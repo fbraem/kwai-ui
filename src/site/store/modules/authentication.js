@@ -140,7 +140,6 @@ const actions = {
       ;
       commit('setLogout');
     } catch (error) {
-      console.log(error.response);
       if (error.response.status === 401) {
         commit('setLogout');
       } else {
