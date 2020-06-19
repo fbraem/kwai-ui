@@ -59,7 +59,7 @@
 
 <script>
 import messages from './lang';
-
+import config from 'config';
 import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import Spinner from '@/components/Spinner';
@@ -73,11 +73,10 @@ export default {
   i18n: messages,
   computed: {
     story() {
-      return this.$store.state.news.active;
+      return this.$store.state.news.current;
     },
     facebookUrl() {
-      // TODO: remove the host
-      return 'https://www.judokwaikemzeke.be/facebook/news/' + this.story.id;
+      return config.site + '/facebook/news/' + this.story.id;
     },
     error() {
       return this.$store.state.news.error;
@@ -104,7 +103,7 @@ export default {
       }
     },
     copyText(text) {
-      var cb = document.getElementById('cb');
+      const cb = document.getElementById('cb');
       cb.value = text;
       cb.style.display = 'block';
       cb.select();
