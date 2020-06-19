@@ -30,10 +30,10 @@
               <br />
               Gepubliceerd in
               <router-link
-                :to="categoryLink"
+                :to="applicationLink"
                 class="font-bold"
               >
-                {{ story.category.name }}
+                {{ story.application.title }}
               </router-link>
             </p>
             <IconButtons
@@ -68,10 +68,10 @@
           <br />
           Gepubliceerd in
           <router-link
-            :to="categoryLink"
+            :to="applicationLink"
             class="font-bold"
           >
-            {{ story.category.name }}
+            {{ story.application.title }}
           </router-link>
         </p>
         <IconButtons
@@ -146,7 +146,7 @@ export default {
   },
   computed: {
     story() {
-      return this.$store.state.news.active;
+      return this.$store.state.news.current;
     },
     picture() {
       if (this.story) {
@@ -154,11 +154,11 @@ export default {
       }
       return null;
     },
-    categoryLink() {
+    applicationLink() {
       return {
         name: 'categories.read',
         params: {
-          id: this.story.category.id
+          id: this.story.application.id
         }
       };
     },
