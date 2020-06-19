@@ -8,7 +8,6 @@ import seasonsRouter from './seasons/routes';
 import teamsRouter from './teams/routes';
 import eventsRouter from './events/routes';
 import trainingsRouter from './trainings/routes';
-import clubsRouter from './clubs/routes';
 import userRouter from './user/routes';
 
 function makeRoutes() {
@@ -23,7 +22,6 @@ function makeRoutes() {
     .concat(teamsRouter)
     .concat(eventsRouter)
     .concat(trainingsRouter)
-    .concat(clubsRouter)
     .concat(userRouter)
   ;
 }
