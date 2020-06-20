@@ -159,7 +159,7 @@ const actions = {
         refresh_token: state.refresh_token
       };
       const json = await http
-        .url('user/acess_token')
+        .url('user/access_token')
         .formData(form)
         .post()
         .json()
