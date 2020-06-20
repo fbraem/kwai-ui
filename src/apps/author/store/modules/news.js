@@ -10,6 +10,19 @@ export const initialize = () => ({
   error: null
 });
 
+export const getters = {
+  /**
+   * Search a story in the cache
+   */
+  story: (state) => (id) => {
+    for (const [, stories] of Object.entries(state.cache)) {
+      const story = stories.find(s => s.id === id);
+      if (story) return story;
+    }
+    return null;
+  }
+};
+
 export const mutations = {
   setStories(state, { meta, data }) {
     state.error = null;
@@ -18,7 +31,14 @@ export const mutations = {
   }
 };
 
+export const actions = {
+
+};
+
 export default {
   namespaced: true,
-  state: initialize()
+  state: initialize(),
+  getters,
+  mutations,
+  actions
 };
