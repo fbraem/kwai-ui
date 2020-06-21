@@ -11,6 +11,16 @@ const initialize = () => ({
 const getters = {
   application: (state) => (name) => {
     return state.all.find(a => a.name === name);
+  },
+  asOptions: (state) => (filterFn = null) => {
+    let applications = state.all;
+    if (filterFn) {
+      applications = applications.filter(filterFn);
+    }
+    return applications.map((application) => ({
+      value: application.id,
+      text: application.title
+    }));
   }
 };
 
