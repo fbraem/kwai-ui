@@ -80,7 +80,7 @@ import { extend, ValidationObserver } from 'vee-validate';
 import { required, email } from 'vee-validate/dist/rules';
 
 import { i18n } from '@/js/i18n';
-i18n.setLocaleMessage(i18n.locale, lang.messages.nl);
+i18n.setLocaleMessage(i18n.locale, lang.messages[i18n.locale]);
 
 extend('required', {
   ...required,
