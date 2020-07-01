@@ -2,7 +2,7 @@
   "login": {
     "title": "Login to our Website",
     "form": {
-      "required": "'{_field_} is required",
+      "required": "This field is required",
       "password": {
         "label": "Pasword",
         "help": "Enter your password"
@@ -13,7 +13,6 @@
         "invalid": "Email address is not valid"
       },
       "invalidCredentials": "Can't login. Please check your credentials.",
-      "error": "HTTP ERROR {code} - {message}",
       "contact": "When the problem persists, please contact our webmaster.",
       "submit": "Login"
     }

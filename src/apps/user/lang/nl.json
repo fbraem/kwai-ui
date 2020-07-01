@@ -2,7 +2,7 @@
   "login": {
     "title": "Inloggen op onze Website",
     "form": {
-      "required": "{_field_} is verplicht in te vullen",
+      "required": "Dit veld is verplicht in te vullen",
       "password": {
         "label": "Paswoord",
         "help": "Geef jouw paswoord in"
@@ -13,7 +13,6 @@
         "invalid": "Email is niet geldig"
       },
       "invalidCredentials": "Inloggen mislukt. Controleer de inloggegevens.",
-      "error": "HTTP ERROR {code} - {message}",
       "contact": "Wanneer het probleem aanhoudt, neem dan contact op met onze webmaster.",
       "submit": "Login"
     }
