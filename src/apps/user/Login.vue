@@ -5,63 +5,55 @@
       {{ $t('login.title') }}
     </template>
     <template>
-      <ValidationObserver v-slot="{ invalid }">
-        <form @submit.prevent="login" class="flex flex-col">
-          <KwaiField
-            rules="required|email"
-            :label="$t('login.form.email.label')"
-            id="login_email"
-            :name="$t('login.form.email.label')"
-            v-slot="{ valid, required }"
+      <FormulateForm
+        name="login"
+        v-model="form"
+        ref="form"
+        @submit="login"
+      >
+        <FormulateInput
+          type="email"
+          name="email"
+          :label="$t('login.form.email.label')"
+          :required="true"
+          :help="$t('login.form.email.help')"
+          validation="^required|email"
+          :validation-messages="{
+            required: $t('login.form.required'),
+            email: $t('login.form.email.invalid')
+          }"
+        />
+        <FormulateInput
+          type="password"
+          name="password"
+          :label="$t('login.form.password.label')"
+          :required="true"
+          validation="required"
+          :validation-messages="{
+            required: $t('login.form.required')
+          }"
+          :help="$t('login.form.password.help')"
+        />
+        <Alert
+          v-if="invalidCredentials"
+          type="danger"
+        >
+          {{ $t('login.form.invalidCredentials') }}
+        </Alert>
+        <Alert v-if="hasFormErrors">
+          <FormulateErrors />
+          {{ $t('login.form.contact') }}
+        </Alert>
+        <div class="flex justify-end mt-3">
+          <FormulateInput
+            class="bg-primary hover:bg-primary_dark text-primary_light"
+            type="submit"
           >
-            <KwaiInputField
-              id="login_email"
-              type="email"
-              :required="required"
-              :valid="valid"
-              v-model="form.email"
-            />
-          </KwaiField>
-          <KwaiField
-            rules="required"
-            :label="$t('login.form.password.label')"
-            id="login_password"
-            :name="$t('login.form.password.label')"
-            v-slot="{ valid, required }"
-          >
-            <KwaiInputField
-              id="login_password"
-              type="password"
-              :required="required"
-              :valid="valid"
-              v-model="form.password"
-            />
-          </KwaiField>
-          <Alert
-            v-if="invalidCredentials"
-            type="danger"
-          >
-            {{ $t('login.form.invalidCredentials') }}
-          </Alert>
-          <Alert
-            v-if="error"
-            type="danger"
-          >
-            {{ $t('login.form.error', { code: error.code, message: error.message })}}
-            <br />
-            <span class="text-sm">{{ $t('login.form.contact') }}</span>
-          </Alert>
-          <div class="flex justify-end mt-3">
-            <KwaiButton
-              icon="fas fa-unlock"
-              :disabled="invalid"
-              type="submit"
-            >
-              {{ $t('login.form.submit') }}
-            </KwaiButton>
-          </div>
-        </form>
-      </ValidationObserver>
+            <i class="fas fa-unlock mr-2"></i>
+            {{ $t('login.form.submit') }}
+          </FormulateInput>
+        </div>
+      </FormulateForm>
     </template>
   </Dialog>
 </template>
@@ -71,25 +63,8 @@
 
 <script>
 import lang from './lang';
-import KwaiInputField from '@/components/forms/KwaiInputField';
-import KwaiField from '@/components/forms/KwaiField';
 import Alert from '@/components/Alert';
-import KwaiButton from '@/components/forms/KwaiButton';
 import Dialog from '@/components/Dialog';
-import { extend, ValidationObserver } from 'vee-validate';
-import { required, email } from 'vee-validate/dist/rules';
-
-import { i18n } from '@/js/i18n';
-i18n.setLocaleMessage(i18n.locale, lang.messages[i18n.locale]);
-
-extend('required', {
-  ...required,
-  message: i18n.t('login.form.required')
-});
-extend('email', {
-  ...email,
-  message: i18n.t('login.form.email.invalid')
-});
 
 export default {
   data() {
@@ -98,44 +73,34 @@ export default {
         email: '',
         password: ''
       },
-      invalidCredentials: false,
-      error: null
+      hasFormErrors: false,
+      invalidCredentials: false
     };
   },
   components: {
-    KwaiInputField,
-    KwaiField,
     Alert,
-    Dialog,
-    ValidationObserver,
-    KwaiButton
+    Dialog
   },
   i18n: lang,
   methods: {
-    login() {
+    async login() {
       this.invalidCredentials = false;
-      this.error = null;
-      this.$store.dispatch('authentication/login', {
-        email: this.form.email,
-        password: this.form.password
-      })
-        .then(() => {
-          this.$router.push({ name: this.$route.meta.back ?? 'home' });
-        }).catch((e) => {
-          this.form.password = '';
-          if (e.response?.status === 401) { // Not Authorized
-            this.invalidCredentials = true;
-          } else {
-            if (e.response) {
-              this.error = {
-                code: e.response.status,
-                message: e.response.statusText
-              };
-            } else {
-              console.log(e);
-            }
-          }
+      this.hasFormErrors = false;
+
+      try {
+        await this.$store.dispatch('authentication/login', {
+          email: this.form.email,
+          password: this.form.password
         });
+        await this.$router.push({name: this.$route.meta.back ?? 'home'});
+      } catch (error) {
+        this.form.password = '';
+        if (error.response?.status === 401) { // Not Authorized
+          this.invalidCredentials = true;
+        } else {
+          this.$formulate.handle(error, 'login');
+        }
+      }
     }
   }
 };
