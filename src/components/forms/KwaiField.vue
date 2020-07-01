@@ -1,8 +1,7 @@
 <template>
-  <ValidationProvider
+  <div
     :rules="rules"
     :name="name || label"
-    v-slot="{ errors, required, valid, validated }"
     :vid="vid || id"
   >
     <label
@@ -21,11 +20,10 @@
     >
       {{ errors[0] }}
     </div>
-  </ValidationProvider>
+  </div>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
 
 export default {
   props: {
@@ -49,8 +47,5 @@ export default {
       default: undefined
     }
   },
-  components: {
-    ValidationProvider
-  }
 };
 </script>
