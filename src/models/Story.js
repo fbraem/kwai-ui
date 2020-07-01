@@ -18,8 +18,8 @@ export default class NewsStory extends Model {
   static fields() {
     return {
       enabled: new Attribute(),
-      featured: new Attribute(),
-      featured_end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
+      promotion: new Attribute(),
+      promotion_end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
       timezone: new Attribute(),
       publish_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
       end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
@@ -47,7 +47,7 @@ export default class NewsStory extends Model {
     return {
       content(story) {
         if (story.contents) {
-          return story.contents['nl'];
+          return story.contents.find((e) => e.locale === 'nl');
         }
         return null;
       },
@@ -83,15 +83,15 @@ export default class NewsStory extends Model {
         utc.utcOffset('+00:00', true);
         return utc.local().format('HH:mm');
       },
-      localFeaturedEndDate(story) {
-        if (!story.featured_end_date) return null;
-        var utc = story.featured_end_date.clone();
+      localPromotionEndDate(story) {
+        if (!story.promotion_end_date) return null;
+        var utc = story.promotion_end_date.clone();
         utc.utcOffset('+00:00', true);
         return utc.local().format('L');
       },
-      localFeaturedEndTime(story) {
-        if (!story.featured_end_date) return null;
-        var utc = story.featured_end_date.clone();
+      localPromotionEndTime(story) {
+        if (!story.promotion_end_date) return null;
+        var utc = story.promotion_end_date.clone();
         utc.utcOffset('+00:00', true);
         return utc.local().format('HH:mm');
       },
