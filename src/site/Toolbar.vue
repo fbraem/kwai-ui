@@ -12,32 +12,29 @@
               </a>
             </div>
             <div class="flex mr-1">
-              <a
-                class="icon-button text-red-300 hover:bg-red-900 mr-1"
-                :href="facebook"
-              >
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <router-link
+              <IconLink
+                icon="fab fa-facebook-f"
+                class="text-primary_light hover:bg-primary_dark"
+                :link="facebook"
+              />
+              <IconLink
                 v-if="isLoggedIn && activeUser"
-                class="icon-button text-red-300 hover-bg-red-900"
-                :to="{ name: 'users.read', params: { id: activeUser.id } }">
-                <i class="fas fa-user"></i>
-              </router-link>
-              <a
+                icon="fas fa-user"
+                class="text-primary_light hover:bg-primary_dark"
+                :route="{ name: 'users.read', params: { id: activeUser.id } }"
+              />
+              <IconLink
                 v-if="isLoggedIn"
-                class="icon-button text-red-300 hover-bg-red-900"
-                @click="logout"
-              >
-                <i class="fas fa-sign-out-alt"></i>
-              </a>
-              <router-link
+                icon="fas fa-sign-out-alt"
+                class="text-primary_light hover:bg-primary_dark"
+                :method="logout"
+              />
+              <IconLink
                 v-else
-                class="icon-button text-red-300 hover-bg-red-900"
-                :to="{ name: 'user.login'}"
-              >
-                <i class="fas fa-lock"></i>
-              </router-link>
+                icon="fas fa-lock"
+                class="text-primary_light hover:bg-primary_dark"
+                :route="{ name: 'user.login'}"
+              />
             </div>
           </div>
         </div>
@@ -47,7 +44,11 @@
 </template>
 
 <script>
+import IconLink from '@/components/IconLink';
 export default {
+  components: {
+    IconLink
+  },
   computed: {
     title() {
       return this.$store.state.kwai.page.title;
