@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     isError() {
-      return this.context.showValidationErrors;
+      return this.context.visibleValidationErrors.length > 0;
     }
   }
 };
