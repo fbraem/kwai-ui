@@ -121,6 +121,9 @@ export const actions = {
       dispatch('wait/end', 'author.news.read', { root: true });
     }
   },
+  async create({ commit }) {
+    commit('setCurrent', new Story());
+  },
   /**
    * Save a news story.
    */
