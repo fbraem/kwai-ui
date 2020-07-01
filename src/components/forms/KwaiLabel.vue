@@ -31,10 +31,7 @@ export default {
   },
   computed: {
     isError() {
-      if (this.required) {
-        return !this.context.isValid;
-      }
-      return this.context.hasValue && !this.context.isValid;
+      return this.context.showValidationErrors;
     }
   }
 };
