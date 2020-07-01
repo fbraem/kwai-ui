@@ -25,7 +25,6 @@
               :validation-messages="{
                 required: $t('news.form.required')
               }"
-              error-behavior="live"
             />
           </div>
           <div class="w-full sm:w-auto sm:pl-4 self-center flex-none">
@@ -47,7 +46,6 @@
           :validation-messages="{
             required: $t('news.form.required')
           }"
-          error-behavior="live"
         />
         <FormulateInput
           type="textarea"
@@ -92,7 +90,6 @@
                 required: $t('news.form.required'),
                 kwaidate: $t('news.form.invalid_date')
               }"
-              error-behavior="live"
             />
           </div>
           <div class="md:pr-6 w-full md:w-1/2 mb-4">
@@ -106,7 +103,6 @@
                 required: $t('news.form.required'),
                 kwaitime: $t('news.form.invalid_time')
               }"
-              error-behavior="live"
             />
           </div>
         </div>
@@ -120,7 +116,6 @@
               :validation-messages="{
                 kwaidate: $t('news.form.invalid_date')
               }"
-              error-behavior="live"
             />
           </div>
           <div class="md:pr-6 w-full md:w-1/2 mb-4">
@@ -138,7 +133,6 @@
                 kwaitime: $t('news.form.invalid_time'),
                 after_publish: $t('news.form.end_date_after')
               }"
-              error-behavior="live"
             />
           </div>
         </div>
@@ -166,7 +160,6 @@
               :validation-messages="{
                 kwaidate: $t('news.form.invalid_date')
               }"
-              error-behavior="live"
             />
           </div>
           <div class="md:pr-6 w-full md:w-1/2">
@@ -184,7 +177,6 @@
                 kwaitime: $t('news.form.invalid_time'),
                 after_publish: $t('news.form.end_date_after')
               }"
-              error-behavior="live"
             />
           </div>
         </div>
