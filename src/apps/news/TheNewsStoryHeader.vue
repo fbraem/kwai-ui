@@ -168,7 +168,7 @@ export default {
         buttons.push({
           icon: 'fas fa-edit',
           route: {
-            name: 'news.update',
+            name: 'author.news.update',
             params: {
               id: this.story.id
             }
