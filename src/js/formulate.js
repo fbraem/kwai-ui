@@ -53,6 +53,13 @@ export default function init() {
           return 'flex content-center';
         }
       },
+      help(context) {
+        let clazz = 'text-sm italic';
+        if (!context.hasErrors) {
+          clazz += ' mb-4';
+        }
+        return clazz;
+      },
       outer: 'mb-2',
       input(context) {
         switch (context.classification) {
@@ -69,7 +76,7 @@ export default function init() {
           return 'appearance-once block w-full bg-gray-200 border rounded py-3 px-4 mb-3 leading-thight focus:outline-none focus:shadow-outline';
         }
       },
-      errors: 'text-red-600 text-sm italic'
+      errors: 'text-red-600 text-sm italic mb-4'
     }
   });
 };
