@@ -17,10 +17,13 @@ const getters = {
     if (filterFn) {
       applications = applications.filter(filterFn);
     }
-    return applications.map((application) => ({
-      value: application.id,
-      text: application.title
-    }));
+    return applications.reduce(
+      (result, current) => {
+        result[current.id] = current.title;
+        return result;
+      },
+      {}
+    );
   }
 };
 
