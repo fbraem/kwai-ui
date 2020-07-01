@@ -38,6 +38,12 @@ export default {
         vm.$store.dispatch('news/setCurrent', to.meta.active);
       }
     });
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'author.news.update') {
+      to.meta.active = this.$store.state.news.current;
+    }
+    next();
   }
 };
 </script>

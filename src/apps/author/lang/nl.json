@@ -1,0 +1,88 @@
+{
+  "news": {
+    "create": "Maak Nieuwsbericht",
+    "update": "Wijzig Nieuwsbericht",
+    "form": {
+      "title": {
+        "name": "Titel",
+        "label": "Titel",
+        "placeholder": "Geef een titel in"
+      },
+      "enabled": {
+        "label": "Actief"
+      },
+      "summary": {
+        "label": "Samenvatting",
+        "placeholder":"Geef een samenvatting in"
+      },
+      "content": {
+        "label": "Inhoud",
+        "placeholder": "Geef de inhoud van het nieuwsbericht in"
+      },
+      "application": {
+        "label": "Applicatie",
+        "placeholder": "Selecteer een applicatie"
+      },
+      "publish_date": {
+        "label": "Publicatie Datum",
+        "placeholder": "Geef een datum in ({format})"
+      },
+      "end_date": {
+        "label": "Publicatie Einddatum",
+        "placeholder": "Geef een datum in ({format})"
+      },
+      "publish_time": {
+        "label": "Publicatie Tijd",
+        "placeholder": "Geef een tijdstip in ({format})"
+      },
+      "end_time": {
+        "label": "Publicatie Eindtijd",
+        "placeholder": "Geef een tijdstip in ({format})"
+      },
+      "promotion": {
+        "label": "Promotie"
+      },
+      "promotion_end_date": {
+        "label": "Promotie Einddatum",
+        "placeholder": "Geef een datum in ({format})"
+      },
+      "promotion_end_time": {
+        "label": "Promotie Eindtijd",
+        "placeholder": "Geef een tijdstip in ({format})"
+      },
+      "remark": {
+        "label": "Opmerking",
+        "placeholder": "Geef een opmerking in"
+      },
+      "fieldset": {
+        "content": {
+          "title": "Inhoud",
+          "description": "Geef een titel voor het bericht. De samenvatting zal in overzichten getoond worden. In de samenvatting en de inhoud kan je Markdown gebruiken."
+        },
+        "application": {
+          "title": "Applicatie",
+          "description": "Tot welk onderdeel van de website behoort dit nieuwsbericht?"
+        },
+        "publication": {
+          "title": "Publicatie",
+          "description": "Wanneer moet dit bericht gepubliceerd worden? Met een einddatum kan een bericht ook automatisch verwijderd worden uit het overzicht."
+        },
+        "promotion": {
+          "title": "Promotie",
+          "description": "Een promotie bericht kan op de startpagina getoond worden. Een periode kan aageven hou lang die promotie duurt. De promotiewaarde zal gebruikt worden om de berichten te sorteren."
+        },
+        "remark": {
+          "title": "Opmerking",
+          "description": "Geef een eventuele opmerking in. Een opmerking zal niet zichtbaar zijn voor een bezoeker van de website."
+        }
+      },
+      "required": "Dit veld is verplicht in te vullen",
+      "invalid_date": "Datum is niet geldig",
+      "invalid_time": "Tijdstip is niet geldig",
+      "end_date_after": "Einddatum moet na publicatie datum liggen",
+      "date": "Datum",
+      "time": "Tijdstip",
+      "submit": "Bewaar"
+    }
+  }
+}

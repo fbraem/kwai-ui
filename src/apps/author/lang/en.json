@@ -1,0 +1,88 @@
+{
+  "news": {
+    "create": "Create Newsstory",
+    "update": "Modify Newsstory",
+    "form": {
+      "title": {
+        "name": "Title",
+        "label": "Title",
+        "placeholder": "Enter a title"
+      },
+      "enabled": {
+        "label": "Active"
+      },
+      "summary": {
+        "label": "Summary",
+        "placeholder": "Enter a summary"
+      },
+      "content": {
+        "label": "Content",
+        "placeholder": "Enter the content of the news story"
+      },
+      "application": {
+        "label": "Application",
+        "placeholder": "Select an application"
+      },
+      "publish_date": {
+        "label": "Publication Date",
+        "placeholder": "Enter a date ({format})"
+      },
+      "end_date": {
+        "label": "Publication Enddate",
+        "placeholder": "Enter a date ({format})"
+      },
+      "publish_time": {
+        "label": "Publication Time",
+        "placeholder": "Enter a time ({format})"
+      },
+      "end_time": {
+        "label": "Publication Endtime",
+        "placeholder": "Enter a time ({format})"
+      },
+      "promotion": {
+        "label": "Promotion"
+      },
+      "promotion_end_date": {
+        "label": "Promotion Enddate",
+        "placeholder": "Enter a date ({format})"
+      },
+      "promotion_end_time": {
+        "label": "Promotion Endtime",
+        "placeholder": "Enter a time ({format})"
+      },
+      "remark": {
+        "label": "Remark",
+        "placeholder": "Enter a remark"
+      },
+      "fieldset": {
+        "content": {
+          "title": "Content",
+          "description": "Enter a title for the story. The summary will we shown in the overviews. Markdown can be used in the summary and the content."
+        },
+        "application": {
+          "title": "Application",
+          "description": "To which part of the website does this news story belong?"
+        },
+        "publication": {
+          "title": "Publication",
+          "description": "When should this story be published? With an end date a story can also be automatically removed from the overview."
+        },
+        "promotion": {
+          "title": "Promotion",
+          "description": "A promoted story can be shown on the homepage. A period defines how long the promotion is enabled. The value of the promotion is used to sort promotions."
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "Enter a remark if necessary. A remark will not be visible for vistors of the website."
+        }
+      },
+      "required": "This field is a required field",
+      "invalid_date": "Date is not valid",
+      "invalid_time": "Time is not valid",
+      "end_date_after": "Enddate must be after publish date",
+      "date": "Date",
+      "time": "Time",
+      "submit": "Save"
+    }
+  }
+}
