@@ -7,7 +7,6 @@
     class="appearance-once block w-full bg-gray-200 border rounded py-3 px-4 mb-3 leading-thight focus:outline-none focus:shadow-outline"
     :class="{ 'border-red-600' : !valid }"
     :type="type"
-    :required="required"
     v-bind="$attrs"
     @input="$emit('input', $event.target.value)"
   />

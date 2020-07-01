@@ -34,6 +34,12 @@ import VueWait from 'vue-wait';
 Vue.use(VueWait);
 
 /**
+ * Initialise vue-formulate
+ */
+import initFormulate from '@/js/formulate';
+initFormulate();
+
+/**
  * Initialise vue-notification
  */
 import Notifications from 'vue-notification';
