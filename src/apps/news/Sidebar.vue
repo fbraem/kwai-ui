@@ -3,7 +3,10 @@
   <div>
     <HeaderLine tag="h3" :content="$t('archive')" />
     <template v-for="(year) in archiveYears">
-      <div :key="year">
+      <div
+        class="mt-2"
+        :key="year"
+      >
         <h4>{{ year }}</h4>
         <ul>
           <li
@@ -11,15 +14,17 @@
             :key="month.month"
             class="pt-2 last:pb-2"
           >
-            <div class="relative">
+            <div class="relative flex justify-between">
               <CoverLink :to="{ name : 'news.archive', params : { year : year, month : month.month }}" />
-              <span class="text-blue-600">
+              <div class="text-blue-600 flex-grow">
                 {{ month.monthName }} {{ year }}
-              </span>
-              <Badge
-                class="bg-red-700 text-red-300 float-right"
-                :content="month.count"
-              />
+              </div>
+              <div class="flex-none">
+                <Badge
+                  class="bg-red-700 text-red-300"
+                  :content="month.count"
+                />
+              </div>
             </div>
           </li>
         </ul>
