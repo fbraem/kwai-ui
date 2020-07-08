@@ -49,10 +49,6 @@
 <script>
 export default {
   props: {
-    maxPagesToShow: {
-      type: Number,
-      default: 10
-    },
     limit: Number,
     offset: Number,
     count: Number
