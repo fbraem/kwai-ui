@@ -61,12 +61,22 @@ export const actions = {
   reset({ commit }) {
     commit('reset');
   },
-  async load({ state, commit, dispatch }, { offset = 0 }) {
-    if (state.cache[offset]) return;
+  async load(
+    { state, commit, dispatch },
+    { offset = 0, limit = 10, application, enabled, reload = false }
+  ) {
+    if (!reload && state.cache[offset]) return;
 
     let uri = new URI('author/stories');
     if (offset > 0) {
-      uri.query({ 'page[offset]': offset });
+      uri.addQuery({ 'page[offset]': offset });
+    }
+    uri.addQuery({ 'page[limit]': limit });
+    if (application) {
+      uri.addQuery({ 'filter[application]': application });
+    }
+    if (enabled) {
+      uri.addQuery({ 'filter[enabled}': true });
     }
 
     dispatch('wait/start', 'author.news.load', { root: true });
