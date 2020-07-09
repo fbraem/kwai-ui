@@ -2,7 +2,7 @@
 <template>
   <div>
     <Toolbar></Toolbar>
-    <div class="bg-gray-200">
+    <div class="bg-gray-100">
       <router-view></router-view>
     </div>
     <div v-if="footer" v-html="footer">
