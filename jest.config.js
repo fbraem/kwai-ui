@@ -4,6 +4,10 @@ let config = require('./kwai.development');
 
 module.exports = {
   verbose: true,
+  moduleFileExtensions: [
+    'js',
+    'vue'
+  ],
   moduleDirectories: [ 'node_modules', 'src'],
   moduleNameMapper: {
     '^@/(.*)$': path.join(__dirname, 'src', '$1'),
@@ -11,7 +15,7 @@ module.exports = {
     '^custom/(.*)$': path.join(config.custom, '$1')
   },
   transform: {
-    '^.+\\vue$': 'vue-jest',
-    '^.+\\.[t|j]sx?$': 'babel-jest'
+    '.*\\.(vue)$': 'vue-jest',
+    '.*\\.[t|j]sx?$': 'babel-jest'
   }
 };
