@@ -98,8 +98,8 @@ const actions = {
     if (payload.limit) {
       uri.query({ 'page[limit]': payload.limit });
     }
-    if (payload.category) {
-      uri.query({ 'filter[category]': payload.category });
+    if (payload.application) {
+      uri.query({ 'filter[application]': payload.application });
     }
     if (payload.year) {
       uri.query({ 'filter[year]': payload.year });
