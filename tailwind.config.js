@@ -12,7 +12,10 @@ module.exports = {
         tatami: '#969A86',
         primary: colors.red['700'],
         primary_dark: colors.red['800'],
-        primary_light: colors.red['300']
+        primary_light: colors.red['300'],
+        hero: colors.gray['700'],
+        hero_dark: colors.gray['800'],
+        hero_light: colors.gray['300']
       }
     },
   },
