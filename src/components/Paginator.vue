@@ -1,49 +1,66 @@
 <template>
+  <!--
+    Based on paginator from tailwindui:
+    https://tailwindui.com/components/application-ui/navigation/pagination
+  -->
   <!-- eslint-disable max-len -->
-  <ul
+  <nav
     v-if="pageCount > 1"
-    class="flex border border-gray-300 rounded w-auto"
+    class="relative z-0 inline-flex shadow-sm"
   >
-    <li v-if="currentPage > 1">
-      <a
-        class="block hover:text-red-300 hover:bg-red-700 hover:cursor-pointer text-gray-700 border-r border-gray-300 px-3 py-2"
-        @click="triggerPage(currentPage - 1)"
-      >
-        <i class="fas fa-chevron-left"></i>
-      </a>
-    </li>
+    <span
+      v-if="currentPage === 1"
+      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500"
+    >
+      <i class="fas fa-chevron-left"></i>
+    </span>
+    <a
+      v-else
+      @click="triggerPage(currentPage - 1)"
+      class="cursor-pointer relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+      aria-label="Previous"
+    >
+      <i class="fas fa-chevron-left"></i>
+    </a>
     <template v-for="(page, index) in pages">
-      <li
+      <span
         v-if="page === '...'"
         :key="index"
-        class="text-gray-700 border-r border-gray-300 px-3 py-2"
+        class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700"
       >
         ...
-      </li>
-      <li
+      </span>
+      <span
+        v-else-if="page === currentPage"
+        :key="index"
+        class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-bold text-gray-700"
+      >
+        {{ page }}
+      </span>
+      <a
         v-else
         :key="index"
+        @click="triggerPage(page)"
+        class="cursor-pointer -ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
       >
-        <a
-          :class="{ 'text-gray-700': page !== currentPage, 'text-red-300' : page === currentPage, 'bg-red-700' : page === currentPage }"
-          class="block hover:text-red-300 hover:bg-red-700 hover:cursor-pointer border-r border-gray-300 px-3 py-2"
-          @click="triggerPage(page)"
-        >
-          {{ page }}
-        </a>
-      </li>
-    </template>
-    <li
-      v-if="currentPage < pageCount"
-    >
-      <a
-        class="block hover:text-red-300 hover:bg-red-700 hover:cursor-pointer text-gray-700 border-r border-gray-300 px-3 py-2"
-        @click="triggerPage(currentPage + 1)"
-      >
-        <i class="fas fa-chevron-right"></i>
+        {{ page }}
       </a>
-    </li>
-  </ul>
+    </template>
+    <span
+      v-if="currentPage === pageCount"
+      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500"
+    >
+      <i class="fas fa-chevron-right"></i>
+    </span>
+    <a
+      v-else
+      @click="triggerPage(currentPage + 1)"
+      class="cursor-pointer -ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+      aria-label="Next"
+    >
+      <i class="fas fa-chevron-right"></i>
+    </a>
+  </nav>
 </template>
 
 <script>
@@ -59,7 +76,7 @@ export default {
     },
     currentPage() {
       let current = 1;
-      for (var offset = 0; offset < this.offset; current++) {
+      for (let offset = 0; offset < this.offset; current++) {
         offset += this.limit;
       }
       return current;
@@ -88,8 +105,8 @@ export default {
   },
   methods: {
     triggerPage(newPage) {
-      var offset = 0;
-      for (var page = 1; page < newPage; page++) {
+      let offset = 0;
+      for (let page = 1; page < newPage; page++) {
         offset += this.limit;
       }
       this.$emit('page', offset);
