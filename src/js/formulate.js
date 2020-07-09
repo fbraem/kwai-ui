@@ -54,7 +54,7 @@ export default function init() {
         }
       },
       help(context) {
-        let clazz = 'text-sm italic';
+        let clazz = 'text-sm italic mt-2';
         if (!context.hasErrors) {
           clazz += ' mb-4';
         }
@@ -70,10 +70,10 @@ export default function init() {
         case 'button':
         case 'submit':
           // eslint-disable-next-line max-len
-          return 'py-2 px-4 rounded focus:outline-none hover:no-underline disabled:opacity-50 disabled:cursor-not-allowed';
+          return 'py-3 px-4 rounded focus:outline-none hover:no-underline disabled:opacity-50 disabled:cursor-not-allowed';
         default:
           // eslint-disable-next-line max-len
-          return 'appearance-once block w-full bg-gray-200 border rounded py-3 px-4 mb-3 leading-thight focus:outline-none focus:shadow-outline';
+          return 'appearance-once block w-full bg-gray-200 border rounded py-3 px-4 leading-thight focus:outline-none focus:shadow-outline';
         }
       },
       errors: 'text-red-600 text-sm italic mb-4'
