@@ -405,21 +405,26 @@ export default {
     },
     async submit() {
       this.readForm();
-      this.$store.dispatch('author/news/save', this.story)
-        .then((story) => {
-          this.$router.push({
-            name: 'news.story',
-            params: {
-              id: story.id
-            }
-          });
-        })
-        .catch(err => {
-          this.$formulate.handle(err, 'newsstory');
-          if (this.$refs.form) {
-            this.hasFormErrors = this.$refs.form.mergedFormErrors.length > 0;
-          }
-        });
+      try {
+        const story = await this.$store.dispatch(
+          'author/news/save',
+          this.story
+        );
+        const route = {};
+        if (this.$route.meta.back) {
+          route.name = this.$route.meta.back.name;
+          route.params = this.$route.meta.back.params;
+        } else {
+          route.name = 'news.story';
+          route.params = { id: story.id };
+        }
+        await this.$router.push(route);
+      } catch (err) {
+        this.$formulate.handle(err, 'newsstory');
+        if (this.$refs.form) {
+          this.hasFormErrors = this.$refs.form.mergedFormErrors.length > 0;
+        }
+      }
     },
     isAfterPublishTimestamp({ value, getFormValues, name }, dateField) {
       const after_timestamp = moment(
