@@ -211,7 +211,11 @@
           type="submit"
           :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
         >
-          <i class="fas fa-save mr-2"></i>
+          <i
+            v-if="saving"
+            class="fas fa-spinner fa-spin mr-2"
+          ></i>
+          <i v-else class="fas fa-save mr-2"></i>
           {{ $t('news.form.submit') }}
         </FormulateInput>
       </div>
@@ -313,6 +317,9 @@ export default {
     },
     error() {
       return this.$store.state.author.news.error;
+    },
+    saving() {
+      return this.$wait.is('author.news.save');
     }
   },
   beforeRouteEnter(to, from, next) {
