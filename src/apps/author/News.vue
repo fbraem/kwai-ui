@@ -207,18 +207,22 @@ export default {
     },
     submitFilter() {
       this.action = 'filter';
+      this.offset = 0;
       this.fetchData({
         application: this.filter.application,
         enabled: this.filter.enabled,
+        offset: this.offset,
         reload: true
       });
     },
     resetFilter() {
       this.action = 'reset';
       this.$formulate.reset('filterForm');
+      this.offset = 0;
       this.fetchData({
         application: this.filter.application,
         enabled: this.filter.enabled,
+        offset: this.offset,
         reload: true
       });
     },
