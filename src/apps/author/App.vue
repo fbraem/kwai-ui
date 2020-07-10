@@ -53,6 +53,7 @@ export default {
     this.$store.registerModule('author', store);
   },
   beforeDestroy() {
+    this.$store.dispatch('author/news/reset');
     this.$store.unregisterModule('author');
   },
   beforeRouteEnter(to, from, next) {
