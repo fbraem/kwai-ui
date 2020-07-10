@@ -1,7 +1,26 @@
 {
+  "title": "Author Application",
+  "intro": "Using this application you can write, update or manage news stories or articles",
+  "manage_news": "News",
+  "manage_articles": "Articles",
+  "home": {
+  },
   "news": {
     "create": "Create Newsstory",
     "update": "Modify Newsstory",
+    "read_more": "Read More",
+    "edit": "Edit",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "stories": "stories",
+    "filter": {
+      "application": {
+        "label": "Application",
+        "help": "List only stories of the selected application",
+        "placeholder": "Select an application"
+      }
+    },
     "form": {
       "title": {
         "name": "Title",

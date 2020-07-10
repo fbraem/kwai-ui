@@ -1,6 +1,11 @@
-import App from './App';
-import Home from './Home';
-
+const App = () => import(
+  /* webpackChunkName: "author_chunk" */
+  './App'
+);
+const News = () => import(
+  /* webpackChunkName: "author_chunk" */
+  './News'
+);
 const NewsForm = () => import(
   /* webpackChunkName: "author_chunk" */
   './NewsForm.vue'
@@ -28,9 +33,16 @@ export default [
         },
       },
       {
+        name: 'author.news',
+        path: 'news',
+        component: News
+      },
+      {
         path: '',
         name: 'author.home',
-        component: Home
+        redirect: {
+          name: 'author.news'
+        }
       },
     ]
   },

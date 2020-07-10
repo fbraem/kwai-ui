@@ -1,7 +1,26 @@
 {
+  "title": "Auteur Applicatie",
+  "intro": "Met deze applicatie kan je nieuwsberichten of artikels schrijven, wijzigen of beheren.",
+  "manage_news": "Nieuws",
+  "manage_articles": "Artikels",
+  "home": {
+  },
   "news": {
     "create": "Maak Nieuwsbericht",
     "update": "Wijzig Nieuwsbericht",
+    "read_more": "Lees Meer",
+    "edit": "Wijzig",
+    "showing": "Toon",
+    "to": "tot",
+    "of": "van",
+    "stories": "berichten",
+    "filter": {
+      "application": {
+        "label": "Applicatie",
+        "help": "Toon enkel berichten van de geselecteerde applicatie",
+        "placeholder": "Selecteer een applicatie"
+      }
+    },
     "form": {
       "title": {
         "name": "Titel",

@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div>
+  <PageSection>
     <HeaderLine :content="title" />
     <FormulateForm
       name="newsstory"
@@ -201,15 +201,15 @@
       </Alert>
       <div class="flex justify-end mt-3">
         <FormulateInput
-          class="bg-primary hover:bg-primary_dark text-primary_light"
           type="submit"
+          :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
         >
           <i class="fas fa-save mr-2"></i>
           {{ $t('news.form.submit') }}
         </FormulateInput>
       </div>
     </FormulateForm>
-  </div>
+  </PageSection>
 </template>
 
 <script>
@@ -220,6 +220,7 @@ import lang from './lang';
 
 import KwaiFieldset from '@/components/forms/KwaiFieldset';
 import HeaderLine from '@/components/HeaderLine';
+import PageSection from '@/components/PageSection';
 import Application from '@/models/Application';
 import Alert from '@/components/Alert';
 
@@ -236,7 +237,8 @@ export default {
   components: {
     HeaderLine,
     KwaiFieldset,
-    Alert
+    Alert,
+    PageSection
   },
   props: {
     creating: {
@@ -364,7 +366,7 @@ export default {
       } else {
         this.story.end_date = null;
       }
-      this.story.promotion = this.form.promotion;
+      this.story.promotion = parseInt(this.form.promotion, 10);
       if (this.form.promotion_end_date) {
         this.story.promotion_end_date = createDatetime(
           this.form.promotion_end_date,
