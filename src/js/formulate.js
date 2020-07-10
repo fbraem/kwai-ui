@@ -60,6 +60,7 @@ export default function init() {
         }
         return clazz;
       },
+      error: 'mt-1',
       outer: 'mb-2',
       input(context) {
         switch (context.classification) {
