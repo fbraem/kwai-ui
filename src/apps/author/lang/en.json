@@ -101,7 +101,8 @@
       "end_date_after": "Enddate must be after publish date",
       "date": "Date",
       "time": "Time",
-      "submit": "Save"
+      "submit": "Save",
+      "validation_failed": "Please correct all errors before submitting again."
     }
   }
 }

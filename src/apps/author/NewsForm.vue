@@ -7,6 +7,7 @@
       v-model="form"
       ref="form"
       @submit="submit"
+      @submit-raw="checkValidation"
     >
       <!-- CONTENT -->
       <KwaiFieldset :title="$t('news.form.fieldset.content.title')">
@@ -199,6 +200,12 @@
       >
         <FormulateErrors />
       </Alert>
+      <Alert
+        v-if="hasValidationErrors"
+        type="danger"
+      >
+        {{ $t('news.form.validation_failed') }}
+      </Alert>
       <div class="flex justify-end mt-3">
         <FormulateInput
           type="submit"
@@ -262,7 +269,8 @@ export default {
         promotion_end_time: '',
         remark: ''
       },
-      hasFormErrors: false
+      hasFormErrors: false,
+      hasValidationErrors: false
     };
   },
   computed: {
@@ -318,6 +326,9 @@ export default {
     next();
   },
   methods: {
+    async checkValidation(submission) {
+      this.hasValidationErrors = await submission.hasValidationErrors();
+    },
     async setupForm(params) {
       if (params.id) {
         await this.$store.dispatch('author/news/read', {

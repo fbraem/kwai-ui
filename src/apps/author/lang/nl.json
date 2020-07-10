@@ -101,7 +101,8 @@
       "end_date_after": "Einddatum moet na publicatie datum liggen",
       "date": "Datum",
       "time": "Tijdstip",
-      "submit": "Bewaar"
+      "submit": "Bewaar",
+      "validation_failed": "Gelieve alle foutieve informatie te corrigeren."
     }
   }
 }
