@@ -137,7 +137,7 @@ export const actions = {
   /**
    * Save a news story.
    */
-  async save({ commit }, story) {
+  async save({ dispatch, commit }, story) {
     let uri = new URI('author/stories');
     if (story.id) uri.segment(story.id);
 
@@ -145,6 +145,8 @@ export const actions = {
     const data = transformer.serialize(story);
 
     try {
+      dispatch('wait/start', 'author.news.save', { root: true });
+
       let api = http_api.url(uri.href()).json(data);
       const res = await story.id ? api.patch() : api.post();
       let newStory = transformer.deserialize(Story, await res.json());
@@ -156,6 +158,8 @@ export const actions = {
     } catch (error) {
       commit('setError', error);
       throw error;
+    } finally {
+      dispatch('wait/end', 'author.news.save', { root: true });
     }
   },
   /**
