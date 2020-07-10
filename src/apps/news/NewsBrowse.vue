@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       offset: 0,
-      categoryId: null
+      applicationId: null
     };
   },
   computed: {
@@ -94,13 +94,13 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      if (params.category) {
-        this.categoryId = params.category;
+      if (params.application) {
+        this.applicationId = params.application;
       }
       await this.$store.dispatch('news/load', {
         year: params.year,
         month: params.month,
-        category: params.category,
+        application: params.application,
         featured: params.featured
       });
     },
@@ -109,7 +109,7 @@ export default {
         offset: offset,
         year: this.year,
         month: this.month,
-        category: this.categoryId,
+        application: this.applicationId,
         featured: this.featured
       });
       this.offset = offset;
