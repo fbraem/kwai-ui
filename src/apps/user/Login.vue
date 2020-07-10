@@ -92,7 +92,14 @@ export default {
           email: this.form.email,
           password: this.form.password
         });
-        await this.$router.push({name: this.$route.meta.back ?? 'home'});
+        if (this.$route.meta.back) {
+          await this.$router.push({
+            name: this.$route.meta.back.name,
+            params: this.$route.meta.back.params
+          });
+        } else {
+          await this.$router.push({ name: 'home' });
+        }
       } catch (error) {
         this.form.password = '';
         if (error.response?.status === 401) { // Not Authorized
