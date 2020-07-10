@@ -76,7 +76,7 @@ export const actions = {
       uri.addQuery({ 'filter[application]': application });
     }
     if (enabled) {
-      uri.addQuery({ 'filter[enabled}': true });
+      uri.addQuery({ 'filter[enabled]': true });
     }
 
     dispatch('wait/start', 'author.news.load', { root: true });
