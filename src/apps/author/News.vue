@@ -7,6 +7,7 @@
       </p>
       <div class="flex flex-col md:flex-row w-full md:mt-4 mt-6 md:justify-start justify-center items-center">
         <IconButton
+          v-if="canCreate"
           class="bg-primary hover:bg-primary_dark text-primary_light m-2"
           icon="fas fa-file-alt"
           :content="$t('news.create')"
@@ -156,6 +157,8 @@ import Link from '@/components/Link';
 import Paginator from '@/components/Paginator';
 import Alert from '@/components/Alert';
 
+import Story from '@/models/Story';
+
 export default {
   components: {
     Alert,
@@ -178,16 +181,19 @@ export default {
     };
   },
   computed: {
-    error() {
-      return this.$store.state.author.news.error;
-    },
     applications() {
       return this.$store.getters['applications/asOptions'](
         (application) => application.news
       );
     },
+    canCreate() {
+      return this.$can('create', Story);
+    },
     count() {
       return this.$store.state.author.news.count;
+    },
+    error() {
+      return this.$store.state.author.news.error;
     },
     from() {
       return this.offset + 1;
