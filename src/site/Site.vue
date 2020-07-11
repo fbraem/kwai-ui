@@ -7,6 +7,7 @@
     </div>
     <div v-if="footer" v-html="footer">
     </div>
+    <notifications group="error" />
   </div>
 </template>
 
