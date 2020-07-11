@@ -53,9 +53,28 @@ const router = new VueRouter({
   routes
 });
 router.beforeEach((to, from, next) => {
+  // First check if navigation is allowed.
+  const canNavigate = to.matched.every(route => {
+    if (!route.meta.auth) return true;
+    return ability.can(
+      route.meta.auth.action || 'read',
+      route.meta.subject
+    );
+  });
+  if (!canNavigate) {
+    // Navigation not allowed, redirect to home page
+    console.log(to.name, ' is not allowed!');
+    return next({
+      name: 'home',
+      replace: true,
+    });
+  }
+
   to.meta.back = from;
+
   next();
 });
+
 import VueScrollBehavior from 'vue-scroll-behavior';
 Vue.use(VueScrollBehavior, { router: router });
 
