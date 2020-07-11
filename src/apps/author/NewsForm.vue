@@ -324,13 +324,35 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.setupForm(to.params);
-      next();
+      try {
+        await vm.setupForm(to.params);
+        return next();
+      } catch (err) {
+        console.log(err);
+        vm.$notify({
+          group: 'error',
+          type: 'error',
+          title: 'Unexpected error',
+          text: err
+        });
+        return next('/author/news');
+      }
     });
   },
   async beforeRouteUpdate(to, from, next) {
-    await this.setupForm(to.params);
-    next();
+    try {
+      await this.setupForm(to.params);
+      return next();
+    } catch (err) {
+      console.log(err);
+      this.$notify({
+        group: 'error',
+        type: 'error',
+        title: 'Unexpected error',
+        text: err
+      });
+      return next('/author/news');
+    }
   },
   methods: {
     async checkValidation(submission) {
