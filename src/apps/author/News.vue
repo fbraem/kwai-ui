@@ -14,7 +14,15 @@
         />
       </div>
     </PageSectionHeader>
-    <PageSection>
+    <PageSection v-if="error">
+      <Alert
+        type="danger"
+        class="w-full"
+      >
+        {{ error.response.status }} - {{ error.response.statusText }}
+      </Alert>
+    </PageSection>
+    <PageSection v-else>
       <div class="rounded-lg p-4 flex flex-col border border-gray-600 border-solid w-full mx-auto max-w-2xl">
         <h2>
           Filter
@@ -146,9 +154,11 @@ import IconButton from '@/components/IconButton';
 import lang from './lang';
 import Link from '@/components/Link';
 import Paginator from '@/components/Paginator';
+import Alert from '@/components/Alert';
 
 export default {
   components: {
+    Alert,
     Paginator,
     Link,
     IconButton,
@@ -168,6 +178,9 @@ export default {
     };
   },
   computed: {
+    error() {
+      return this.$store.state.author.news.error;
+    },
     applications() {
       return this.$store.getters['applications/asOptions'](
         (application) => application.news
