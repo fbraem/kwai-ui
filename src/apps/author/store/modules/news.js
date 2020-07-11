@@ -126,6 +126,7 @@ export const actions = {
       commit('setCurrent', transformer.deserialize(Story, json));
     } catch (error) {
       commit('setError', error);
+      throw error;
     } finally {
       dispatch('wait/end', 'author.news.read', { root: true });
     }
