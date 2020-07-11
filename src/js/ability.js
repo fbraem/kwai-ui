@@ -7,6 +7,9 @@ function subjectName(item) {
   if (!item || typeof item === 'string') {
     return item;
   }
+  if (typeof item === 'function') {
+    return item.type();
+  }
   return item.constructor.type();
 }
 
