@@ -122,6 +122,7 @@
               icon="fas fa-arrow-right"
             />
             <Link
+              v-if="$can('update', story)"
               class="mt-2"
               :content="$t('news.edit')"
               :route="{ name: 'author.news.update', params: { id: story.id }}"
