@@ -15,12 +15,8 @@ function subjectName(item) {
 
 export const ability = new Ability([], { subjectName });
 
-// TODO: Also used in store authentication... Search for a better integration
-import Lockr from 'lockr';
-const USER_RULES_KEY = 'rules';
-
 export const abilityPlugin = (store) => {
-  ability.update(Lockr.get(USER_RULES_KEY, []));
+  ability.update(store.state.authentication.rules);
   return store.subscribe((mutation, state) => {
     switch (mutation.type) {
     case 'authentication/setLogin':
