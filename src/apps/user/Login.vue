@@ -46,7 +46,7 @@
         </Alert>
         <div class="flex justify-end mt-3">
           <FormulateInput
-            class="bg-primary hover:bg-primary_dark text-primary_light"
+            :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
             type="submit"
           >
             <i class="fas fa-unlock mr-2"></i>
