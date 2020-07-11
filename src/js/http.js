@@ -6,7 +6,7 @@ import store from '@/site/store';
 
 export const http = wretch(config.api);
 
-export const http_auth = http.defer((w, url, options) => {
+export const http_auth = http.defer(w => {
   const token = store.state.authentication.access_token;
   if (token) {
     return w.auth(`Bearer ${token}`);
