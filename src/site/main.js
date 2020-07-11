@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
     if (!route.meta.auth) return true;
     return ability.can(
       route.meta.auth.action || 'read',
-      route.meta.subject
+      route.meta.auth.subject
     );
   });
   if (!canNavigate) {
