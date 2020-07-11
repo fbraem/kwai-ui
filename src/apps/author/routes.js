@@ -11,6 +11,8 @@ const NewsForm = () => import(
   './NewsForm.vue'
 );
 
+import Story from '@/models/Story';
+
 export default [
   {
     path: '/author',
@@ -23,6 +25,12 @@ export default [
         props: {
           creating: false
         },
+        meta: {
+          auth: {
+            action: 'update',
+            subject: Story
+          }
+        },
       },
       {
         name: 'author.news.create',
@@ -31,11 +39,22 @@ export default [
         props: {
           creating: true
         },
+        meta: {
+          auth: {
+            action: 'create',
+            subject: Story
+          }
+        },
       },
       {
         name: 'author.news',
         path: 'news',
-        component: News
+        component: News,
+        meta: {
+          auth: {
+            subject: Story
+          }
+        },
       },
       {
         path: '',
