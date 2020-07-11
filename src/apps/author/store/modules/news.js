@@ -102,7 +102,6 @@ export const actions = {
    */
   async read({getters, dispatch, commit, state}, { id }) {
     // Don't read it again when it is already current...
-    console.log(state.current, id);
     if (state.current?.id === id) {
       return;
     }
