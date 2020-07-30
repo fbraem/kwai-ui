@@ -1,9 +1,9 @@
 <template>
   <!-- eslint-disable max-len -->
   <div>
-    <PageSectionHeader title="Nieuws">
+    <PageSectionHeader :title="$t('news.title')">
       <p class="leading-relaxed text-base">
-        Maak nieuwe nieuwsberichten, wijzig of beheer oude berichten.
+        {{ $t('news.intro') }}
       </p>
       <div class="flex flex-col md:flex-row w-full md:mt-4 mt-6 md:justify-start justify-center items-center">
         <IconButton
