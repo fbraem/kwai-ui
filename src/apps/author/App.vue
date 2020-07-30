@@ -23,6 +23,7 @@
           class="bg-primary hover:bg-primary_dark text-primary_light m-2"
           icon="fas fa-file-alt"
           :content="$t('manage_articles')"
+          :route="{ name: 'author.pages' }"
         />
       </div>
     </Hero>
