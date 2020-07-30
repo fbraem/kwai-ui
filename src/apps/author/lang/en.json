@@ -6,6 +6,8 @@
   "home": {
   },
   "news": {
+    "title": "News",
+    "intro": "Create newsstories, change or manage the old stories.",
     "create": "Create Newsstory",
     "update": "Modify Newsstory",
     "read_more": "Read More",
@@ -101,6 +103,75 @@
       "end_date_after": "Enddate must be after publish date",
       "date": "Date",
       "time": "Time",
+      "submit": "Save",
+      "validation_failed": "Please correct all errors before submitting again."
+    }
+  },
+  "pages": {
+    "title": "Articles",
+    "intro": "Write new articles, update and manage old articles.",
+    "update": "Edit Article",
+    "create": "Create Article",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "articles": "articles",
+    "filter": {
+      "application": {
+        "label": "Application",
+        "help": "Show only the articles of the selected application",
+        "placeholder": "Select an application"
+      },
+      "sort": {
+        "label": "Sort",
+        "help": "Sort articles",
+        "placeholder": "Select a sort method",
+        "options": {
+          "application": "Application",
+          "creation_date": "Creation Date"
+        }
+      }
+    },
+    "form": {
+      "title": {
+        "name": "Title",
+        "label": "Title",
+        "placeholder": "Enter a title"
+      },
+      "enabled": {
+        "label": "Active"
+      },
+      "summary": {
+        "label": "Summary",
+        "placeholder": "Enter a summary"
+      },
+      "content": {
+        "label": "Content",
+        "placeholder": "Enter the content of the article"
+      },
+      "application": {
+        "label": "Application",
+        "placeholder": "Select an application"
+      },
+      "remark": {
+        "label": "Remark",
+        "placeholder": "Enter a remark"
+      },
+      "fieldset": {
+        "content": {
+          "title": "Content",
+          "description": "Enter a title for the article. The summary will we shown in the overviews. Markdown can be used in the summary and the content."
+        },
+        "application": {
+          "title": "Application",
+          "description": "To which part of the website does this article belong?"
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "Enter a remark if necessary. A remark will not be visible for vistors of the website."
+        }
+      },
+      "required": "This field is a required field",
       "submit": "Save",
       "validation_failed": "Please correct all errors before submitting again."
     }

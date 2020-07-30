@@ -10,8 +10,17 @@ const NewsForm = () => import(
   /* webpackChunkName: "author_chunk" */
   './NewsForm.vue'
 );
+const Pages = () => import(
+  /* webpackChunkName: "author_chunk" */
+  './Pages'
+);
+const PageForm = () => import(
+  /* webpackChunkName: "author_chunk" */
+  './PageForm.vue'
+);
 
 import Story from '@/models/Story';
+import Page from '@/models/Page';
 
 export default [
   {
@@ -53,6 +62,44 @@ export default [
         meta: {
           auth: {
             subject: Story
+          }
+        },
+      },
+      {
+        name: 'author.pages',
+        path: 'pages',
+        component: Pages,
+        meta: {
+          auth: {
+            subject: Page
+          }
+        }
+      },
+      {
+        name: 'author.pages.update',
+        path: 'pages/update/:id(\\d+)',
+        component: PageForm,
+        props: {
+          creating: false
+        },
+        meta: {
+          auth: {
+            action: 'update',
+            subject: Page
+          }
+        },
+      },
+      {
+        name: 'author.pages.create',
+        path: 'pages/create',
+        component: PageForm,
+        props: {
+          creating: true
+        },
+        meta: {
+          auth: {
+            action: 'create',
+            subject: Page
           }
         },
       },

@@ -6,6 +6,8 @@
   "home": {
   },
   "news": {
+    "title": "Nieuws",
+    "intro": "Schrijf nieuwe nieuwsberichten, wijzig of beheer oude berichten.",
     "create": "Maak Nieuwsbericht",
     "update": "Wijzig Nieuwsbericht",
     "read_more": "Lees Meer",
@@ -101,6 +103,75 @@
       "end_date_after": "Einddatum moet na publicatie datum liggen",
       "date": "Datum",
       "time": "Tijdstip",
+      "submit": "Bewaar",
+      "validation_failed": "Gelieve alle foutieve informatie te corrigeren."
+    }
+  },
+  "pages": {
+    "title": "Artikels",
+    "intro": "Schrijf nieuwe artikels, wijzig of beheer oude artikels.",
+    "update": "Wijzig Artikel",
+    "create": "Schrijf Artikel",
+    "showing": "Toon",
+    "to": "tot",
+    "of": "van",
+    "articles": "artikels",
+    "filter": {
+      "application": {
+        "label": "Applicatie",
+        "help": "Toon enkel artikels van de geselecteerde applicatie",
+        "placeholder": "Selecteer een applicatie"
+      },
+      "sort": {
+        "label": "Sorteer",
+        "help": "Sorteer de artikels",
+        "placeholder": "Selecteer een sorteermethode",
+        "options": {
+          "application": "Applicatie",
+          "creation_date": "Creatie Datum"
+        }
+      }
+    },
+    "form": {
+      "title": {
+        "name": "Titel",
+        "label": "Titel",
+        "placeholder": "Geef een titel in"
+      },
+      "enabled": {
+        "label": "Actief"
+      },
+      "summary": {
+        "label": "Samenvatting",
+        "placeholder":"Geef een samenvatting in"
+      },
+      "content": {
+        "label": "Inhoud",
+        "placeholder": "Geef de inhoud van het artikel in"
+      },
+      "application": {
+        "label": "Applicatie",
+        "placeholder": "Selecteer een applicatie"
+      },
+      "remark": {
+        "label": "Opmerking",
+        "placeholder": "Geef een opmerking in"
+      },
+      "fieldset": {
+        "content": {
+          "title": "Inhoud",
+          "description": "Geef een titel voor het artikel. De samenvatting zal in overzichten getoond worden. In de samenvatting en de inhoud kan je Markdown gebruiken."
+        },
+        "application": {
+          "title": "Applicatie",
+          "description": "Tot welk onderdeel van de website behoort dit artikel?"
+        },
+        "remark": {
+          "title": "Opmerking",
+          "description": "Geef een eventuele opmerking in. Een opmerking zal niet zichtbaar zijn voor een bezoeker van de website."
+        }
+      },
+      "required": "Dit veld is verplicht in te vullen",
       "submit": "Bewaar",
       "validation_failed": "Gelieve alle foutieve informatie te corrigeren."
     }
