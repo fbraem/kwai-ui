@@ -433,7 +433,7 @@ export default {
           this.story
         );
         const route = {};
-        if (this.$route.meta.back) {
+        if (this.$route.meta.back?.name) {
           route.name = this.$route.meta.back.name;
           route.params = this.$route.meta.back.params;
         } else {
