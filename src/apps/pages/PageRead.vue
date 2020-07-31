@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="error">
-      {{ error.response.statusText }}
+      {{ error }}
     </div>
     <Spinner v-if="$wait.is('pages.read')" />
     <article
@@ -117,7 +117,7 @@ export default {
   i18n: messages,
   computed: {
     page() {
-      return this.$store.state.page.active;
+      return this.$store.state.pages.current;
     },
     categoryLink() {
       return {
@@ -129,10 +129,10 @@ export default {
       };
     },
     categories() {
-      return this.$store.state.category.all;
+      return this.$store.state.applications.all;
     },
     error() {
-      return this.$store.state.page.error;
+      return this.$store.state.pages.error;
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -148,23 +148,10 @@ export default {
   methods: {
     fetchData(params) {
       try {
-        this.$store.dispatch('page/read', { id: params.id });
+        this.$store.dispatch('pages/read', { id: params.id });
       } catch (error) {
         console.log(error);
       }
-    },
-    deletePage() {
-      var category = this.page.category.id;
-      this.$store.dispatch('page/delete', {
-        page: this.page
-      }).then(() => {
-        this.$router.push({
-          name: 'pages.browse',
-          params: {
-            category: category
-          }
-        });
-      });
     }
   }
 };

@@ -1,28 +1,24 @@
 import App from './App.vue';
 
 const PagesHeader = () => import(
-  /* webpackChunkName: "pages_chunck" */
+  /* webpackChunkName: "pages_chunk" */
   '@/apps/pages/ThePagesHeader.vue'
 );
 const PageHeader = () => import(
-  /* webpackChunkName: "pages_chunck" */
+  /* webpackChunkName: "pages_chunk" */
   '@/apps/pages/ThePageHeader.vue'
 );
 const PageCategoryHeader = () => import(
-  /* webpackChunkName: "pages_chunck" */
+  /* webpackChunkName: "pages_chunk" */
   '@/apps/pages/ThePageCategoryHeader.vue'
 );
 const PageRead = () => import(
-  /* webpackChunkName: "pages_chunck" */
+  /* webpackChunkName: "pages_chunk" */
   '@/apps/pages/PageRead.vue'
 );
 const PageBrowse = () => import(
-  /* webpackChunkName: "pages_chunck" */
+  /* webpackChunkName: "pages_chunk" */
   '@/apps/pages/PageBrowse.vue'
-);
-const PageForm = () => import(
-  /* webpackChunkName: "pages_admin" */
-  '@/apps/pages/PageForm.vue'
 );
 
 export default [
@@ -45,22 +41,6 @@ export default [
           default: PageBrowse
         },
         name: 'pages.category',
-      },
-      {
-        path: 'create',
-        component: PageForm,
-        props: {
-          creating: true
-        },
-        name: 'pages.create',
-      },
-      {
-        path: 'update/:id(\\d+)',
-        name: 'pages.update',
-        component: PageForm,
-        props: {
-          creating: false
-        },
       },
       {
         path: '',

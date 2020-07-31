@@ -1,14 +1,11 @@
 <template>
   <Page>
     <Spinner v-if="$wait.is('pages.browse')" />
-    <div
-      v-if="pagesMeta"
-      class="flex justify-center"
-    >
+    <div class="flex justify-center mb-4">
       <Paginator
-        :count="pagesMeta.count"
-        :limit="pagesMeta.limit"
-        :offset="pagesMeta.offset"
+        :count="paginator.count"
+        :limit="paginator.limit"
+        :offset="paginator.offset"
         @page="readPage"
       />
     </div>
@@ -21,16 +18,20 @@
         <PageSummary :page="page" />
       </div>
     </div>
-    <div
-      v-if="pagesMeta"
-      class="flex justify-center"
-    >
+    <div class="flex justify-center mb-4">
       <Paginator
-        :count="pagesMeta.count"
-        :limit="pagesMeta.limit"
-        :offset="pagesMeta.offset"
+        :count="paginator.count"
+        :limit="paginator.limit"
+        :offset="paginator.offset"
         @page="readPage"
       />
+    </div>
+    <div
+        v-if="! $wait.is('pages.load') && pageCount === 0"
+    >
+      <Alert type="danger">
+        {{ $t('no_pages') }}
+      </Alert>
     </div>
     <template slot="sidebar">
       <Sidebar />
@@ -44,6 +45,7 @@ import PageSummary from './components/PageSummary';
 import Paginator from '@/components/Paginator';
 import Spinner from '@/components/Spinner';
 import Sidebar from './Sidebar';
+import Alert from '@/components/Alert';
 
 import messages from './lang';
 
@@ -57,18 +59,28 @@ export default {
     Sidebar,
     PageSummary,
     Paginator,
-    Spinner
+    Spinner,
+    Alert
+  },
+  data() {
+    return {
+      offset: 0,
+      applicationId: null
+    };
   },
   computed: {
     pages() {
-      return this.$store.state.page.all;
+      return this.$store.state.pages.cache[this.offset];
     },
     pageCount() {
-      if (this.pages) return this.pages.length;
-      return -1;
+      return this.$store.state.pages.count;
     },
-    pagesMeta() {
-      return null;
+    paginator() {
+      return {
+        offset: this.offset,
+        count: this.$store.state.pages.count,
+        limit: 10
+      };
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -82,13 +94,18 @@ export default {
     next();
   },
   methods: {
-    fetchData(params) {
-      this.$store.dispatch('page/browse', {
-        category: params.category
-      });
+    async fetchData(params) {
+      if (params.application) {
+        this.applicationId = params.application;
+      }
+      await this.$store.dispatch('pages/load', params);
     },
-    readPage(offset) {
-      console.log(offset);
+    async readPage(offset) {
+      this.offset = offset;
+      await this.fetchData({
+        offset,
+        application: this.applicationId,
+      });
     }
   }
 };

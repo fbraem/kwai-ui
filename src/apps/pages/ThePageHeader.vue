@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     page() {
-      return this.$store.state.page.active;
+      return this.$store.state.pages.current;
     },
     picture() {
       return this.page.picture;
