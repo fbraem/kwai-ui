@@ -67,7 +67,7 @@ export const actions = {
   ) {
     if (!reload && state.cache[offset]) return;
 
-    let uri = new URI('author/pages');
+    let uri = new URI('pages');
     if (offset > 0) {
       uri.addQuery({ 'page[offset]': offset });
     }

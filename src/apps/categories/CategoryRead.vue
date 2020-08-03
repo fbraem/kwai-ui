@@ -67,7 +67,12 @@ export default {
   },
   computed: {
     category() {
-      return this.$store.getters['category/category'](this.$route.params.id);
+      if (this.$route.params.id) {
+        // eslint-disable-next-line max-len
+        return this.$store.getters['applications/applicationWithId'](this.$route.params.id);
+      }
+      // eslint-disable-next-line max-len
+      return this.$store.getters['applications/application'](this.$route.params.app);
     },
     moreNewsLink() {
       return {
@@ -102,32 +107,22 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.fetchCategory(to.params);
-      if (vm.category.app) {
-        vm.$router.replace({ path: '/' + vm.category.app });
-      } else {
-        vm.fetchData(to.params);
-      }
+      await vm.fetchData(to.params);
     });
   },
   async beforeRouteUpdate(to, from, next) {
-    this.fetchCategory(to.params);
-    this.fetchData(to.params);
+    await this.fetchData(to.params);
     next();
   },
   methods: {
-    async fetchCategory(params) {
-      await this.$store.dispatch('category/read', {
-        id: params.id
-      });
-    },
     async fetchData(params) {
-      this.$store.dispatch('category/news/browse', {
-        category: params.id,
+      await this.$store.dispatch('applications/load');
+      await this.$store.dispatch('category/news/load', {
+        application: this.category.id,
         featured: true
       });
-      this.$store.dispatch('category/page/browse', {
-        category: params.id
+      await this.$store.dispatch('category/page/load', {
+        application: this.category.id
       });
     }
   }

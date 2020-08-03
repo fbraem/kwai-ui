@@ -65,6 +65,14 @@ export default [
         name: 'categories.update',
       },
       {
+        path: ':app',
+        components: {
+          hero: CategoryHeader,
+          default: CategoryRead
+        },
+        name: 'categories.read.app',
+      },
+      {
         path: '',
         components: {
           hero: CategoriesHeader,

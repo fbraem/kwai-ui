@@ -13,6 +13,7 @@ import pageStore from '@/apps/pages/store';
 
 export default {
   beforeCreate() {
+    this.$store.registerModule(['category'], { namespaced: true });
     this.$store.registerModule(['category', 'news'], newsStore);
     this.$store.registerModule(['category', 'page'], pageStore);
   },
@@ -21,6 +22,7 @@ export default {
     this.$store.unregisterModule(['category', 'news']);
     this.$store.dispatch('category/page/reset');
     this.$store.unregisterModule(['category', 'page']);
+    this.$store.unregisterModule(['category']);
   }
 };
 </script>

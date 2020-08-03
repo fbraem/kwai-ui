@@ -26,7 +26,7 @@ export default {
   i18n: messages,
   computed: {
     category() {
-      return this.$store.getters['category/category'](this.$route.params.id);
+      return this.$store.getters['applications/application'](this.$route.params.id);
     },
     picture() {
       return this.category?.header_picture;

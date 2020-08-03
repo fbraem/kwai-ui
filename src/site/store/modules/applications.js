@@ -9,6 +9,9 @@ const initialize = () => ({
 });
 
 const getters = {
+  applicationWithId: (state) => (id) => {
+    return state.all.find(a => a.id === id);
+  },
   application: (state) => (name) => {
     return state.all.find(a => a.name === name);
   },

@@ -93,25 +93,25 @@ const actions = {
 
     let uri = new URI('news/stories');
     if (payload.offset && payload.offset > 0) {
-      uri.query({ 'page[offset]': payload.offset });
+      uri.addQuery({ 'page[offset]': payload.offset });
     }
     if (payload.limit) {
-      uri.query({ 'page[limit]': payload.limit });
+      uri.addQuery({ 'page[limit]': payload.limit });
     }
     if (payload.application) {
-      uri.query({ 'filter[application]': payload.application });
+      uri.addQuery({ 'filter[application]': payload.application });
     }
     if (payload.year) {
-      uri.query({ 'filter[year]': payload.year });
+      uri.addQuery({ 'filter[year]': payload.year });
     }
     if (payload.month) {
-      uri.query({ 'filter[month]': payload.month });
+      uri.addQuery({ 'filter[month]': payload.month });
     }
     if (payload.featured) {
-      uri.query({ 'filter[featured]': true });
+      uri.addQuery({ 'filter[featured]': true });
     }
     if (payload.user) {
-      uri.query({'filter[user]': payload.user });
+      uri.addQuery({'filter[user]': payload.user });
     }
 
     dispatch('wait/start', 'news.load', {root: true});
