@@ -7,6 +7,10 @@ Japanese), but in the future it may be possible to support other sports.
 The backend (api) of kwai can be found in the
 [kwai-api](https://github.com/fbraem/kwai-api) repository.
 
+> Kwai is a greenfield project. As long as there is no official release,
+> everything can change. Although there is still a lot to do, kwai is already used in production for
+> our club but that is no guarantee that it will work for you...
+
 UI
 ==
 Kwai UI is a Single Page Application (SPA) written with
@@ -20,9 +24,6 @@ Currently, the following is available:
 - members
 - teams
 - trainings
-
-Although there is still a lot to do, kwai is already used in production for
-our club.
 
 TODO
 ====
