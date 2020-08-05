@@ -58,6 +58,7 @@
     "@casl/ability": "^4.1.5",
     "@casl/vue": "^1.1.1",
     "@fortawesome/fontawesome-free": "^5.13.1",
+    "@vue/composition-api": "^1.0.0-beta.6",
     "flag-icon-css": "^3.5.0",
     "jump.js": "^1.0.2",
     "lockr": "^0.8.5",
