@@ -1,15 +1,18 @@
 <template>
   <div class="container mx-auto mt-3">
-    <Spinner v-if="$wait.is('seasons.browse')">
+    <Spinner v-if="seasons.isLoading">
     </Spinner>
     <div v-else>
       <Alert
-        v-if="noSeasons"
+        v-if="seasons.count === 0"
         type="warning"
       >
         {{ $t('no_seasons') }}
       </Alert>
-      <table class="table">
+      <table
+          v-else
+          class="table"
+      >
         <thead>
           <tr>
             <th></th>
@@ -24,7 +27,7 @@
         </thead>
         <tbody>
           <SeasonRow
-            v-for="season in seasons"
+            v-for="season in seasons.all"
             :key="season.id"
             :season="season"
           />
@@ -42,6 +45,7 @@ import Alert from '@/components/Alert';
 import SeasonRow from './TheSeasonRow';
 
 export default {
+  props: [ 'seasons' ],
   i18n: messages,
   components: {
     Spinner,
@@ -49,27 +53,19 @@ export default {
     Alert
   },
   computed: {
-    seasons() {
-      return this.$store.state.season.all;
-    },
     noSeasons() {
       return this.seasons && this.seasons.length === 0;
     }
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.fetchData(to.params);
+      await vm.seasons.load();
       next();
     });
   },
   async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
+    await this.seasons.load();
     next();
-  },
-  methods: {
-    fetchData() {
-      this.$store.dispatch('season/browse');
-    }
   }
 };
 </script>

@@ -27,16 +27,19 @@ import messages from './lang';
 import Attributes from '@/components/Attributes';
 import Alert from '@/components/Alert';
 import IconButtons from '@/components/IconButtons';
+import Season from '@/models/Season';
 
 export default {
+  props: {
+    season: {
+      type: Season
+    }
+  },
   components: {
     Attributes, Alert, IconButtons
   },
   i18n: messages,
   computed: {
-    season() {
-      return this.$store.state.season.active;
-    },
     toolbar() {
       const buttons = [
         {

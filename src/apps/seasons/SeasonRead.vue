@@ -1,33 +1,38 @@
 <template>
   <div class="container mx-auto p-4">
-    <router-view name="season_information">
+    <router-view
+        v-if="season"
+        name="season_information"
+        :season="season"
+    >
     </router-view>
   </div>
 </template>
 
 <script>
 export default {
+  props: [
+    'seasons',
+  ],
   computed: {
     season() {
-      return this.$store.state.season.active;
+      return this.seasons.current;
     },
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.fetchData(to.params);
+      vm.fetchData(to.params);
       next();
     });
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
+  beforeRouteUpdate(to, from, next) {
+    this.fetchData(to.params);
     next();
   },
   methods: {
-    fetchData(params) {
+    async fetchData(params) {
       try {
-        this.$store.dispatch('season/read', {
-          id: params.id
-        });
+        await this.seasons.read(params.id);
       } catch (error) {
         console.log(error);
       }

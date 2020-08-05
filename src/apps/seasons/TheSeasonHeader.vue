@@ -73,24 +73,6 @@
       </div>
     </div>
   </div>
-<!--
-  <Header
-    v-if="season"
-    :title="$t('seasons')"
-    :subtitle="season.name"
-    :toolbar="toolbar"
-  >
-    <AreYouSure
-      :show="isModalVisible"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="deleteSeason"
-      @close="close"
-    >
-      {{ $t('are_you_sure') }}
-    </AreYouSure>
-  </Header>
--->
 </template>
 
 <style scoped>
@@ -109,11 +91,11 @@
 <script>
 import messages from './lang';
 
-// import AreYouSure from '@/components/AreYouSure';
 import MegaMenu from '@/components/MegaMenu';
 import MegaMenuBlock from '@/components/MegaMenuBlock';
 
 export default {
+  props: [ 'seasons' ],
   i18n: messages,
   components: {
     /* AreYouSure, */ MegaMenu, MegaMenuBlock
@@ -126,7 +108,7 @@ export default {
   },
   computed: {
     season() {
-      return this.$store.state.season.active;
+      return this.seasons.current;
     },
     toolbar() {
       const buttons = [{
