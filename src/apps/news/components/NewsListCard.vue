@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Category from '@/models/Category';
+import Application from '@/models/Application';
 import messages from '../lang';
 import NewsSummaryList from './NewsSummaryList';
 
@@ -38,7 +38,7 @@ export default {
       required: true
     },
     category: {
-      type: Category,
+      type: Application,
       required: false
     }
   },
