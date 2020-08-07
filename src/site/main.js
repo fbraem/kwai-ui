@@ -5,6 +5,9 @@ import './css/index.css';
 
 import Vue from 'vue';
 
+import VueCompositionApi from '@vue/composition-api';
+Vue.use(VueCompositionApi);
+
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
