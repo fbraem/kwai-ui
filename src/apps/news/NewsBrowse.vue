@@ -101,7 +101,7 @@ export default {
         year: params.year,
         month: params.month,
         application: params.application,
-        featured: params.featured
+        promoted: params.promoted
       });
     },
     async readPage(offset) {
@@ -110,7 +110,7 @@ export default {
         year: this.year,
         month: this.month,
         application: this.applicationId,
-        featured: this.featured
+        promoted: this.promoted
       });
       this.offset = offset;
     }
