@@ -2,8 +2,8 @@ import App from './App.vue';
 
 export default [
   {
-    path: '/club',
-    name: 'club',
+    path: '/judo',
+    name: 'judo',
     component: App
   },
 ];
