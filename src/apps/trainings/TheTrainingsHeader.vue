@@ -12,7 +12,7 @@
 import Training from '@/models/trainings/Training';
 import Coach from '@/models/trainings/Coach';
 import Team from '@/models/Team';
-import Category from '@/models/Category';
+import Application from '@/models/Application';
 
 import ImageHeader from '@/components/ImageHeader';
 
@@ -21,7 +21,7 @@ import messages from './lang';
 export default {
   props: {
     category: {
-      type: Category
+      type: Application
     }
   },
   components: {
