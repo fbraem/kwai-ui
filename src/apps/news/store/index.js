@@ -107,8 +107,8 @@ const actions = {
     if (payload.month) {
       uri.addQuery({ 'filter[month]': payload.month });
     }
-    if (payload.featured) {
-      uri.addQuery({ 'filter[featured]': true });
+    if (payload.promoted) {
+      uri.addQuery({ 'filter[promoted]': true });
     }
     if (payload.user) {
       uri.addQuery({'filter[user]': payload.user });
