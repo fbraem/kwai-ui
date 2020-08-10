@@ -51,7 +51,7 @@
 <script>
 import moment from 'moment';
 
-import Category from '@/models/Category';
+import Application from '@/models/Application';
 import newsStore from '@/apps/news/store';
 import pageStore from '@/apps/pages/store';
 
@@ -71,7 +71,7 @@ export default {
   },
   props: {
     category: {
-      type: Category
+      type: Application
     }
   },
   data() {
@@ -147,13 +147,13 @@ export default {
       this.$store.dispatch('training/coach/browse');
     },
     fetchNews(categoryId) {
-      this.$store.dispatch('training/news/browse', {
+      this.$store.dispatch('training/news/load', {
         category: categoryId,
-        featured: true
+        promoted: true
       });
     },
     fetchPages(categoryId) {
-      this.$store.dispatch('training/page/browse', {
+      this.$store.dispatch('training/page/load', {
         category: categoryId
       });
     },
