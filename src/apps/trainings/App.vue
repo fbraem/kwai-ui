@@ -2,11 +2,11 @@
   <div>
     <router-view
       name="hero"
-      :category="category"
+      :category="application"
     >
     </router-view>
     <div class="container mx-auto p-4 lg:p-6">
-      <router-view :category="category"></router-view>
+      <router-view :category="application"></router-view>
     </div>
   </div>
 </template>
@@ -21,8 +21,8 @@ import memberStore from '@/apps/members/store';
 
 export default {
   computed: {
-    category() {
-      return this.$store.getters['category/categoryApp']('trainings');
+    application() {
+      return this.$store.getters['applications/application']('trainings');
     }
   },
   beforeCreate() {
