@@ -83,14 +83,14 @@ export default {
       };
     },
     stories() {
-      return this.$store.state.category.news.all;
+      return this.$store.state.category.news.cache[0];
     },
     storyCount() {
       if (this.stories) return this.stories.length;
       return 0;
     },
     pages() {
-      return this.$store.state.category.page.all;
+      return this.$store.state.category.page.cache[0];
     },
     pageCount() {
       if (this.pages) return this.pages.length;
@@ -106,6 +106,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
+    console.log(to.meta);
     next(async(vm) => {
       await vm.fetchData(to.params);
     });
@@ -119,7 +120,7 @@ export default {
       await this.$store.dispatch('applications/load');
       await this.$store.dispatch('category/news/load', {
         application: this.category.id,
-        featured: true
+        promoted: true
       });
       await this.$store.dispatch('category/page/load', {
         application: this.category.id
