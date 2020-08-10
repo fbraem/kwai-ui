@@ -46,10 +46,7 @@ export default {
   computed: {
     linkToApplication() {
       return {
-        name: this.application.name,
-        params: {
-          id: this.application.id
-        }
+        name: this.application.name
       };
     }
   }
