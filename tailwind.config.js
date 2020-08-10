@@ -15,7 +15,11 @@ module.exports = {
         primary_light: colors.red['300'],
         hero: colors.gray['700'],
         hero_dark: colors.gray['800'],
-        hero_light: colors.gray['300']
+        hero_light: colors.gray['300'],
+        body: colors.gray['100'],
+        body_light: colors.white,
+        body_dark: colors.gray['300'],
+        body_text: colors.gray['700']
       }
     },
   },
