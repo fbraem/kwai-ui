@@ -3,7 +3,6 @@
     :is="header"
     v-if="page"
     :title="page.content.title"
-    :toolbar="toolbar"
     :picture="picture"
     :pictures="pictures"
   >
@@ -24,30 +23,20 @@
       <br />
       Gepubliceerd in
       <router-link
-        :to="categoryLink"
+        :to="applicationLink"
         class="font-bold"
       >
-        {{ page.category.name }}
+        {{ page.application.title }}
       </router-link>
     </p>
     <div v-html="page.content.html_summary">
     </div>
-    <AreYouSure
-      :show="isModalVisible"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="deletePage"
-      @close="close"
-    >
-      {{ $t('are_you_sure') }}
-    </AreYouSure>
   </component>
 </template>
 
 <script>
 import messages from './lang';
 
-import AreYouSure from '@/components/AreYouSure.vue';
 import Header from '@/components/Header.vue';
 import ImageHeader from '@/components/ImageHeader.vue';
 
@@ -57,14 +46,8 @@ import ImageHeader from '@/components/ImageHeader.vue';
 export default {
   i18n: messages,
   components: {
-    AreYouSure,
     Header,
     ImageHeader
-  },
-  data() {
-    return {
-      isModalVisible: false
-    };
   },
   computed: {
     page() {
@@ -90,49 +73,12 @@ export default {
       if (this.picture) return 'ImageHeader';
       return 'Header';
     },
-    categoryLink() {
+    applicationLink() {
+      let application = this.$store.getters['applications/applicationWithId'](this.page.application.id);
       return {
-        name: 'categories.read',
-        params: {
-          id: this.page.category.id
-        }
+        name: application.name
       };
     },
-    toolbar() {
-      const buttons = [];
-      if (this.page) {
-        if (this.$can('update', this.page)) {
-          buttons.push({
-            icon: 'fas fa-edit',
-            route: {
-              name: 'pages.update',
-              params: {
-                id: this.page.id
-              }
-            }
-          });
-          if (this.$can('delete', this.page)) {
-            buttons.push({
-              icon: 'fas fa-trash',
-              method: this.showModal
-            });
-          }
-        }
-      }
-      return buttons;
-    }
-  },
-  methods: {
-    showModal() {
-      this.isModalVisible = true;
-    },
-    close() {
-      this.isModalVisible = false;
-    },
-    deletePage() {
-      this.isModalVisible = false;
-      console.log('delete');
-    }
   }
 };
 </script>
