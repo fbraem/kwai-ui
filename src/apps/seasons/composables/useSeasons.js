@@ -17,7 +17,7 @@ export default function useSeasons() {
   const current = ref();
 
   async function load(reload = false) {
-    if (!reload && all.value.length > 0) return;
+    if (!reload && all.value.length > 0) return all.value;
 
     const uri = createURI();
     const json = await http_api
@@ -35,7 +35,7 @@ export default function useSeasons() {
    */
   async function read(id) {
     // Don't read it again
-    if (current.value?.id === id) return;
+    if (current.value?.id === id) return current.value;
 
     // See if it was already loaded
     current.value = all.value.find((s) => s.id === id);
