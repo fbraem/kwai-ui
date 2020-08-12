@@ -2,7 +2,7 @@
   <!-- eslint-disable max-len -->
   <component
     :is="tag"
-    class="inline-flex items-center border-0 py-3 px-5 rounded-lg focus:outline-none"
+    class="cursor-pointer inline-flex items-center border-0 py-2 px-4 rounded-md focus:outline-none"
     :[to]="route"
     :[href]="link"
     @[clickEvent]="method"
