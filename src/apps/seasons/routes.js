@@ -1,16 +1,8 @@
 import App from './App.vue';
 
-const SeasonHeader = () => import(
-  /* webpackChunkName: "seasons_chunck" */
-  '@/apps/seasons/TheSeasonHeader.vue'
-);
 const SeasonRead = () => import(
-  /* webpackChunkName: "seasons_chunck" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonRead.vue'
-);
-const SeasonFormHeader = () => import(
-  /* webpackChunkName: "seasons_admin" */
-  '@/apps/seasons/TheSeasonFormHeader.vue'
 );
 const SeasonForm = () => import(
   /* webpackChunkName: "seasons_admin" */
@@ -32,12 +24,8 @@ const SeasonDetail = () => import(
   /* webpackChunkName: "seasons_admin" */
   '@/apps/seasons/SeasonDetail.vue'
 );
-const SeasonsHeader = () => import(
-  /* webpackChunkName: "seasons_chunck" */
-  '@/apps/seasons/TheSeasonsHeader.vue'
-);
 const SeasonBrowse = () => import(
-  /* webpackChunkName: "seasons_chunck" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonBrowse.vue'
 );
 
@@ -48,10 +36,7 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: SeasonHeader,
-          default: SeasonRead
-        },
+        component: SeasonRead,
         children: [
           {
             path: 'teams',
@@ -85,36 +70,17 @@ export default [
       },
       {
         path: 'create',
-        components: {
-          hero: SeasonFormHeader,
-          default: SeasonForm
-        },
-        props: {
-          hero: {
-            creating: true
-          }
-        },
+        component: SeasonForm,
         name: 'seasons.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: SeasonFormHeader,
-          default: SeasonForm
-        },
-        props: {
-          hero: {
-            creating: false
-          }
-        },
+        component: SeasonForm,
         name: 'seasons.update',
       },
       {
         path: '',
-        components: {
-          hero: SeasonsHeader,
-          default: SeasonBrowse
-        },
+        component: SeasonBrowse,
         name: 'seasons.browse',
       },
     ]

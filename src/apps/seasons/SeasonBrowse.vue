@@ -1,39 +1,65 @@
 <template>
-  <div class="container mx-auto mt-3">
-    <Spinner v-if="seasons.isLoading">
-    </Spinner>
-    <div v-else>
-      <Alert
-        v-if="seasons.count === 0"
-        type="warning"
-      >
-        {{ $t('no_seasons') }}
-      </Alert>
-      <table
-          v-else
-          class="table"
-      >
-        <thead>
-          <tr>
-            <th></th>
-            <th>
-              {{ $t('form.season.name.label') }}
-            </th>
-            <th>
-              {{ $t('period') }}
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <SeasonRow
-            v-for="season in seasons.all"
-            :key="season.id"
-            :season="season"
+  <!-- eslint-disable max-len -->
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('seasons')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconButton v-if="canCreate"
+            class="bg-primary text-primary_light"
+            icon="fas fa-plus"
+            :content="$t('create')"
+            :route="{ name: 'seasons.create' }"
           />
-        </tbody>
-      </table>
-    </div>
+        </div>
+      </div>
+    </PageHeader>
+    <PageSection>
+      <Spinner
+        v-if="isLoading"
+        class="mx-auto"
+      >
+      </Spinner>
+      <div v-else
+        class="w-full"
+      >
+        <Alert
+          v-if="noSeasons"
+          type="warning"
+        >
+          {{ $t('no_seasons') }}
+        </Alert>
+        <div v-else class="flex flex-col">
+          <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+            <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      {{ $t('form.season.name.label') }}
+                    </th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      {{ $t('period') }}
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <SeasonRow
+                    v-for="season in seasons.all"
+                    :key="season.id"
+                    :season="season"
+                  />
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </PageSection>
   </div>
 </template>
 
@@ -43,28 +69,44 @@ import messages from './lang';
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 import SeasonRow from './TheSeasonRow';
+import PageSection from '@/components/PageSection';
+import Season from '@/models/Season';
+import PageHeader from '@/components/PageHeader';
+import IconButton from '@/components/IconButton';
+import ApplicationHeader from '@/components/ApplicationHeader';
 
 export default {
   props: [ 'seasons' ],
   i18n: messages,
   components: {
+    ApplicationHeader,
+    IconButton,
+    PageHeader,
     Spinner,
     SeasonRow,
-    Alert
+    Alert,
+    PageSection
   },
   computed: {
+    canCreate() {
+      return this.$can('create', Season.type());
+    },
     noSeasons() {
-      return this.seasons && this.seasons.length === 0;
+      return this.seasons.count === 0;
+    },
+    isLoading() {
+      return this.seasons.load.isRunning;
     }
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
-      await vm.seasons.load();
+      await vm.seasons.load.run();
       next();
     });
   },
   async beforeRouteUpdate(to, from, next) {
-    await this.seasons.load();
+    // await this.seasons.load();
+    await this.seasons.load.run();
     next();
   }
 };

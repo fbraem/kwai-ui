@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <router-view
-        name="hero"
-        :seasons="seasons"
-    ></router-view>
-    <router-view :seasons="seasons"></router-view>
-  </div>
+  <router-view
+    :seasons="seasons"
+  >
+  </router-view>
 </template>
 
 <script>

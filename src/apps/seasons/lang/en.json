@@ -8,27 +8,35 @@
     "season": {
       "end_date": {
         "after": "End date must be after start date",
-        "invalid": "Invalid date. Format is {format}",
         "label": "End Date",
-        "placeholder": "Enter a date",
-        "required": "End date is required."
+        "placeholder": "Enter a date ({format})"
       },
       "name": {
         "label": "Name",
-        "placeholder": "Enter a name",
-        "required": "Name is required."
+        "placeholder": "Enter a name"
       },
       "remark": {
         "label": "Remark",
         "placeholder": "Enter a remark"
       },
       "start_date": {
-        "invalid": "Invalid date. Format is {format}",
         "label": "Start Date",
-        "placeholder": "Enter a date",
-        "required": "Start date is required."
+        "placeholder": "Enter a date ({format})"
+      },
+      "submit": "Submit",
+      "fieldset": {
+        "season": {
+          "title": "Season",
+          "description": "Enter a unique name, start and enddate."
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "Enter a remark"
+        }
       }
-    }
+    },
+    "required": "This field is required",
+    "invalid_date": "This is not a valid date. Format ({format})"
   },
   "no_seasons": "There are no seasons yet",
   "no_teams": "There are no teams defined for this season",
