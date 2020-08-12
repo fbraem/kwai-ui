@@ -13,7 +13,6 @@ function createURI() {
  * State management for Season.
  */
 export default function useSeasons() {
-  const saving = ref(false);
   const all = ref([]);
   const current = ref();
 
@@ -85,7 +84,6 @@ export default function useSeasons() {
     all: computed(() => all.value),
     count: computed(() => all.value.length),
     current: computed(() => current.value),
-    isSaving: computed(() => saving.value),
     load: useAPI(load),
     read: useAPI(read),
     reset,
