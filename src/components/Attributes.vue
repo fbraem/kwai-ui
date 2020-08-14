@@ -7,11 +7,14 @@
           {{ title }}
         </h3>
       </slot>
-      <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
-        <slot name="description">
-          {{ description }}
-        </slot>
-      </p>
+      <slot name="description">
+        <p
+          v-if="description"
+          class="mt-1 max-w-2xl text-sm leading-5 text-gray-500"
+        >
+        {{ description }}
+        </p>
+      </slot>
     </div>
     <div>
       <dl>
