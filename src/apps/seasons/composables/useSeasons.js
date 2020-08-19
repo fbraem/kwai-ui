@@ -1,27 +1,28 @@
-import { ref, computed } from '@vue/composition-api';
-import URI from 'urijs';
+import {ref, computed, inject, provide} from '@vue/composition-api';
 import { http_api } from '@/js/http';
 import Season from '@/models/Season';
 import Transformer from '@/js/jsonapi/Transformer';
 import { useAPI } from '@/js/useAPI';
 
-function createURI() {
-  return new URI('seasons');
-}
+const http_seasons_api = http_api.url('seasons');
 
 /**
  * State management for Season.
+ * @return {Object}
  */
 export default function useSeasons() {
   const all = ref([]);
   const current = ref();
 
+  /**
+   * Load all seasons.
+   * @param {boolean} reload
+   * @returns {Array}
+   */
   async function load(reload = false) {
     if (!reload && all.value.length > 0) return all.value;
 
-    const uri = createURI();
-    const json = await http_api
-      .url(uri.href())
+    const json = await http_seasons_api
       .get()
       .json()
     ;
@@ -31,7 +32,7 @@ export default function useSeasons() {
 
   /**
    * Read the season.
-   * @param id
+   * @param {int} id
    */
   async function read(id) {
     // Don't read it again
@@ -41,11 +42,8 @@ export default function useSeasons() {
     current.value = all.value.find((s) => s.id === id);
     if (current.value) return current.value;
 
-    const uri = createURI();
-    uri.segment(id);
-
-    const json = await http_api
-      .url(uri.href())
+    const json = await http_seasons_api
+      .url(`/${id}`)
       .get()
       .json()
     ;
@@ -55,21 +53,31 @@ export default function useSeasons() {
 
   /**
    * Save the season
+   * @param {Season} season
+   * @return {Season}
    */
   async function save(season) {
     const transformer = new Transformer();
-    const uri = createURI();
-    if (season.id) uri.segment(season.id);
-    const api = http_api
-      .url(uri.href())
-      .json(transformer.serialize(season))
-    ;
 
-    const res = await season.id ? api.patch() : api.post();
+    let api = http_seasons_api;
+    if (season.id) api = api.url(`/${season.id}`);
+    api.json(transformer.serialize(season));
+
+    const res = await (season.id ? api.patch() : api.post());
     current.value = transformer.deserialize(Season, await res.json());
     if (!season.id) all.value.push(current.value);
 
     return current.value;
+  }
+
+  function asOptions() {
+    return all.value.reduce(
+      (result, season) => {
+        result[season.id] = season.name;
+        return result;
+      },
+      {}
+    );
   }
 
   /**
@@ -84,9 +92,20 @@ export default function useSeasons() {
     all: computed(() => all.value),
     count: computed(() => all.value.length),
     current: computed(() => current.value),
+    asOptions: computed(() => asOptions()),
     load: useAPI(load),
     read: useAPI(read),
     reset,
     save: useAPI(save)
   };
 };
+
+const SeasonsSymbol = Symbol();
+
+export function useSeasonStore() {
+  return inject(SeasonsSymbol);
+}
+
+export function provideSeasonStore() {
+  provide(SeasonsSymbol, useSeasons());
+}
