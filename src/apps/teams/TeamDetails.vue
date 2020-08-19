@@ -1,87 +1,74 @@
 <template>
-  <div>
-    <Alert
-      v-if="notAllowed"
-      type="danger"
+  <PageSection>
+    <Attributes
+      v-if="team"
+      :attributes="attributes"
+      :title="team.name"
     >
-      {{ $t('not_allowed') }}
-    </Alert>
-    <Alert
-      v-if="notFound"
-      type="danger"
-    >
-      {{ $t('not_found') }}
-    </Alert>
-    <Spinner v-if="$wait.is('teams.read')">
-    </Spinner>
+      <template v-slot:value_season="{ attribute }">
+        <router-link
+          v-if="attribute.value"
+          :to="{ name: 'seasons.read', params: { id : attribute.value.id} }"
+        >
+          {{ attribute.value.name }}
+        </router-link>
+      </template>
+    </Attributes>
     <div
-      v-else-if="team"
-      class="p-2"
+      v-if="team"
+      class="flex justify-between border-t mb-2 sm:mb-4 pt-3"
     >
-      <Attributes :attributes="attributes">
-        <template v-slot:value_season="{ attribute }">
-          <router-link
-            v-if="attribute.value"
-            :to="{ name: 'seasons.read', params: { id : attribute.value.id} }"
-          >
-            {{ attribute.value.name }}
-          </router-link>
-        </template>
-      </Attributes>
-      <div class="flex justify-between border-t mb-2 sm:mb-4 pt-3">
-        <div class="flex flex-wrap text-xs">
-          <div class="mr-4">
-            <strong>Aangemaakt:</strong> {{ team.localCreatedAt }}
-          </div>
-          <div>
-            <strong>Laatst gewijzigd:</strong> {{ team.localUpdatedAt }}
-          </div>
+      <div class="flex flex-wrap text-xs">
+        <div class="mr-4">
+          <strong>Aangemaakt:</strong> {{ localCreatedAt }}
+        </div>
+        <div>
+          <strong>Laatst gewijzigd:</strong> {{ localUpdatedAt }}
         </div>
       </div>
     </div>
-  </div>
+  </PageSection>
 </template>
 
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner.vue';
-import Alert from '@/components/Alert';
+import PageSection from '@/components/PageSection';
+
 import Attributes from '@/components/Attributes';
+import { useTeamStore } from '@/apps/teams/composables/useTeams';
 
 export default {
+  setup() {
+    return {
+      teams: {
+        ...useTeamStore()
+      }
+    };
+  },
   components: {
-    Spinner,
-    Alert,
-    Attributes
+    Attributes, PageSection
   },
   i18n: messages,
   computed: {
     team() {
-      return this.$store.state.team.active;
+      return this.teams.current;
     },
-    error() {
-      return this.$store.state.team.error;
+    localCreatedAt() {
+      return this.team.formatted_created_at;
     },
-    notAllowed() {
-      return this.error && this.error.response.status === 401;
-    },
-    notFound() {
-      return this.error && this.error.response.status === 404;
+    localUpdatedAt() {
+      return this.team.formatted_updated_at;
     },
     attributes() {
       return {
-        name: {
-          label: this.$t('name'),
-          value: this.team.name
-        },
         season: {
           label: this.$t('season'),
           value: this.team.season
         },
         members: {
           label: this.$t('members'),
-          value: this.team.members_count
+          value: this.team.members_count || 0
         },
         remark: {
           label: this.$t('remark'),

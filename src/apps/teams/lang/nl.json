@@ -9,8 +9,8 @@
   "clear": "Maak Leeg",
   "competition": "Competitie",
   "count": "Aantal leden",
-  "create": "Maak nieuw team",
-  "create_category": "Maak nieuwe category",
+  "create": "Maak team",
+  "create_category": "Maak category",
   "update_category": "Wijzig categorie",
   "created": "Aangemaakt op",
   "delete": "Verwijder",
@@ -30,14 +30,34 @@
       },
       "season": {
         "empty": "<Geen Seizoen>",
-        "hint": "Een team dat niet gebonden is aan een seizoen kan gebruikt worden om leden te groeperen (bv. bij registratie trainingen). Een team dat bij een seizoen hoort kan gebruikt worden voor tornooien/wedstrijden.",
+        "placeholder": "Selecteer een seizoen",
         "label": "Seizoen"
       },
       "category": {
         "empty": "<Geen Category>",
-        "hint": "Een category kan gebruikt worden om extra controles uit te voeren bij het toevoegen van leden (Bv. leeftijd).",
+        "placeholder": "Selecteer een category",
         "label": "Categorie"
-      }
+      },
+      "fieldset": {
+        "team": {
+          "title": "Team",
+          "description": "Geef een naam aan het team"
+        },
+        "season": {
+          "description": "Selecteer een seizoen, wanneer het team seizoensgebonden is.",
+          "title": "Seizoen"
+        },
+        "category": {
+          "title": "Categorie",
+          "description": "Een category kan gebruikt worden om extra controles uit te voeren bij het toevoegen van leden (Bv. leeftijd)."
+        },
+        "remark": {
+          "title": "Opmerking",
+          "description": "Een opmerking voor dit team. Een opmerking wordt niet publiek getoond."
+        }
+      },
+      "submit": "Bewaar",
+      "required": "Dit veld is verplicht in te vullen"
     },
     "team_category": {
       "active": {

@@ -9,7 +9,7 @@
   "clear": "Clear",
   "competition": "Competition?",
   "count": "Member count",
-  "create": "Create new team",
+  "create": "Create team",
   "created": "Created on",
   "delete": "Delete",
   "details": "Team Details",
@@ -28,14 +28,34 @@
       },
       "season": {
         "empty": "<No Season>",
-        "hint": "A team that is not related to a season can be used to group members (to register the presence on a training for example). A team that is related to a season can be used for tournaments/games.",
-        "label": "Season"
+        "label": "Season",
+        "placeholder": "Select a season"
       },
       "category": {
         "empty": "<No Category>",
-        "hint": "A category can be used to add more checks when a member is added to the team (Age for example).",
-        "label": "Category"
-      }
+        "label": "Category",
+        "placeholder": "Select a category"
+      },
+      "fieldset": {
+        "team": {
+          "title": "Team",
+          "description": "Give the team a unique name"
+        },
+        "season": {
+          "description": "Associate the team with a season when it is seasonable.",
+          "title": "Season"
+        },
+        "category": {
+          "title": "Category",
+          "description": ""
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "A remark for this team. A remark is private and will not be shown publicly."
+        }
+      },
+      "submit": "Save",
+      "required": "This field is required"
     },
     "team_category": {
       "active": {

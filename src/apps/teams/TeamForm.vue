@@ -1,45 +1,88 @@
 <template>
-  <div class="m-6">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
-      @submit="submit"
-    >
-      <KwaiField
-        name="name"
-        :label="$t('form.team.name.label')"
+  <!-- eslint-disable max-len -->
+  <div>
+    <PageHeader>
+      <ApplicationHeader :content="$t('teams')" />
+    </PageHeader>
+    <PageSection>
+      <HeaderLine :content="title" />
+      <FormulateForm
+        name="team"
+        v-model="form"
+        ref="form"
+        @submit="submit"
+        @submit-raw="checkValidation"
+        class="w-full"
       >
-        <KwaiInputText :placeholder="$t('form.team.name.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="season"
-        :label="$t('form.team.season.label')"
-      >
-        <KwaiSelect :items="seasons" />
-      </KwaiField>
-      <p class="uk-text-meta">
-        {{ $t('form.team.season.hint')}}
-      </p>
-      <KwaiField
-        name="category"
-        :label="$t('form.team.category.label')"
-      >
-        <KwaiSelect :items="categories" />
-      </KwaiField>
-      <p class="uk-text-meta">
-        {{ $t('form.team.category.hint')}}
-      </p>
-      <KwaiField
-        name="remark"
-        :label="$t('form.team.remark.label')"
-      >
-        <KwaiTextarea
-          :rows="5"
-          :placeholder="$t('form.team.remark.placeholder')"
-        />
-      </KwaiField>
-    </KwaiForm>
+        <KwaiFieldset :title="$t('form.team.fieldset.team.title')">
+          <template slot="description">
+            {{ $t('form.team.fieldset.team.description') }}
+          </template>
+          <div class="w-full">
+            <FormulateInput
+              name="name"
+              :label="$t('form.team.name.label')"
+              :required="true"
+              :placeholder="$t('form.team.name.placeholder')"
+              validation="required"
+              :validation-messages="{
+                required: $t('form.team.required')
+              }"
+            >
+            </FormulateInput>
+          </div>
+        </KwaiFieldset>
+        <KwaiFieldset :title="$t('form.team.fieldset.season.title')">
+          <template slot="description">
+            {{ $t('form.team.fieldset.season.description') }}
+          </template>
+          <FormulateInput
+            name="season"
+            type="select"
+            :placeholder="$t('form.team.season.placeholder')"
+            :label="$t('form.team.season.label')"
+            :options="seasonOptions"
+          ></FormulateInput>
+        </KwaiFieldset>
+        <KwaiFieldset :title="$t('form.team.fieldset.category.title')">
+          <template slot="description">
+            {{ $t('form.team.fieldset.category.description') }}
+          </template>
+          <FormulateInput
+            name="category"
+            type="select"
+            :placeholder="$t('form.team.category.placeholder')"
+            :label="$t('form.team.category.label')"
+            :options="categoryOptions"
+          ></FormulateInput>
+        </KwaiFieldset>
+        <KwaiFieldset :title="$t('form.team.fieldset.remark.title')">
+          <template slot="description">
+            {{ $t('form.team.fieldset.remark.description')}}
+          </template>
+          <FormulateInput
+            type="textarea"
+            name="remark"
+            :label="$t('form.team.remark.label')"
+            :placeholder="$t('form.team.remark.placeholder')"
+            :rows="5"
+          />
+        </KwaiFieldset>
+        <div class="flex justify-end mt-3">
+          <FormulateInput
+            type="submit"
+            :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
+          >
+            <i
+              v-if="teams.saving"
+              class="fas fa-spinner fa-spin mr-2"
+            ></i>
+            <i v-else class="fas fa-save mr-2"></i>
+            {{ $t('form.team.submit') }}
+          </FormulateInput>
+        </div>
+      </FormulateForm>
+    </PageSection>
   </div>
 </template>
 
@@ -47,152 +90,108 @@
 import TeamCategory from '@/models/TeamCategory';
 import Season from '@/models/Season';
 
-import makeForm, { makeField, notEmpty } from '@/js/Form';
-const makeTeamForm = (fields) => {
-  const writeForm = (team) => {
-    fields.name.value = team.name;
-    fields.remark.value = team.remark;
-    if (team.season) {
-      fields.season.value = team.season.id;
-    }
-    if (team.team_category) {
-      fields.category.value = team.team_category.id;
-    }
-  };
-  const readForm = (team) => {
-    team.name = fields.name.value;
-    team.remark = fields.remark.value;
-    if (fields.season.value === 0) {
-      team.season = null;
-    } else {
-      team.season = new Season();
-      team.season.id = fields.season.value;
-    }
-    if (fields.category.value === 0) {
-      team.team_category = null;
-    } else {
-      team.team_category = new TeamCategory();
-      team.team_category.id = fields.category.value;
-    }
-  };
-  return { ...makeForm(fields), writeForm, readForm };
-};
-
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText';
-import KwaiTextarea from '@/components/forms/KwaiTextarea';
-import KwaiSelect from '@/components/forms/KwaiSelect';
-
 import messages from './lang';
 
+import PageHeader from '@/components/PageHeader';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import PageSection from '@/components/PageSection';
+import HeaderLine from '@/components/HeaderLine';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+
+import { useTeamStore } from '@/apps/teams/composables/useTeams';
+import { useSeasonStore } from '@/apps/seasons/composables/useSeasons';
+// eslint-disable-next-line max-len
+import { useTeamCagegoryStore } from '@/apps/teams/composables/useTeamCategories';
+import Team from '@/models/Team';
+
 export default {
+  props: {
+    id: {
+      required: false
+    }
+  },
+  setup(props) {
+    const teams = useTeamStore();
+    const seasons = useSeasonStore();
+    const categories = useTeamCagegoryStore();
+
+    return {
+      teams,
+      seasons,
+      categories
+    };
+  },
   components: {
-    KwaiForm, KwaiField, KwaiInputText, KwaiTextarea, KwaiSelect
+    ApplicationHeader,
+    KwaiFieldset,
+    HeaderLine,
+    PageSection,
+    PageHeader
   },
   i18n: messages,
   data() {
     return {
-      form: makeTeamForm({
-        name: makeField({
-          value: '',
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('form.team.name.required'),
-            },
-          ]
-        }),
-        season: makeField({
-          value: 0
-        }),
-        category: makeField({
-          value: 0
-        }),
-        remark: makeField({
-          value: ''
-        })
-      })
+      hasValidationErrors: false,
+      hasFormErrors: false,
+      form: {
+        name: '',
+        season: 0,
+        category: 0,
+        remark: ''
+      }
     };
   },
+  async mounted() {
+    await this.seasons.load.run();
+    await this.categories.load.run();
+    if (this.id) {
+      await this.teams.read.run(this.id);
+      this.form.name = this.teams.current.name;
+      this.form.season = this.teams.current.season?.id ?? 0;
+      this.form.category = this.teams.current.team_category?.id ?? 0;
+      this.form.remark = this.teams.current.remark;
+    }
+  },
   computed: {
-    team() {
-      return this.$store.state.team.active;
+    title() {
+      return this.id ? this.$t('update') : this.$t('create');
     },
-    error() {
-      return this.$store.state.team.error;
-    },
-    seasons() {
-      var seasons = this.$store.getters['team/season/seasonsAsOptions'];
-      seasons.unshift({
-        value: 0,
-        text: this.$t('form.team.season.empty')
-      });
+    seasonOptions() {
+      const seasons = this.seasons.asOptions;
+      seasons[0] = this.$t('form.team.season.empty');
       return seasons;
     },
-    categories() {
-      var categories = this.$store.getters['team/category/categoriesAsOptions'];
-      categories.unshift({
-        value: 0,
-        text: this.$t('form.team.category.empty')
-      });
+    categoryOptions() {
+      const categories = this.categories.asOptions;
+      categories[0] = this.$t('form.team.category.empty');
       return categories;
     },
   },
-  async created() {
-    await this.$store.dispatch('team/season/browse');
-    await this.$store.dispatch('team/category/browse');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      vm.setupForm(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    this.setupForm(to.params);
-    next();
-  },
-  watch: {
-    error(nv) {
-      if (nv) {
-        if (nv.response.status === 422) {
-          this.handleErrors(nv);
-        } else if (nv.response.status === 404) {
-          // this.error = err.response.statusText;
-        } else {
-          // TODO: check if we can get here ...
-          console.log(nv);
-        }
-      }
-    }
-  },
   methods: {
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('team/read', {
-          id: params.id
-        });
-        this.form.writeForm(this.team);
-      } else {
-        this.$store.dispatch('team/create');
-      }
+    async checkValidation(submission) {
+      this.hasValidationErrors = await submission.hasValidationErrors();
     },
     async submit() {
-      this.form.clearErrors();
-      this.form.readForm(this.team);
-      try {
-        await this.$store.dispatch('team/save', this.team);
-        this.$router.push({
+      const team = this.id ? this.teams.current : new Team();
+      team.name = this.form.name;
+      if (this.form.season) {
+        team.season = new Season(this.form.season);
+      }
+      if (this.form.category) {
+        team.category = new TeamCategory(this.form.category);
+      }
+      team.remark = this.form.remark;
+      await this.teams.save.run(team);
+      if (!this.teams.save.error) {
+        await this.$router.push({
           name: 'teams.read',
           params: {
-            id: this.team.id
+            id: this.teams.current.id
           }
         });
-      } catch (error) {
-        console.log(error);
-      };
+      } else {
+        console.log(this.teams.save.error);
+      }
     }
   }
 };

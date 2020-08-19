@@ -32,4 +32,21 @@ export default class Team extends Model {
       members: Member,
     };
   }
+
+  static computed() {
+    return {
+      formatted_created_at(team) {
+        if (team.created_at) {
+          return team.created_at.format('L');
+        }
+        return '';
+      },
+      formatted_updated_at(team) {
+        if (team.updated_at) {
+          return team.updated_at.format('L');
+        }
+        return '';
+      },
+    };
+  }
 }

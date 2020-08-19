@@ -1,70 +1,61 @@
 import App from './App.vue';
 
 const TeamRead = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamRead.vue'
 );
-const TeamHeader = () => import(
-  /* webpackChunkName: "teams_chunck" */
-  './TheTeamHeader.vue'
-);
 const TeamDetails = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamDetails.vue'
 );
 const TeamTrainings = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './NotImplemented.vue'
 );
 const TeamMembers = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamMembers.vue'
 );
 const TeamTournaments = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './NotImplemented.vue'
 );
-
 const TeamBrowse = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamBrowse.vue'
 );
-const TeamsHeader = () => import(
-  /* webpackChunkName: "teams_chunck" */
-  './TheTeamsHeader.vue'
-);
 const TeamForm = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamForm.vue'
 );
 const TeamFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TheTeamFormHeader.vue'
 );
 
 const TeamCategoryRead = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryRead.vue'
 );
 
 const TeamCategoryHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TheTeamCategoryHeader.vue'
 );
 const TeamCategoryBrowse = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryBrowse.vue'
 );
 const TeamCategoriesHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TheTeamCategoriesHeader.vue'
 );
 const TeamCategoryForm = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryForm.vue'
 );
 const TeamCategoryFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TheTeamCategoryFormHeader.vue'
 );
 
@@ -75,10 +66,8 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: TeamHeader,
-          default: TeamRead
-        },
+        component: TeamRead,
+        props: true,
         children: [
           {
             path: 'members',
@@ -116,28 +105,17 @@ export default [
           hero: TeamFormHeader,
           default: TeamForm
         },
-        props: {
-          hero: {
-            creating: true
-          }
-        },
         name: 'teams.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: TeamFormHeader,
-          default: TeamForm
-        },
-        props: {
-          hero: {
-            creating: false
-          }
-        },
+        component: TeamForm,
+        props: true,
         name: 'teams.update',
       },
       {
         path: 'categories/:id(\\d+)',
+        props: true,
         components: {
           hero: TeamCategoryHeader,
           default: TeamCategoryRead
@@ -150,11 +128,6 @@ export default [
           hero: TeamCategoryFormHeader,
           default: TeamCategoryForm
         },
-        props: {
-          hero: {
-            creating: true
-          }
-        },
         name: 'team_categories.create',
       },
       {
@@ -163,11 +136,7 @@ export default [
           hero: TeamCategoryFormHeader,
           default: TeamCategoryForm
         },
-        props: {
-          hero: {
-            creating: false
-          }
-        },
+        props: true,
         name: 'team_categories.update',
       },
       {
@@ -180,10 +149,7 @@ export default [
       },
       {
         path: '',
-        components: {
-          hero: TeamsHeader,
-          default: TeamBrowse
-        },
+        component: TeamBrowse,
         name: 'teams.browse',
       },
     ]
