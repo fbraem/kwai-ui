@@ -43,7 +43,7 @@ export default function useTeamCategories() {
 }
 
 const TeamCategoriesSymbol = Symbol();
-export function useTeamCagegoryStore() {
+export function useTeamCategoryStore() {
   return inject(TeamCategoriesSymbol);
 }
 
