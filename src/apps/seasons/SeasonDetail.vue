@@ -20,12 +20,11 @@ import messages from './lang';
 
 import Attributes from '@/components/Attributes';
 import Alert from '@/components/Alert';
-import Season from '@/models/Season';
 
 export default {
   props: {
     season: {
-      type: Season
+      required: true
     }
   },
   components: {
