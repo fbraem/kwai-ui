@@ -37,13 +37,12 @@ import PageSection from '@/components/PageSection';
 
 import Attributes from '@/components/Attributes';
 import { useTeamStore } from '@/apps/teams/composables/useTeams';
+import {reactive} from '@vue/composition-api';
 
 export default {
   setup() {
     return {
-      teams: {
-        ...useTeamStore()
-      }
+      teams: reactive(useTeamStore())
     };
   },
   components: {

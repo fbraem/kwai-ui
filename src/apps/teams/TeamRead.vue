@@ -99,7 +99,7 @@ import ApplicationHeader from '@/components/ApplicationHeader';
 import MegaMenu from '@/components/MegaMenu';
 import MegaMenuBlock from '@/components/MegaMenuBlock';
 import IconLink from '@/components/IconLink';
-import {onMounted} from '@vue/composition-api';
+import {onMounted, reactive, ref} from '@vue/composition-api';
 
 export default {
   props: {
@@ -111,8 +111,8 @@ export default {
     const teams = useTeamStore();
     onMounted(() => teams.read.run(props.id));
     return {
-      teams,
-      showMenu: false
+      teams: reactive(teams),
+      showMenu: ref(false)
     };
   },
   i18n: lang,
@@ -125,6 +125,7 @@ export default {
   },
   computed: {
     team() {
+      console.log(this.teams.current);
       return this.teams.current;
     }
   },

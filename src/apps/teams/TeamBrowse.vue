@@ -82,14 +82,14 @@ import IconButton from '@/components/IconButton';
 
 import { useTeamStore } from '@/apps/teams/composables/useTeams';
 import Team from '@/models/Team';
-import {onMounted} from '@vue/composition-api';
+import {onMounted, reactive} from '@vue/composition-api';
 
 export default {
   setup() {
     const teams = useTeamStore();
     onMounted(() => { teams.load.run(); });
     return {
-      teams
+      teams: reactive(teams)
     };
   },
   i18n: messages,
