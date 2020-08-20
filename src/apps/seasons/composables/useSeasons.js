@@ -61,7 +61,7 @@ export default function useSeasons() {
 
     let api = http_seasons_api;
     if (season.id) api = api.url(`/${season.id}`);
-    api.json(transformer.serialize(season));
+    api = api.json(transformer.serialize(season));
 
     const res = await (season.id ? api.patch() : api.post());
     current.value = transformer.deserialize(Season, await res.json());
