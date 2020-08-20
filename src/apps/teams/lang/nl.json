@@ -17,6 +17,7 @@
   "details": "Team Details",
   "female": "Vrouw",
   "filter": "Filter",
+  "create_season": "Maak Seizoen",
   "form": {
     "team": {
       "name": {
@@ -33,11 +34,13 @@
         "placeholder": "Selecteer een seizoen",
         "label": "Seizoen"
       },
+      "no_season": "Er zijn nog geen seizoenen aangemaakt.",
       "category": {
         "empty": "<Geen Category>",
         "placeholder": "Selecteer een category",
         "label": "Categorie"
       },
+      "no_category": "Er zijn nog geen categorieën aangemaakt.",
       "fieldset": {
         "team": {
           "title": "Team",

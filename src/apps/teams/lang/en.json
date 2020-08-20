@@ -10,11 +10,14 @@
   "competition": "Competition?",
   "count": "Member count",
   "create": "Create team",
+  "create_category": "Create Category",
+  "update_category": "Update Category",
   "created": "Created on",
   "delete": "Delete",
   "details": "Team Details",
   "female": "Female",
   "filter": "Filter",
+  "create_season": "Create Season",
   "form": {
     "team": {
       "name": {
@@ -31,11 +34,13 @@
         "label": "Season",
         "placeholder": "Select a season"
       },
+      "no_season": "There are no seasons defined yet.",
       "category": {
         "empty": "<No Category>",
         "label": "Category",
         "placeholder": "Select a category"
       },
+      "no_category": "There are no categories defined yet.",
       "fieldset": {
         "team": {
           "title": "Team",
