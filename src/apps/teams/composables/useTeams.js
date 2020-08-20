@@ -47,12 +47,16 @@ export default function useTeams() {
     return current.value;
   }
 
+  /**
+   * Save the team
+   * @param team
+   */
   async function save(team) {
     const transformer = new Transformer();
 
     let api = http_teams_api;
     if (team.id) api = api.url(`/${team.id}`);
-    api.json(transformer.serialize(team));
+    api = api.json(transformer.serialize(team));
 
     const res = await (team.id ? api.patch() : api.post());
     current.value = transformer.deserialize(Team, await res.json());
