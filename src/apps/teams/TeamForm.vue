@@ -143,7 +143,7 @@ import Alert from '@/components/Alert';
 
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
-import {useTeamCagegoryStore} from '@/apps/teams/composables/useTeamCategories';
+import {useTeamCategoryStore} from '@/apps/teams/composables/useTeamCategories';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
 import IconButton from '@/components/IconButton';
@@ -158,7 +158,7 @@ export default {
   setup(props) {
     const teams = useTeamStore();
     const seasons = useSeasonStore();
-    const categories = useTeamCagegoryStore();
+    const categories = useTeamCategoryStore();
 
     const vm = getCurrentInstance();
 
