@@ -74,9 +74,15 @@ import Season from '@/models/Season';
 import PageHeader from '@/components/PageHeader';
 import IconButton from '@/components/IconButton';
 import ApplicationHeader from '@/components/ApplicationHeader';
+import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {reactive} from '@vue/composition-api';
 
 export default {
-  props: [ 'seasons' ],
+  setup() {
+    return {
+      seasons: reactive(useSeasonStore())
+    };
+  },
   i18n: messages,
   components: {
     ApplicationHeader,

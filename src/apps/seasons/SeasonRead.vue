@@ -96,8 +96,15 @@ import MegaMenu from '@/components/MegaMenu';
 import MegaMenuBlock from '@/components/MegaMenuBlock';
 import ApplicationHeader from '@/components/ApplicationHeader';
 import PageHeader from '@/components/PageHeader';
+import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {reactive} from '@vue/composition-api';
 
 export default {
+  setup() {
+    return {
+      seasons: reactive(useSeasonStore())
+    };
+  },
   components: {
     IconLink,
     PageHeader,
@@ -106,9 +113,6 @@ export default {
     MegaMenuBlock
   },
   i18n: messages,
-  props: [
-    'seasons',
-  ],
   data() {
     return {
       showMenu: false

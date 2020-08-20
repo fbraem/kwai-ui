@@ -76,7 +76,7 @@
             :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
         >
           <i
-              v-if="seasons.saving"
+              v-if="seasons.save.isRunning"
               class="fas fa-spinner fa-spin mr-2"
           ></i>
           <i v-else class="fas fa-save mr-2"></i>
@@ -95,15 +95,21 @@ import PageSection from '@/components/PageSection';
 import KwaiFieldset from '@/components/forms/KwaiFieldset';
 import Season from '@/models/Season';
 import HeaderLine from '@/components/HeaderLine';
+import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {reactive} from '@vue/composition-api';
 
 export default {
+  setup() {
+    return {
+      seasons: reactive(useSeasonStore())
+    };
+  },
   i18n: messages,
   components: {
     HeaderLine,
     KwaiFieldset,
     PageSection,
   },
-  props: [ 'seasons' ],
   data() {
     return {
       hasValidationErrors: false,
