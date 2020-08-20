@@ -1,20 +1,13 @@
 <template>
-  <router-view
-    :seasons="seasons"
-  >
-  </router-view>
+  <router-view></router-view>
 </template>
 
 <script>
-import useSeasons from '@/apps/seasons/composables/useSeasons';
+import {provideSeasonStore} from '@/apps/seasons/composables/useSeasons';
 
 export default {
   setup() {
-    return {
-      seasons: {
-        ...useSeasons()
-      }
-    };
+    provideSeasonStore();
   }
 };
 </script>
