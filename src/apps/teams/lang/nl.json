@@ -3,9 +3,10 @@
   "add": "Toevoegen",
   "add_members": "Leden toevoegen",
   "add_members_info": "Leden worden automatisch geselecteerd op basis van het teamtype.",
-  "age": "jaar",
+  "age": "Leeftijd",
   "age_remark": "Leeftijd is berekend op de einddatum van het seizoen {season} ({start} &ndash; {end})",
   "cancel": "Annuleer",
+  "category": "Categorie",
   "clear": "Maak Leeg",
   "competition": "Competitie",
   "count": "Aantal leden",
@@ -91,7 +92,31 @@
         "label": "Min. Leeftijd",
         "numeric": "Min. Leeftijd moet een getal zijn",
         "placeholder": "Geef de minimum leeftijd voor leden van dit team type"
-      }
+      },
+      "fieldset" : {
+        "name": {
+          "title": "Naam van de categorie",
+          "description": "Geef een naam voor de categorie"
+        } ,
+        "requirements": {
+          "title": "Vereisten Leden",
+          "description": "Gebruik de min. en max. leeftijd om het team te beperken tot leden van een bepaalde leeftijd. Selecteer een geslacht om leden te beperken tot een bepaald geslacht."
+        },
+        "competition": {
+          "title": "Competitie",
+          "description": "Zullen teams van deze categorie deelnemen aan competities?"
+        },
+        "active": {
+          "title": "Actief",
+          "description": "Is deze category actief?"
+        },
+        "remark": {
+          "title": "Opmerking",
+          "description": "Een opmerking voor deze categorie. Een opmerking wordt niet publiekelijk getoond."
+        }
+      },
+      "submit": "Bewaar",
+      "required": "Dit veld is verplicht in te vullen"
     }
   },
   "gender": "Geslacht",

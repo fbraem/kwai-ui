@@ -5,7 +5,6 @@
     </PageHeader>
     <PageSection>
       <HeaderLine :content="title" />
-      {{ teams.read.isRunning }}
       <FormulateForm
         name="team"
         v-model="form"

@@ -28,35 +28,18 @@ const TeamForm = () => import(
   /* webpackChunkName: "teams_admin_chunk" */
   './TeamForm.vue'
 );
-const TeamFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
-  './TheTeamFormHeader.vue'
-);
 
 const TeamCategoryRead = () => import(
   /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryRead.vue'
 );
-
-const TeamCategoryHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
-  './TheTeamCategoryHeader.vue'
-);
 const TeamCategoryBrowse = () => import(
   /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryBrowse.vue'
 );
-const TeamCategoriesHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
-  './TheTeamCategoriesHeader.vue'
-);
 const TeamCategoryForm = () => import(
   /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryForm.vue'
-);
-const TeamCategoryFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
-  './TheTeamCategoryFormHeader.vue'
 );
 
 export default [
@@ -101,10 +84,7 @@ export default [
       },
       {
         path: 'create',
-        components: {
-          hero: TeamFormHeader,
-          default: TeamForm
-        },
+        component: TeamForm,
         name: 'teams.create',
       },
       {
@@ -116,36 +96,24 @@ export default [
       {
         path: 'categories/:id(\\d+)',
         props: true,
-        components: {
-          hero: TeamCategoryHeader,
-          default: TeamCategoryRead
-        },
+        component: TeamCategoryRead,
         name: 'team_categories.read',
       },
       {
         path: 'categories/create',
-        components: {
-          hero: TeamCategoryFormHeader,
-          default: TeamCategoryForm
-        },
+        component: TeamCategoryForm,
         name: 'team_categories.create',
       },
       {
         path: 'categories/update/:id(\\d+)',
-        components: {
-          hero: TeamCategoryFormHeader,
-          default: TeamCategoryForm
-        },
+        component: TeamCategoryForm,
         props: true,
         name: 'team_categories.update',
       },
       {
         path: 'categories',
-        components: {
-          hero: TeamCategoriesHeader,
-          default: TeamCategoryBrowse
-        },
-        name: 'team_types.browse',
+        component: TeamCategoryBrowse,
+        name: 'team_categories.browse',
       },
       {
         path: '',

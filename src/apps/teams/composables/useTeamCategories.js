@@ -14,14 +14,45 @@ export default function useTeamCategories() {
    * Load team categories
    * @param {boolean} reload
    */
-  async function load(reload = false) {
+  const load = useAPI(async(reload = false) => {
     if (!reload && all.value.length > 0) return all.value;
 
     const json = await http_team_categories_api.get().json();
     all.value = (new Transformer()).deserialize(TeamCategory, json);
 
     return all.value;
-  }
+  });
+
+  const read = useAPI(async(id) => {
+    // Don't read it again
+    if (current.value?.id === id) return current.value;
+
+    // See if it was already loaded
+    current.value = all.value.find((t) => t.id === id);
+    if (current.value) return current.value;
+
+    const json = await http_team_categories_api.url(`/${id}`)
+      .get()
+      .json()
+    ;
+
+    current.value = (new Transformer()).deserialize(TeamCategory, json);
+    return current.value;
+  });
+
+  const save = useAPI(async(category) => {
+    const transformer = new Transformer();
+
+    let api = http_team_categories_api;
+    if (category.id) api = api.url(`/${category.id}`);
+    api = api.json(transformer.serialize(category));
+
+    const res = await (category.id ? api.patch() : api.post());
+    current.value = transformer.deserialize(TeamCategory, await res.json());
+    if (!category.id) all.value.push(current.value);
+
+    return current.value;
+  });
 
   function asOptions() {
     return all.value.reduce(
@@ -38,7 +69,9 @@ export default function useTeamCategories() {
     count: computed(() => all.value.length),
     current: computed(() => current.value),
     asOptions: computed(() => asOptions()),
-    load: useAPI(load)
+    load,
+    read,
+    save
   };
 }
 

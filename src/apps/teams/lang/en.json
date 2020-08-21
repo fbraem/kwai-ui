@@ -3,9 +3,10 @@
   "add": "Add",
   "add_members": "Add Members",
   "add_members_info": "Members are automatically selected based on the team type.",
-  "age": "years",
+  "age": "Age",
   "age_remark": "Age is determined on the end date of the season {season} ({start} &ndash; {end})",
   "cancel": "Cancel",
+  "category": "Category",
   "clear": "Clear",
   "competition": "Competition?",
   "count": "Member count",
@@ -91,7 +92,31 @@
         "label": "Min. Age",
         "numeric": "Min. age must be numeric",
         "placeholder": "Enter the minimum age of a member to be part of a team with this type."
-      }
+      },
+      "fieldset" : {
+        "name": {
+          "title": "Name of the category",
+          "description": "Give a name to the category"
+        } ,
+        "requirements": {
+          "title": "Requirements for members",
+          "description": "Use the minimum and maximum age to limit this team to members of a certain age. Select a gender to restrict members on gender."
+        },
+        "competition": {
+          "title": "Competition",
+          "description": "Will teams of this category participate in competitions?"
+        },
+        "active": {
+          "title": "Active",
+          "description": "Is this category active?"
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "A remark for this category. A remark is private and will not be shown publicly."
+        }
+      },
+      "submit": "Save",
+      "required": "This field is required"
     }
   },
   "gender": "Gender",
