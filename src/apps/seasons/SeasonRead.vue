@@ -81,7 +81,12 @@
           v-if="$can('update', season)"
           class="hover:bg-body_dark text-body"
           icon="fas fa-edit"
-          :route="{ name: 'seasons.update' }"
+          :route="{
+            name: 'seasons.update',
+            params: {
+              id: season.id
+            }
+          }"
         />
       </div>
     </div>
