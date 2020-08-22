@@ -78,7 +78,7 @@
           :route="{ name: 'seasons.browse' }"
         />
         <IconLink
-          v-if="$can('update', season)"
+          v-if="season && $can('update', season)"
           class="hover:bg-body_dark text-body"
           icon="fas fa-edit"
           :route="{
