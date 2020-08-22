@@ -6,7 +6,7 @@ import { useAPI } from '@/js/useAPI';
 
 const http_team_categories_api = http_api.url('team_categories');
 
-export default function useTeamCategories() {
+export default function createTeamCategoryService() {
   const all = ref([]);
   const current = ref();
 
@@ -81,5 +81,5 @@ export function useTeamCategoryStore() {
 }
 
 export function provideTeamCategoryStore() {
-  provide(TeamCategoriesSymbol, useTeamCategories());
+  provide(TeamCategoriesSymbol, createTeamCategoryService());
 }

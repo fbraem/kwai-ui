@@ -10,7 +10,7 @@ const http_seasons_api = http_api.url('seasons');
  * State management for Season.
  * @return {Object}
  */
-export default function useSeasons() {
+export default function createSeasonService() {
   const all = ref([]);
   const current = ref();
 
@@ -19,7 +19,7 @@ export default function useSeasons() {
    * @param {boolean} reload
    * @returns {Array}
    */
-  const load = useAPI(async (reload = false) => {
+  const load = useAPI(async(reload = false) => {
     if (!reload && all.value.length > 0) return all;
 
     const json = await http_seasons_api
@@ -34,7 +34,7 @@ export default function useSeasons() {
    * Read the season.
    * @param {int} id
    */
-  const read = useAPI(async (id) => {
+  const read = useAPI(async(id) => {
     // Don't read it again
     if (current.value?.id === id) return current;
 
@@ -56,7 +56,7 @@ export default function useSeasons() {
    * @param {Season} season
    * @return {Season}
    */
-  const save = useAPI(async (season) => {
+  const save = useAPI(async(season) => {
     const transformer = new Transformer();
 
     let api = http_seasons_api;
@@ -107,5 +107,5 @@ export function useSeasonStore() {
 }
 
 export function provideSeasonStore() {
-  provide(SeasonsSymbol, useSeasons());
+  provide(SeasonsSymbol, createSeasonService());
 }

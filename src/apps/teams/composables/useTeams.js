@@ -9,7 +9,7 @@ const http_teams_api = http_api.url('teams');
 /**
  * State management for Teams
  */
-export default function useTeams() {
+export default function createTeamService() {
   const all = ref([]);
   const current = ref();
 
@@ -17,7 +17,7 @@ export default function useTeams() {
    * Load all teams
    * @param reload
    */
-  const load = useAPI(async (reload = false) => {
+  const load = useAPI(async(reload = false) => {
     if (!reload && all.value.length > 0) return all;
 
     const json = await http_teams_api.get().json();
@@ -30,7 +30,7 @@ export default function useTeams() {
    * Read the team
    * @param id
    */
-  const read = useAPI(async (id) => {
+  const read = useAPI(async(id) => {
     // Don't read it again
     if (current.value?.id === id) return current;
 
@@ -51,7 +51,7 @@ export default function useTeams() {
    * Save the team
    * @param team
    */
-  const save = useAPI(async (team) => {
+  const save = useAPI(async(team) => {
     const transformer = new Transformer();
 
     let api = http_teams_api;
@@ -91,5 +91,5 @@ export function useTeamStore() {
 }
 
 export function provideTeamStore() {
-  provide(TeamsSymbol, useTeams());
+  provide(TeamsSymbol, createTeamService());
 }
