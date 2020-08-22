@@ -17,20 +17,20 @@ export default function useTeams() {
    * Load all teams
    * @param reload
    */
-  async function load(reload = false) {
+  const load = useAPI(async (reload = false) => {
     if (!reload && all.value.length > 0) return all;
 
     const json = await http_teams_api.get().json();
     all.value = (new Transformer()).deserialize(Team, json);
 
     return all;
-  }
+  });
 
   /**
    * Read the team
    * @param id
    */
-  async function read(id) {
+  const read = useAPI(async (id) => {
     // Don't read it again
     if (current.value?.id === id) return current;
 
@@ -45,13 +45,13 @@ export default function useTeams() {
 
     current.value = (new Transformer()).deserialize(Team, json);
     return current;
-  }
+  });
 
   /**
    * Save the team
    * @param team
    */
-  async function save(team) {
+  const save = useAPI(async (team) => {
     const transformer = new Transformer();
 
     let api = http_teams_api;
@@ -63,7 +63,7 @@ export default function useTeams() {
     if (!team.id) all.value.push(current.value);
 
     return current;
-  }
+  });
 
   /**
    * Clear cached teams
@@ -77,9 +77,9 @@ export default function useTeams() {
     all: computed(() => all.value),
     count: computed(() => all.value.length),
     current: computed(() => current.value),
-    load: useAPI(load),
-    read: useAPI(read),
-    save: useAPI(save),
+    load,
+    read,
+    save,
     reset
   };
 }

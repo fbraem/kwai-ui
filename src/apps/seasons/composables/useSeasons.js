@@ -19,7 +19,7 @@ export default function useSeasons() {
    * @param {boolean} reload
    * @returns {Array}
    */
-  async function load(reload = false) {
+  const load = useAPI(async (reload = false) => {
     if (!reload && all.value.length > 0) return all;
 
     const json = await http_seasons_api
@@ -28,13 +28,13 @@ export default function useSeasons() {
     ;
     all.value = (new Transformer()).deserialize(Season, json);
     return all;
-  }
+  });
 
   /**
    * Read the season.
    * @param {int} id
    */
-  async function read(id) {
+  const read = useAPI(async (id) => {
     // Don't read it again
     if (current.value?.id === id) return current;
 
@@ -49,14 +49,14 @@ export default function useSeasons() {
     ;
     current.value = (new Transformer()).deserialize(Season, json);
     return current;
-  }
+  });
 
   /**
    * Save the season
    * @param {Season} season
    * @return {Season}
    */
-  async function save(season) {
+  const save = useAPI(async (season) => {
     const transformer = new Transformer();
 
     let api = http_seasons_api;
@@ -68,7 +68,7 @@ export default function useSeasons() {
     if (!season.id) all.value.push(current.value);
 
     return current;
-  }
+  });
 
   function asOptions() {
     return all.value.reduce(
@@ -93,10 +93,10 @@ export default function useSeasons() {
     count: computed(() => all.value.length),
     current: computed(() => current.value),
     asOptions: computed(() => asOptions()),
-    load: useAPI(load),
-    read: useAPI(read),
+    load,
+    read,
     reset,
-    save: useAPI(save)
+    save
   };
 };
 
