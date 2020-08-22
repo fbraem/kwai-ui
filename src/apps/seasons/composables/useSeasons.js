@@ -20,14 +20,14 @@ export default function useSeasons() {
    * @returns {Array}
    */
   async function load(reload = false) {
-    if (!reload && all.value.length > 0) return all.value;
+    if (!reload && all.value.length > 0) return all;
 
     const json = await http_seasons_api
       .get()
       .json()
     ;
     all.value = (new Transformer()).deserialize(Season, json);
-    return all.value;
+    return all;
   }
 
   /**
@@ -36,11 +36,11 @@ export default function useSeasons() {
    */
   async function read(id) {
     // Don't read it again
-    if (current.value?.id === id) return current.value;
+    if (current.value?.id === id) return current;
 
     // See if it was already loaded
     current.value = all.value.find((s) => s.id === id);
-    if (current.value) return current.value;
+    if (current.value) return current;
 
     const json = await http_seasons_api
       .url(`/${id}`)
@@ -48,7 +48,7 @@ export default function useSeasons() {
       .json()
     ;
     current.value = (new Transformer()).deserialize(Season, json);
-    return current.value;
+    return current;
   }
 
   /**
@@ -67,7 +67,7 @@ export default function useSeasons() {
     current.value = transformer.deserialize(Season, await res.json());
     if (!season.id) all.value.push(current.value);
 
-    return current.value;
+    return current;
   }
 
   function asOptions() {

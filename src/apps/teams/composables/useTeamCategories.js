@@ -15,21 +15,21 @@ export default function useTeamCategories() {
    * @param {boolean} reload
    */
   const load = useAPI(async(reload = false) => {
-    if (!reload && all.value.length > 0) return all.value;
+    if (!reload && all.value.length > 0) return all;
 
     const json = await http_team_categories_api.get().json();
     all.value = (new Transformer()).deserialize(TeamCategory, json);
 
-    return all.value;
+    return all;
   });
 
   const read = useAPI(async(id) => {
     // Don't read it again
-    if (current.value?.id === id) return current.value;
+    if (current.value?.id === id) return current;
 
     // See if it was already loaded
     current.value = all.value.find((t) => t.id === id);
-    if (current.value) return current.value;
+    if (current.value) return current;
 
     const json = await http_team_categories_api.url(`/${id}`)
       .get()
@@ -37,7 +37,7 @@ export default function useTeamCategories() {
     ;
 
     current.value = (new Transformer()).deserialize(TeamCategory, json);
-    return current.value;
+    return current;
   });
 
   const save = useAPI(async(category) => {
@@ -51,7 +51,7 @@ export default function useTeamCategories() {
     current.value = transformer.deserialize(TeamCategory, await res.json());
     if (!category.id) all.value.push(current.value);
 
-    return current.value;
+    return current;
   });
 
   function asOptions() {

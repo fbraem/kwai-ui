@@ -18,12 +18,12 @@ export default function useTeams() {
    * @param reload
    */
   async function load(reload = false) {
-    if (!reload && all.value.length > 0) return all.value;
+    if (!reload && all.value.length > 0) return all;
 
     const json = await http_teams_api.get().json();
     all.value = (new Transformer()).deserialize(Team, json);
 
-    return all.value;
+    return all;
   }
 
   /**
@@ -32,11 +32,11 @@ export default function useTeams() {
    */
   async function read(id) {
     // Don't read it again
-    if (current.value?.id === id) return current.value;
+    if (current.value?.id === id) return current;
 
     // See if it was already loaded
     current.value = all.value.find((t) => t.id === id);
-    if (current.value) return current.value;
+    if (current.value) return current;
 
     const json = await http_teams_api.url(`/${id}`)
       .get()
@@ -44,7 +44,7 @@ export default function useTeams() {
     ;
 
     current.value = (new Transformer()).deserialize(Team, json);
-    return current.value;
+    return current;
   }
 
   /**
@@ -62,7 +62,7 @@ export default function useTeams() {
     current.value = transformer.deserialize(Team, await res.json());
     if (!team.id) all.value.push(current.value);
 
-    return current.value;
+    return current;
   }
 
   /**
