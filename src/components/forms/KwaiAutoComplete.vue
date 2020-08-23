@@ -1,44 +1,32 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="autocomplete">
+  <div
+    :class="`formulate-input-element formulate-input-element--${context.type}`"
+    :data-type="context.type"
+  >
     <input
-      v-model="search"
-      :id="id"
-      :name="id"
-      class="appearance-once block w-full bg-gray-200 border rounded py-3 px-4 mb-3 leading-thight focus:outline-none focus:shadow-outline"
-      :class="{ 'text-red-600' : field.errors.length > 0 }"
-      type="search"
-      :required="field.required"
-      v-bind="$attrs"
-      @input="onChange"
-      @keydown.down="onArrowDown"
-      @keydown.up="onArrowUp"
-      @keydown.enter="onEnter"
-      @keydown.esc.prevent="onEscape"
+      type="text"
+      v-model="context.model"
+      v-bind="context.attributes"
+      autocomplete="no"
+      @keydown.enter.prevent="context.model = selection.label"
+      @keydown.down.prevent="increment"
+      @keydown.up.prevent="decrement"
+      @blur="context.blurHandler"
     />
     <ul
       class="autocomplete-results"
-      v-show="isOpen"
+      v-if="filteredOptions.length"
     >
-      <li v-if="isLoading">
-        <div class="text-center">
-          <i class="fas fa-spinner fa-2x fa-spin"></i>
-        </div>
+      <li
+        class="autocomplete-result"
+        v-for="(option, index) in filteredOptions" :key="option.value"
+        v-text="option.label"
+        :data-is-selected="selection && selection.value === option.value"
+        @mouseenter="select(index)"
+        @click="click"
+      >
       </li>
-      <li v-if="!isLoading && results != null && results.length == 0">
-        <slot name="empty">
-          Nothing found ...
-        </slot>
-      </li>
-      <template v-if="items != null && items.length > 0 && !isLoading">
-        <li
-          class="autocomplete-result"
-          v-for="(result, i) in results" :key="i"
-          @click="setResult(result)"
-          :class="{ 'is-active': i === arrowCounter }">
-          <slot :result="result" />
-        </li>
-      </template>
     </ul>
   </div>
 </template>
@@ -55,7 +43,7 @@
   padding: 4px 2px;
 }
 
-.autocomplete-result.is-active,
+.autocomplete-result[data-is-selected],
 .autocomplete-result:hover {
   background-color: #4AAE9B;
   color: white;
@@ -63,115 +51,76 @@
 </style>
 
 <script>
-export default {
-  inject: {
-    field: 'field',
-    id: 'id'
-  },
-  props: {
-    items: {
-      type: Array,
-      required: false,
-      default: () => [],
-    },
-    async: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    stringResult: {
-      type: Function,
-      required: false,
-      default: (value) => value
-    },
-  },
-  data() {
-    return {
-      search: '',
-      results: [],
-      isOpen: false,
-      isLoading: false,
-      arrowCounter: -1
-    };
-  },
-  mounted() {
-    document.addEventListener('click', this.handleClickOutside);
-  },
-  destroyed() {
-    document.removeEventListener('click', this.handleClickOutside);
-  },
-  watch: {
-    items(nv, ov) {
-      if (this.async) {
-        this.results = nv;
-        this.isOpen = true;
-        this.isLoading = false;
-      }
-    }
-  },
-  methods: {
-    onChange() {
-      if (this.search.length === 0) {
-        this.results = [];
-        this.isOpen = false;
-        this.arrowCounter = -1;
-        this.field.value = null;
-        return;
-      }
+/* eslint-disable max-len */
 
-      this.isOpen = true;
-      if (this.async) {
-        this.isLoading = true;
-      } else {
-        this.filterResults();
-      }
-      this.$emit('input', this.search);
-    },
-    onArrowDown() {
-      if (this.arrowCounter < this.results.length) {
-        this.arrowCounter = this.arrowCounter + 1;
-      }
-    },
-    onArrowUp() {
-      if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1;
-      }
-    },
-    onEnter() {
-      this.setResult(this.results[this.arrowCounter]);
-      this.arrowCounter = -1;
-    },
-    onEscape() {
-      if (this.field.value) {
-        this.setResult(this.field.value);
-      } else {
-        this.search = '';
-        this.isOpen = false;
-      }
-    },
-    handleClickOutside(evt) {
-      if (!this.$el.contains(evt.target)) {
-        this.isOpen = false;
-        this.arrowCounter = -1;
-      }
-      if (this.field.value) {
-        this.setResult(this.field.value);
-      }
-    },
-    filterResults() {
-      this.results = this.items.filter(
-        (item) => {
-          var s = this.stringResult(item);
-          return s.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-        }
-      );
-    },
-    setResult(result) {
-      this.search = this.stringResult(result);
-      this.results = [];
-      this.isOpen = false;
-      this.field.value = result;
+import {computed, ref, watch} from '@vue/composition-api';
+
+export default {
+  props: {
+    context: {
+      type: Object,
+      required: true
     }
+  },
+  setup(props) {
+    const selectedIndex = ref(0);
+
+    const model = computed(() => props.context.model);
+    const filteredOptions = computed(() => {
+      if (Array.isArray(props.context.options) && props.context.model) {
+        const isAlreadySelected = props.context.options.find(option => option.label === props.context.model);
+        if (!isAlreadySelected) {
+          return props.context.options
+            .filter(option => option.label.toLowerCase().includes(props.context.model.toLowerCase()));
+        }
+      }
+      return [];
+    });
+    const selection = computed(() => {
+      if (filteredOptions.value[selectedIndex.value]) {
+        return filteredOptions.value[selectedIndex.value];
+      }
+      return false;
+    });
+
+    function increment() {
+      const length = filteredOptions.value.length;
+      if (selectedIndex.value + 1 < length) {
+        selectedIndex.value++;
+      } else {
+        selectedIndex.value = 0;
+      }
+    }
+
+    function decrement() {
+      const length = filteredOptions.value.length;
+      if (selectedIndex.value - 1 >= 0) {
+        selectedIndex.value--;
+      } else {
+        selectedIndex.value = length - 1;
+      }
+    }
+
+    function select(index) {
+      selectedIndex.value = index;
+    }
+
+    function click() {
+      props.context.model = selection.value.label;
+    }
+
+    watch(model, () => { selectedIndex.value = 0; });
+
+    return {
+      selectedIndex,
+      model,
+      filteredOptions,
+      selection,
+      increment,
+      decrement,
+      select,
+      click
+    };
   }
 };
 </script>
