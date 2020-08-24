@@ -6,12 +6,13 @@
   >
     <input
       type="text"
-      v-model="context.model"
+      v-model="text"
       v-bind="context.attributes"
       autocomplete="no"
-      @keydown.enter.prevent="context.model = selection.label"
+      @keydown.enter.prevent="click"
       @keydown.down.prevent="increment"
       @keydown.up.prevent="decrement"
+      @keydown.esc.prevent="reset"
       @blur="context.blurHandler"
     />
     <ul
@@ -65,13 +66,15 @@ export default {
   setup(props) {
     const selectedIndex = ref(0);
 
+    const text = ref('');
+
     const model = computed(() => props.context.model);
     const filteredOptions = computed(() => {
-      if (Array.isArray(props.context.options) && props.context.model) {
-        const isAlreadySelected = props.context.options.find(option => option.label === props.context.model);
+      if (Array.isArray(props.context.options) && text.value) {
+        const isAlreadySelected = props.context.options.find(option => option.label === text.value);
         if (!isAlreadySelected) {
           return props.context.options
-            .filter(option => option.label.toLowerCase().includes(props.context.model.toLowerCase()));
+            .filter(option => option.label.toLowerCase().includes(text.value.toLowerCase()));
         }
       }
       return [];
@@ -106,20 +109,34 @@ export default {
     }
 
     function click() {
-      props.context.model = selection.value.label;
+      if (selection.value) {
+        props.context.model = selection.value;
+        text.value = selection.value.label;
+      }
     }
 
-    watch(model, () => { selectedIndex.value = 0; });
+    function reset() {
+      if (props.context.model) {
+        text.value = props.context.model.label;
+      }
+      selectedIndex.value = 0;
+    }
+
+    watch(text, () => {
+      selectedIndex.value = 0;
+    });
 
     return {
       selectedIndex,
       model,
+      text,
       filteredOptions,
       selection,
       increment,
       decrement,
       select,
-      click
+      click,
+      reset
     };
   }
 };
