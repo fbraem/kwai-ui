@@ -5,6 +5,8 @@ import KwaiRange from '@/components/forms/KwaiRange';
 Vue.component('KwaiRange', KwaiRange);
 import KwaiLabel from '@/components/forms/KwaiLabel';
 Vue.component('KwaiLabel', KwaiLabel);
+import KwaiAutoComplete from '@/components/forms/KwaiAutoComplete';
+Vue.component('KwaiAutoComplete', KwaiAutoComplete);
 
 import moment from 'moment';
 
@@ -46,6 +48,10 @@ export default function init() {
         classification: 'slider',
         component: 'KwaiRange'
       },
+      kwaiautocomplete: {
+        classification: 'text',
+        component: 'KwaiAutoComplete'
+      }
     },
     classes: {
       wrapper(context) {
