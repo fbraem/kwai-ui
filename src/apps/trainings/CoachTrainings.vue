@@ -20,8 +20,8 @@ import Calendar from './Calendar.vue';
 
 import messages from './lang';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
-import {onMounted, reactive, watch} from '@vue/composition-api';
-import createTrainingService, {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
+import {computed, onMounted, reactive, watch} from '@vue/composition-api';
+import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
 
 export default {
   props: {
@@ -40,9 +40,9 @@ export default {
     const coaches = useCoachStore();
     const trainings = useTrainingStore();
 
-    onMounted(() => {
+    onMounted(async() => {
       // Force reload, because we use the same store as the trainings page
-      trainings.load.run({
+      await trainings.load.run({
         coach: props.id,
         year: props.year,
         month: props.month
@@ -50,9 +50,9 @@ export default {
     });
     watch(
       () => [ props.id, props.year, props.month ],
-      () => {
+      async() => {
         // Force reload, because we use the same store as the trainings page
-        trainings.load.run({
+        await trainings.load.run({
           coach: props.id,
           year: props.year,
           month: props.month
@@ -60,10 +60,12 @@ export default {
       }
     );
 
+    const coach = computed(() => coaches.current);
+
     return {
       coaches: reactive(coaches),
       trainings: reactive(trainings),
-      coach: coaches.current
+      coach
     };
   },
   components: {
