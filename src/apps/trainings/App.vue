@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <router-view
-      name="hero"
-      :category="application"
-    >
-    </router-view>
-    <div class="container mx-auto p-4 lg:p-6">
-      <router-view :category="application"></router-view>
-    </div>
-  </div>
+  <router-view :category="application"></router-view>
 </template>
 
 <script>
 import trainingStore from './store/training';
 import definitionStore from './store/definition';
-import coachStore from './store/coach';
-import teamStore from '@/apps/teams/store/team';
-import seasonStore from '@/apps/seasons/store';
 import memberStore from '@/apps/members/store';
+import {provideCoachStore} from '@/apps/trainings/composables/useCoaches';
+import {provideSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {provideTeamStore} from '@/apps/teams/composables/useTeams';
+import {provideTrainingStore} from '@/apps/trainings/composables/useTrainings';
 
 export default {
+  setup() {
+    provideTrainingStore();
+    provideCoachStore();
+    provideSeasonStore();
+    provideTeamStore();
+  },
   computed: {
     application() {
       return this.$store.getters['applications/application']('trainings');
@@ -27,17 +25,11 @@ export default {
   },
   beforeCreate() {
     this.$store.registerModule('training', trainingStore);
-    this.$store.registerModule(['training', 'coach'], coachStore);
     this.$store.registerModule(['training', 'definition'], definitionStore);
-    this.$store.registerModule(['training', 'season'], seasonStore);
-    this.$store.registerModule(['training', 'team'], teamStore);
     this.$store.registerModule(['training', 'member'], memberStore);
   },
   destroyed() {
     this.$store.unregisterModule(['training', 'definition']);
-    this.$store.unregisterModule(['training', 'coach']);
-    this.$store.unregisterModule(['training', 'season']);
-    this.$store.unregisterModule(['training', 'team']);
     this.$store.unregisterModule(['training', 'member']);
     this.$store.unregisterModule('training');
   },

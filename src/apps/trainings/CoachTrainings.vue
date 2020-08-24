@@ -6,7 +6,7 @@
     <Calendar
       :year="year"
       :month="month"
-      :trainings="trainings"
+      :trainings="trainings.all"
       @prevMonth="prevMonth"
       @nextYear="nextYear"
       @nextMonth="nextMonth"
@@ -19,53 +19,65 @@
 import Calendar from './Calendar.vue';
 
 import messages from './lang';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import {onMounted, reactive, watch} from '@vue/composition-api';
+import createTrainingService, {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
 
 export default {
-  components: {
-    Calendar
-  },
   props: {
     year: {
       type: Number
     },
     month: {
       type: Number
+    },
+    id: {
+      type: String,
+      required: true
     }
   },
-  i18n: messages,
-  computed: {
-    trainings() {
-      return this.$store.state.training.all || [];
-    },
-    coach() {
-      return this.$store.state.training.coach.active;
-    },
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
+  setup(props) {
+    const coaches = useCoachStore();
+    const trainings = useTrainingStore();
+
+    onMounted(() => {
+      // Force reload, because we use the same store as the trainings page
+      trainings.load.run({
+        coach: props.id,
+        year: props.year,
+        month: props.month
+      }, true);
     });
+    watch(
+      () => [ props.id, props.year, props.month ],
+      () => {
+        // Force reload, because we use the same store as the trainings page
+        trainings.load.run({
+          coach: props.id,
+          year: props.year,
+          month: props.month
+        }, true);
+      }
+    );
+
+    return {
+      coaches: reactive(coaches),
+      trainings: reactive(trainings),
+      coach: coaches.current
+    };
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
+  components: {
+    Calendar
   },
+  i18n: messages,
   methods: {
-    fetchData({ id, year, month }) {
-      this.$store.dispatch('training/browse', {
-        year,
-        month,
-        coach: id
-      });
-    },
     prevYear() {
       this.$router.push({
         name: 'trainings.coaches.trainings',
         params: {
           year: this.year - 1,
           month: this.month,
-          id: this.$route.params.id
+          id: this.id
         }
       });
     },
@@ -75,13 +87,13 @@ export default {
         params: {
           year: this.year + 1,
           month: this.month,
-          id: this.$route.params.id
+          id: this.id
         }
       });
     },
     prevMonth() {
-      var year = this.year;
-      var month = this.month - 1;
+      let year = this.year;
+      let month = this.month - 1;
       if (month === 0) {
         year = this.year - 1;
         month = 12;
@@ -91,13 +103,13 @@ export default {
         params: {
           year,
           month,
-          id: this.$route.params.id
+          id: this.id
         }
       });
     },
     nextMonth() {
-      var year = this.year;
-      var month = this.month + 1;
+      let year = this.year;
+      let month = this.month + 1;
       if (month === 13) {
         year = this.year + 1;
         month = 1;
@@ -107,7 +119,7 @@ export default {
         params: {
           year,
           month,
-          id: this.$route.params.id
+          id: this.id
         }
       });
     }
