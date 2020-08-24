@@ -78,6 +78,11 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.ya?ml$/,
+          type: 'json', // Needed for Webpack v4
+          use: 'yaml-loader'
+        },
+        {
           test: /\.html$/,
           exclude: /node_modules/,
           use: [
