@@ -6,7 +6,7 @@ module.exports = {
   verbose: true,
   moduleFileExtensions: [
     'js',
-    'vue'
+    'vue',
   ],
   moduleDirectories: [ 'node_modules', 'src'],
   moduleNameMapper: {
