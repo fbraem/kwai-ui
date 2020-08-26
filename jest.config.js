@@ -8,7 +8,7 @@ module.exports = {
     'js',
     'vue',
   ],
-  moduleDirectories: [ 'node_modules', 'src'],
+  moduleDirectories: [ 'node_modules', 'src', '.' ],
   moduleNameMapper: {
     '^@/(.*)$': path.join(__dirname, 'src', '$1'),
     '^config$': path.join(__dirname, 'kwai.development'),
@@ -17,5 +17,9 @@ module.exports = {
   transform: {
     '.*\\.(vue)$': 'vue-jest',
     '.*\\.[t|j]sx?$': 'babel-jest'
-  }
+  },
+  automock: false,
+  setupFiles: [
+    './setupJest.js',
+  ]
 };
