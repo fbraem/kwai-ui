@@ -10,7 +10,11 @@ export function useAPI(callback = () => {}) {
       isRunning.value = true;
       data = await callback(...params);
     } catch (e) {
-      error.value = e;
+      if (e.status && e.response) {
+        error.value = e;
+      } else {
+        throw e;
+      }
     } finally {
       isRunning.value = false;
     }
