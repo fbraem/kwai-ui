@@ -80,6 +80,23 @@ export default function createTrainingService() {
     return current;
   });
 
+  const saveAll = useAPI(async(trainings) => {
+    const transformer = new Transformer();
+
+    const json = {
+      data: trainings.map((training) => {
+        return transformer.serialize(training)['data'];
+      })
+    };
+
+    const res = http_trainings_api
+      .json(json)
+      .post()
+      .json()
+    ;
+    return res.data;
+  });
+
   /**
    * Clear all coaches
    */
@@ -95,7 +112,8 @@ export default function createTrainingService() {
     load,
     read,
     reset,
-    save
+    save,
+    saveAll
   };
 };
 
