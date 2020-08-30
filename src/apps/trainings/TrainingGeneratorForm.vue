@@ -15,36 +15,43 @@
       v-show="showForm"
       class="mt-6"
     >
-      <KwaiForm
-        title="Genereer Trainingen"
-        :form="form"
+      <FormulateForm
+        name="generate"
+        v-model="form"
         @submit="generate"
-        :save="$t('training.generator.form.generate')"
+        @submit-raw="checkValidation"
+        class="w-full"
       >
         <KwaiFieldset title="Periode">
           <template slot="description">
             Geef de periode in waarvoor trainingen moeten aangemaakt worden.
           </template>
-          <div class="flex flex-row">
-            <div class="pr-6 w-full sm:w-1/2">
-              <KwaiField
-                label="Start periode"
-                name="start_date"
-              >
-                <KwaiInputText
-                  :placeholder="$t('training.generator.form.start_date.placeholder')"
+          <div class="flex flex-row flex-wrap space-y-2 sm:space-y-0">
+            <div class="sm:pr-6 w-full sm:w-1/2">
+                <FormulateInput
+                  name="start_date"
+                  label="Start Periode"
+                  :required="true"
+                  validation="^required|kwaidate"
+                  :validation-messages="{
+                    required: 'Dit veld is verplicht in te vullen.',
+                    kwaidate: $t('training.generator.form.invalid_date', { format: dateFormat })
+                  }"
+                  :placeholder="$t('training.generator.form.start_date.placeholder', { format: dateFormat })"
                 />
-              </KwaiField>
             </div>
-            <div class="pr-6 w-full sm:w-1/2">
-              <KwaiField
-                label="Einde periode"
+            <div class="w-full sm:w-1/2">
+              <FormulateInput
                 name="end_date"
-              >
-                <KwaiInputText
-                  :placeholder="$t('training.generator.form.end_date.placeholder')"
-                />
-              </KwaiField>
+                label="Einde Periode"
+                :required="true"
+                validation="^required|kwaidate"
+                :validation-messages="{
+                    required: 'Dit veld is verplicht in te vullen.',
+                    kwaidate: $t('training.generator.form.invalid_date', { format: dateFormat })
+                  }"
+                :placeholder="$t('training.generator.form.end_date.placeholder', { format: dateFormat })"
+              />
             </div>
           </div>
         </KwaiFieldset>
@@ -52,25 +59,32 @@
           <template slot="description">
             Selecteer de coaches voor deze trainingen.
           </template>
-          <KwaiField name="coaches">
-            <multiselect
-              :options="coaches"
-              label="name"
-              track-by="id"
-              :multiple="true"
-              :close-on-select="false"
-              :selectLabel="$t('training.generator.form.coaches.selectLabel')"
-              :deselectLabel="$t('training.generator.form.coaches.deselectLabel')"
-            />
-          </KwaiField>
+          <FormulateInput
+            name="coaches"
+            type="checkbox"
+            :options="coaches.asOptions"
+            element-class="flex flex-wrap"
+            input-class="w-1/2 sm:w-1/3"
+            label-class="text-red-900"
+          />
         </KwaiFieldset>
-      </KwaiForm>
-      <EventGenerate
-        v-if="trainings"
-        :trainings="trainings"
-        @generate="createAll"
-      />
+        <div class="flex justify-end mt-3">
+          <FormulateInput
+            type="submit"
+            :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
+          >
+            {{ $t('training.generator.form.generate') }}
+          </FormulateInput>
+        </div>
+      </FormulateForm>
     </div>
+    <EventGenerate
+      v-if="trainings"
+      :trainings="trainings"
+      @generate="createAll"
+    ></EventGenerate>
     <notifications position="bottom right" />
   </div>
 </template>
@@ -82,107 +96,83 @@ import messages from './lang';
 
 import Training from '@/models/trainings/Training';
 
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
 import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import Multiselect from '@/components/forms/MultiSelect.vue';
-
 import EventGenerate from './TrainingGenerate.vue';
 
-import makeForm, { makeField, notEmpty, isDate } from '@/js/Form';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import {onMounted, reactive, ref} from '@vue/composition-api';
+import createTrainingService from '@/apps/trainings/composables/useTrainings';
 
 export default {
-  props: [
-    'definition',
-  ],
+  props: {
+    definition: {
+      required: true
+    }
+  },
+  setup(props) {
+    const coaches = useCoachStore();
+    const trainingService = createTrainingService();
+
+    const dateFormat = ref(moment.localeData().longDateFormat('L'));
+    const form = ref({
+      start_date: ref(moment().format(dateFormat.value)),
+      end_date: ref(
+        moment().add(1, 'months').format(dateFormat.value)
+      ),
+      coaches: ref([])
+    });
+    const showForm = ref(false);
+    let hasFormErrors = ref(false);
+    let hasValidationErrors = ref(false);
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    onMounted(() => coaches.load.run());
+
+    return {
+      coaches: reactive(coaches),
+      trainingService: reactive(trainingService),
+      form,
+      dateFormat,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      showForm
+    };
+  },
   components: {
-    KwaiForm, Multiselect, KwaiField, KwaiFieldset, KwaiInputText, EventGenerate
+    KwaiFieldset, EventGenerate
   },
   i18n: messages,
   data() {
     return {
       trainings: null,
-      showForm: false,
-      form: makeForm({
-        start_date: makeField({
-          value: moment().format('L'),
-          label: this.$t('training.generator.form.start_date.label'),
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.generator.form.start_date.required')
-            },
-            {
-              v: isDate,
-              error: this.$t('training.generator.form.start_date.invalid', {
-                format: moment.localeData().longDateFormat('L')
-              })
-            },
-          ]
-        }),
-        end_date: makeField({
-          required: true,
-          label: this.$t('training.generator.form.end_date.label'),
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.generator.form.end_date.required')
-            },
-            {
-              v: isDate,
-              error: this.$t('training.generator.form.end_date.invalid', {
-                format: moment.localeData().longDateFormat('L')
-              })
-            },
-          ]
-        }),
-        coaches: makeField({
-          value: [],
-          label: this.$t('training.generator.form.coaches.label'),
-          placeholder: this.$t('training.generator.form.coaches.placeholder')
-        })
-      })
     };
   },
-  computed: {
-    error() {
-      return this.$store.state.training.definition.error;
-    },
-    coaches() {
-      var coaches = this.$store.state.training.coach.all;
-      return coaches || [];
-    }
-  },
-  mounted() {
-    this.fetchCoaches();
-  },
   methods: {
-    fetchCoaches() {
-      this.$store.dispatch('training/coach/browse').catch((err) => {
-        console.log(err);
-      });
-    },
     generate() {
-      var tz = moment.tz.guess();
-      var start = moment(this.form.fields.start_date.value, 'L');
-      var end = moment(this.form.fields.end_date.value, 'L');
-      var next = start.day(this.definition.weekday);
-      var trainings = [];
+      const selectedCoaches = this.form.coaches.map(
+        id => this.coaches.all.find((c) => c.id === id)
+      );
+      const tz = moment.tz.guess();
+      const start = moment(this.form.start_date, 'L');
+      const end = moment(this.form.end_date, 'L');
+      let next = start.day(this.definition.weekday);
+      const trainings = [];
       while (next.isBefore(end)) {
-        var training = new Training();
+        const training = new Training();
         training.event = Object.create(null);
-        var content = Object.create(null);
+        const content = Object.create(null);
         content.title = this.definition.name;
         content.summary = this.definition.description;
         training.event.contents = [ content ];
-        var s = next.clone();
+        const s = next.clone();
         s.hours(this.definition.start_time.hours());
         s.minutes(this.definition.start_time.minutes());
         training.event.start_date = s;
 
-        var e = next.clone();
+        const e = next.clone();
         e.hours(this.definition.end_time.hours());
         e.minutes(this.definition.end_time.minutes());
         training.event.end_date = e;
@@ -194,21 +184,24 @@ export default {
         if (this.definition.team) {
           training.teams = [ this.definition.team ];
         }
-        training.coaches = this.form.fields.coaches.value;
+        training.coaches = selectedCoaches;
         trainings.push(training);
         next = next.day(this.definition.weekday + 7);
       }
       this.trainings = trainings;
     },
-    createAll(selection) {
-      this.$store.dispatch('training/createAll', selection).then(() => {
+    async createAll(selection) {
+      await this.trainingService.saveAll.run(this.trainings);
+      if (this.trainingService.saveAll.error) {
+        console.log(this.trainingService.saveAll.error);
+      } else {
         this.trainings = null;
         this.$notify({
           type: 'success',
           title: 'Success!',
           text: 'All trainings were created!'
         });
-      });
+      }
     }
   }
 };

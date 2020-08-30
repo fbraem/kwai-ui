@@ -1,50 +1,65 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="container mx-auto mt-4"
-  >
-    <Spinner
-      v-if="$wait.is('training.definitions.browse')"
-      class="text-center"
-    ></Spinner>
-    <div v-else>
-      <Alert
-        v-if="noData"
-        type="warning">
-          {{ $t('training.definitions.no_data') }}
-      </Alert>
-      <table
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('training.definitions.title')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconButton
+            v-if="canCreate"
+            class="bg-primary text-primary_light"
+            icon="fas fa-plus"
+            :content="$t('training.definitions.create')"
+            :route="{ name: 'trainings.definitions.create' }"
+          />
+        </div>
+      </div>
+    </PageHeader>
+    <PageSection>
+      <Spinner
+        v-if="definitions.load.isRunning"
+        class="w-full text-center"
+      ></Spinner>
+      <div
         v-else
-        class="table table-striped"
+        class="w-full"
       >
-        <thead>
-          <tr>
-            <th scope="col">
-              {{ $t('name') }}
-            </th>
-            <th scope="col">
-              {{ $t('training.definitions.weekday') }}
-            </th>
-            <th scope="col">
-              {{ $t('description') }}
-            </th>
-            <th scope="col">
-              {{ $t('team') }}
-            </th>
-            <th scope="col">
-              {{ $t('season') }}
-            </th>
-            <th scope="col">
-              {{ $t('training.definitions.form.active.label') }}
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+        <Alert
+          v-if="definitions.all.length === 0"
+          type="warning">
+            {{ $t('training.definitions.no_data') }}
+        </Alert>
+        <Table v-else>
+          <template slot="header">
+            <tr>
+              <TableHeader>
+                {{ $t('name') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('training.definitions.weekday') }}
+              </TableHeader>
+              <TableHeader scope="col">
+                {{ $t('description') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('team') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('season') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('training.definitions.form.active.label') }}
+              </TableHeader>
+              <th></th>
+            </tr>
+          </template>
           <tr
-            v-for="definition in definitions"
+            v-for="definition in definitions.all"
             :key="definition.id"
           >
-            <th scope="row">
+            <TableCell>
               <router-link
                 :to="{
                   name: 'trainings.definitions.read',
@@ -55,14 +70,14 @@
               >
                 {{ definition.name }}
               </router-link>
-            </th>
-            <td>
+            </TableCell>
+            <TableCell>
               {{ definition.weekdayText }}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell class="truncate max-w-md">
               {{ definition.description }}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               <router-link
                 v-if="definition.team"
                 :to="{
@@ -80,8 +95,8 @@
               >
                 <i class="fas fa-minus"></i>
               </div>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               <router-link
                 v-if="definition.season"
                 :to="{
@@ -99,8 +114,8 @@
               >
                 <i class="fas fa-minus"></i>
               </div>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               <i
                 v-if="definition.active"
                 class="fas fa-check"
@@ -111,8 +126,8 @@
                 class="fas fa-times text-red-500"
               >
               </i>
-            </td>
-            <td class="text-right">
+            </TableCell>
+            <TableCell class="text-right">
               <router-link
                 v-if="$can('update', definition)"
                 class="icon-button text-gray-700 hover:bg-gray-300"
@@ -125,18 +140,11 @@
               >
                 <i class="fas fa-edit"></i>
               </router-link>
-            </td>
+            </TableCell>
           </tr>
-        </tbody>
-      </table>
-      <div class="flex flex-col w-full items-end">
-        <IconButtons
-          :toolbar="toolbar"
-          normal-class="text-gray-800"
-          hover-class="hover:bg-gray-300"
-        />
+        </Table>
       </div>
-    </div>
+    </PageSection>
   </div>
 </template>
 
@@ -145,51 +153,49 @@ import messages from './lang';
 
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
-import IconButtons from '@/components/IconButtons';
+import Table from '@/components/table/Table';
+import TableCell from '@/components/table/TableCell';
+import TableHeader from '@/components/table/TableHeader';
+import PageSection from '@/components/PageSection';
+import PageHeader from '@/components/PageHeader';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import IconButton from '@/components/IconButton';
 
 import TrainingDefinition from '@/models/trainings/Definition';
+import {useDefinitionStore} from '@/apps/trainings/composables/useDefinitions';
+// eslint-disable-next-line max-len
+import {getCurrentInstance, onMounted, reactive, computed} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const vm = getCurrentInstance();
+
+    const definitions = useDefinitionStore();
+
+    onMounted(() => {
+      definitions.load.run();
+    });
+
+    const canCreate = computed(
+      () => vm.$can('create', TrainingDefinition)
+    );
+
+    return {
+      definitions: reactive(definitions),
+      canCreate
+    };
+  },
   components: {
+    IconButton,
+    ApplicationHeader,
+    PageHeader,
     Spinner,
     Alert,
-    IconButtons
+    Table,
+    TableCell,
+    TableHeader,
+    PageSection
   },
   i18n: messages,
-  computed: {
-    definitions() {
-      return this.$store.state.training.definition.all;
-    },
-    noData() {
-      return this.definitions && this.definitions.length === 0;
-    },
-    toolbar() {
-      let buttons = [];
-      if (this.$can('create', TrainingDefinition.type())) {
-        buttons.push({
-          icon: 'fas fa-plus',
-          route: {
-            name: 'trainings.definitions.create'
-          }
-        });
-      }
-      return buttons;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData();
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData();
-    next();
-  },
-  methods: {
-    fetchData() {
-      this.$store.dispatch('training/definition/browse');
-    }
-  }
 };
 </script>

@@ -20,6 +20,7 @@ export default [
       {
         path: ':id(\\d+)',
         component: DefinitionRead,
+        props: true,
         name: 'trainings.definitions.read',
       },
       {

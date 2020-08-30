@@ -8,9 +8,10 @@
   "season": "Seizoen",
   "team": "Team",
   "title": "Training",
+  "required": "Dit veld is verplicht in te vullen.",
   "training": {
     "coaches": {
-      "create": "Voeg een nieuwe coach toe",
+      "create": "Maak Coach",
       "form": {
         "active": {
           "label": "Actief"
@@ -32,6 +33,24 @@
         "remark": {
           "label": "Opmerking",
           "placeholder": "Geef een opmerking in"
+        },
+        "fieldset": {
+          "coach": {
+            "title": "Lid",
+            "description": "Zoek het lid om coach te maken"
+          },
+          "information": {
+            "title": "Informatie",
+            "description": "Geef informatie over de coach"
+          },
+          "active": {
+            "title": "Actief",
+            "description": "Is deze coach actief?"
+          },
+          "remark": {
+            "title": "Opmerking",
+            "description": "Geef een opmerking in over deze coach"
+          }
         }
       },
       "no_data": "Er zijn momenteel geen coaches",
@@ -41,7 +60,7 @@
       "update": "Wijzig een coach"
     },
     "definitions": {
-      "create": "Maak een nieuw trainingsmoment",
+      "create": "Maak Trainingsmoment",
       "form": {
         "active": {
           "label": "Actief"
@@ -79,8 +98,7 @@
           "before": "Begintijd moet voor de eindtijd liggen",
           "invalid": "Begintijd is foutief.",
           "label": "Begintijd",
-          "placeholder": "Geef een begintijd in",
-          "required": "Begintijd is verplicht"
+          "placeholder": "Geef een begintijd in"
         },
         "team": {
           "label": "Team",
@@ -88,8 +106,7 @@
         },
         "weekday": {
           "label": "Weekdag",
-          "numeric": "Weekdag moet numerisch zijn",
-          "required": "Weekdag is verplicht"
+          "numeric": "Weekdag moet numerisch zijn"
         }
       },
       "no_data": "Er zijn momenteel nog geen trainingsmomenten",
@@ -121,8 +138,7 @@
           "after": "Eindtijd moet na de begintijd liggen",
           "invalid": "Eindtijd is niet geldig",
           "label": "Eindtijd",
-          "placeholder": "Geef een tijd in",
-          "required": "Eindtijd is verplicht in te vullen"
+          "placeholder": "Geef een tijd in"
         },
         "remark": {
           "label": "Opmerking",
@@ -130,24 +146,25 @@
         },
         "season": {
           "label": "Seizoen",
-          "no_season": "< Geen Seizoen >"
+          "no_season": "< Geen Seizoen >",
+          "placeholder": "Selecteer een seizoen"
         },
         "start_date": {
           "invalid": "Datum is niet geldig",
           "label": "Datum",
-          "placeholder": "Geef een datum in",
-          "required": "Datum is verplicht in te vullen"
+          "placeholder": "Geef een datum in"
         },
         "start_time": {
           "invalid": "Begintijd is niet geldig",
           "label": "Begintijd",
-          "placeholder": "Geef een tijd in",
-          "required": "Begintijd is verplicht in te vullen"
+          "placeholder": "Geef een tijd in"
         },
         "summary": {
           "label": "Omschrijving",
-          "placeholder": "Geef een omschrijving in",
-          "required": "Omschrijving is verplicht in te vullen"
+          "placeholder": "Geef een omschrijving in"
+        },
+        "location": {
+          "placeholder": "Geef een locatie in"
         },
         "teams": {
           "deselectLabel": "Druk enter om te verwijderen",
@@ -157,9 +174,10 @@
         },
         "title": {
           "label": "Titel",
-          "placeholder": "Geef een titel in",
-          "required": "Titel is verplicht in te vullen"
-        }
+          "placeholder": "Geef een titel in"
+        },
+        "invalid_date": "Ongeldige datum (Formaat: {format}).",
+        "invalid_time": "Ongeldig tijdstip (Format: {format})"
       },
       "generate": "Genereer nieuwe trainingen",
       "no_data": "Er zijn geen trainingen gevonden in deze periode.",
@@ -179,18 +197,16 @@
         },
         "end_date": {
           "after": "Einddatum moet na de startdatum liggen",
-          "invalid": "Ongeldige einddatum (Formaat: {format}).",
           "label": "Einddatum",
-          "placeholder": "Geef een einddatum in",
-          "required": "Einddatum is verplicht in te vullen."
+          "placeholder": "Geef een einddatum in (Formaat: {format})"
         },
         "generate": "Genereer",
         "start_date": {
-          "invalid": "Ongeldige startdatum (Formaat: {format}).",
           "label": "Startdatum",
-          "placeholder": "Geef een startdatum in",
-          "required": "Startdatum is verplicht in te vullen."
-        }
+          "placeholder": "Geef een startdatum in (Formaat: {format})"
+        },
+        "invalid_date": "Ongeldige datum (Formaat: {format}).",
+        "invalid_time": "Ongeldig tijdstip (Format: {format})"
       },
       "help": "Selecteer alle trainingen die aangemaakt moeten worden en klik onderaan op 'Bewaar'"
     },

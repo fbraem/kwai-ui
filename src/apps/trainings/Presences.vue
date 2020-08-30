@@ -115,12 +115,12 @@ import MemberSummary from '@/apps/members/components/MemberSummary';
 import makeForm, { makeField } from '@/js/Form';
 import KwaiForm from '@/components/forms/KwaiForm';
 import KwaiField from '@/components/forms/KwaiField';
-import Multiselect from '@/components/forms/MultiSelect';
+import KwaiMultiselect from '@/components/forms/KwaiMultiSelect';
 
 export default {
   i18n: messages,
   components: {
-    TrainingCard, MemberSummary, KwaiForm, KwaiField, Multiselect
+    TrainingCard, MemberSummary, KwaiForm, KwaiField, KwaiMultiselect
   },
   data() {
     return {
