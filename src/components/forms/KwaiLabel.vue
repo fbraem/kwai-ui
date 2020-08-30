@@ -1,10 +1,11 @@
 <template>
   <label
     :for="context.id"
-    class="block font-bold mb-2"
+    class="block mb-2"
     :class="{
       'text-red-600': isError,
-      'ml-2': context.classification === 'box'
+      'ml-2': context.classification === 'box',
+      'font-bold': context.classification !== 'box'
     }"
   >
     {{ context.label }}
