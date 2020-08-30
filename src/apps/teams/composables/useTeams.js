@@ -65,6 +65,16 @@ export default function createTeamService() {
     return current;
   });
 
+  function asOptions() {
+    return all.value.reduce(
+      (result, team) => {
+        result[team.id] = team.name;
+        return result;
+      },
+      {}
+    );
+  }
+
   /**
    * Clear cached teams
    */
@@ -80,6 +90,7 @@ export default function createTeamService() {
     load,
     read,
     save,
+    asOptions: computed(() => asOptions()),
     reset
   };
 }
