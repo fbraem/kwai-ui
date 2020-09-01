@@ -201,6 +201,19 @@ import Season from '@/models/Season';
 import Coach from '@/models/trainings/Coach';
 import Team from '@/models/Team';
 
+function useOptions(list, cb, extras = {}) {
+  const options = list.reduce(
+    (result, model) => {
+      result[model.id] = cb(model);
+      return result;
+    },
+    {}
+  );
+  return {
+    ...options, ...extras
+  };
+}
+
 export default {
   props: {
     id: {
@@ -246,9 +259,11 @@ export default {
       return true;
     }
 
-    seasons.load.run();
-    coaches.load.run();
-    teams.load.run();
+    onMounted(async() => {
+      await seasons.load.run();
+      await coaches.load.run();
+      await teams.load.run();
+    });
 
     if (props.id) {
       onMounted(async() => {
@@ -261,9 +276,9 @@ export default {
         form.value.start_date = trainings.current.formattedStartDate;
         form.value.start_time = trainings.current.formattedStartTime;
         form.value.end_time = trainings.current.formattedEndTime;
-        form.value.coaches = trainings.current.coaches;
+        form.value.coaches = trainings.current.coaches.map(coach => coach.id);
         form.value.season = trainings.current.season?.id ?? null;
-        form.value.teams = trainings.current.teams;
+        form.value.teams = trainings.current.teams.map(team => team.id);
       });
     }
     async function submit() {
@@ -292,10 +307,10 @@ export default {
       training.coaches = form.value.coaches.map((id) => new Coach(id));
       training.teams = form.value.teams.map((id) => new Team(id));
       if (form.value.season) {
-        if (form.value.season.id === 0) {
+        if (form.value.season === 0) {
           training.season = null;
         } else {
-          training.season = new Season(form.value.season.id);
+          training.season = new Season(form.value.season);
         }
       }
       await trainings.save.run(training);
@@ -313,13 +328,20 @@ export default {
 
     const vm = getCurrentInstance();
 
-    const seasonOptions = computed(() => {
-      const options = seasons.asOptions;
-      options[0] = vm.$t('training.events.form.season.no_season');
-      return options;
-    });
-    const teamOptions = computed(() => teams.asOptions);
-    const coachOptions = computed(() => coaches.asOptions);
+    const seasonOptions = computed(
+      () => useOptions(
+        seasons.all,
+        (season) => season.name, {
+          0: vm.$t('training.events.form.season.no_season')
+        }
+      )
+    );
+    const teamOptions = computed(
+      () => useOptions(teams.all, (team) => team.name)
+    );
+    const coachOptions = computed(
+      () => useOptions(coaches.all, (model) => model.name)
+    );
 
     return {
       trainings: reactive(trainings),
