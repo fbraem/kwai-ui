@@ -302,7 +302,7 @@ export default {
           [ 'after_publish', 'end_date' ],
         ];
       }
-      return [ 'optional', 'kwaitime' ];
+      return [ ['optional'], ['kwaitime'] ];
     },
     promotionTimeValidation() {
       if (this.form.promotion_end_date) {
