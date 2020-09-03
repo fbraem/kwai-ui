@@ -166,7 +166,6 @@ export default {
     }
 
     async function submit() {
-      console.log(form.value);
       const coach = props.id ? coaches.current : new Coach();
       if (!props.id) {
         coach.member = new Member(form.value.member.value);
