@@ -69,16 +69,6 @@ export default function createCoachService() {
     return current;
   });
 
-  function asOptions() {
-    return all.value.reduce(
-      (result, coach) => {
-        result[coach.id] = coach.name;
-        return result;
-      },
-      {}
-    );
-  }
-
   /**
    * Clear all coaches
    */
@@ -91,7 +81,6 @@ export default function createCoachService() {
     all: computed(() => all.value),
     count: computed(() => all.value.length),
     current: computed(() => current.value),
-    asOptions: computed(() => asOptions()),
     load,
     read,
     reset,
