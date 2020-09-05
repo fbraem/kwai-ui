@@ -6,8 +6,10 @@
       </h4>
     </div>
     <div class="flex items-center justify-between">
-      <div class="text-meta truncate">
-        {{ story.content.summary }}
+      <div
+        class="text-meta truncate"
+        v-html="story.content.html_summary"
+      >
       </div>
       <div>
         <router-link
