@@ -1,15 +1,15 @@
 import App from '../App.vue';
 
 const DefinitionBrowse = () =>
-  import(/* webpackChunkName: "trainings_admin_chunck" */
+  import(/* webpackChunkName: "trainings_admin_chunk" */
     '@/apps/trainings/DefinitionBrowse.vue');
 
 const DefinitionForm = () =>
-  import(/* webpackChunkName: "trainings_admin_chunck" */
+  import(/* webpackChunkName: "trainings_admin_chunk" */
     '@/apps/trainings/DefinitionForm.vue');
 
 const DefinitionRead = () =>
-  import(/* webpackChunkName: "trainings_admin_chunck" */
+  import(/* webpackChunkName: "trainings_admin_chunk" */
     '@/apps/trainings/DefinitionRead.vue');
 
 export default [
@@ -26,17 +26,13 @@ export default [
       {
         path: 'create',
         component: DefinitionForm,
-        props: {
-          creating: true
-        },
+        props: true,
         name: 'trainings.definitions.create',
       },
       {
         path: 'update/:id(\\d+)',
         component: DefinitionForm,
-        props: {
-          creating: false
-        },
+        props: true,
         name: 'trainings.definitions.update',
       },
       {
