@@ -89,7 +89,8 @@
         },
         "season": {
           "label": "Season",
-          "no_season": "< No Season >"
+          "no_season": "< No Season >",
+          "placeholder": "Select a season"
         },
         "start_time": {
           "before": "Starttime must be before the endtime",
@@ -99,12 +100,15 @@
         },
         "team": {
           "label": "Team",
-          "no_team": "< No Team >"
+          "no_team": "< No Team >",
+          "placeholder": "Select a team"
         },
         "weekday": {
           "label": "Weekday",
-          "numeric": "Weekday must be numeric"
-        }
+          "numeric": "Weekday must be numeric",
+          "placeholder": "Select a weekday"
+        },
+        "invalid_time": "Invalid Time"
       },
       "no_data": "There are no training definitions yet",
       "not_found": "This training definition doesn't exist",

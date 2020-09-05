@@ -92,7 +92,8 @@
         },
         "season": {
           "label": "Seizoen",
-          "no_season": "< Geen Seizoen >"
+          "no_season": "< Geen Seizoen >",
+          "placeholder": "Selecteer een seizoen"
         },
         "start_time": {
           "before": "Begintijd moet voor de eindtijd liggen",
@@ -102,12 +103,15 @@
         },
         "team": {
           "label": "Team",
-          "no_team": "< Geen Team >"
+          "no_team": "< Geen Team >",
+          "placeholder": "Selecteer een team"
         },
         "weekday": {
           "label": "Weekdag",
-          "numeric": "Weekdag moet numerisch zijn"
-        }
+          "numeric": "Weekdag moet numerisch zijn",
+          "placeholder": "Selecteer een dag"
+        },
+        "invalid_time": "Tijdstip is foutief"
       },
       "no_data": "Er zijn momenteel nog geen trainingsmomenten",
       "not_found": "Dit trainingsmoment bestaat niet",
