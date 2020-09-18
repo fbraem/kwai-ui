@@ -47,6 +47,21 @@ export default function createTeamService() {
     return current;
   });
 
+  const loadMembers = useAPI(async(id) => {
+    if (current.value?.id === id && current.value.members) {
+      return;
+    }
+    current.value = all.value.find((t) => t.id === id);
+    if (current.value && current.value.members) return current;
+
+    const api = http_teams_api.query({ include: 'members' });
+
+    const json = await api.url(`/${id}`).get().json();
+
+    current.value = (new Transformer()).deserialize(Team, json);
+    return current;
+  });
+
   /**
    * Save the team
    * @param team
@@ -89,6 +104,7 @@ export default function createTeamService() {
     current: computed(() => current.value),
     load,
     read,
+    loadMembers,
     save,
     asOptions: computed(() => asOptions()),
     reset
