@@ -29,20 +29,12 @@ const TrainingForm = () =>
   import(/* webpackChunkName: "trainings_admin_chunk" */
     '@/apps/trainings/TrainingForm.vue'
   );
-const TrainingFormHeader = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
-    '@/apps/trainings/TheTrainingFormHeader.vue'
-  );
 const Presences = () =>
   import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/Presences.vue'
   );
-const ThePresencesHeader = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
-    '@/apps/trainings/ThePresencesHeader.vue'
-  );
 
-var routes = [
+let routes = [
   {
     path: '/trainings',
     component: App,
@@ -55,10 +47,8 @@ var routes = [
       },
       {
         path: ':id(\\d+)/presences',
-        components: {
-          hero: ThePresencesHeader,
-          default: Presences
-        },
+        component: Presences,
+        props: true,
         name: 'trainings.presences',
       },
       {
