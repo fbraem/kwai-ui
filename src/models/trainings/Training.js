@@ -74,21 +74,30 @@ export default class Training extends Model {
        * @param {Training} training A training model
        */
       formattedStartDate(training) {
-        return training.event.start_date.format('L');
+        if (training.event) {
+          return training.event.start_date.format('L');
+        }
+        return null;
       },
       /**
        * Returns a formatted starttime of the event
        * @param {Training} training A training model
        */
       formattedStartTime(training) {
-        return training.event.start_date.format('HH:mm');
+        if (training.event) {
+          return training.event.start_date.format('HH:mm');
+        }
+        return null;
       },
       /**
        * Returns a formatted endtime of the event
        * @param {Training} training A training model
        */
       formattedEndTime(training) {
-        return training.event.end_date.format('HH:mm');
+        if (training.event) {
+          return training.event.end_date.format('HH:mm');
+        }
+        return null;
       },
       /**
        * Returns the content of the event. For now the first content is
@@ -97,9 +106,12 @@ export default class Training extends Model {
        * @todo Return the content belonging to the current locale
        */
       content(training) {
-        if (training.event.contents && training.event.contents.length > 0) {
-          return training.event.contents[0];
+        if (training.event) {
+          if (training.event.contents && training.event.contents.length > 0) {
+            return training.event.contents[0];
+          }
         }
+        return null;
       }
     };
   }
