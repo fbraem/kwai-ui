@@ -14,10 +14,6 @@ export default class Presence extends Model {
     return 'presences';
   }
 
-  static namespace() {
-    return ['trainings'];
-  }
-
   static fields() {
     return {
       ... Member.fields(),
