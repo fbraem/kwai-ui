@@ -2,7 +2,25 @@
   <!-- eslint-disable max-len -->
   <div>
     <PageHeader>
-      <ApplicationHeader :content="$t('title')" />
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('title')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconLink
+            v-if="training"
+            class="hover:bg-hero text-body_dark"
+            icon="fas fa-list"
+            :route="{
+              name: 'trainings.browse',
+              params: {
+                month: training.event.start_date.format('MM'),
+                year: training.event.start_date.format('YYYY')
+              }
+            }"
+          />
+        </div>
+      </div>
     </PageHeader>
     <PageSection
       v-if="training"
@@ -76,6 +94,7 @@ import {computed, onMounted, reactive, watch} from '@vue/composition-api';
 import PageHeader from '@/components/PageHeader';
 import PageSection from '@/components/PageSection';
 import ApplicationHeader from '@/components/ApplicationHeader';
+import IconLink from '@/components/IconLink';
 
 export default {
   props: {
@@ -102,6 +121,7 @@ export default {
   },
   i18n: messages,
   components: {
+    IconLink,
     ApplicationHeader,
     TrainingCard,
     Alert,
