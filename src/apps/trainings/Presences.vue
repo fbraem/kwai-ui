@@ -1,108 +1,76 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div
-    v-if="training"
-    class="mt-6 flex justify-center"
-  >
-    <TrainingCard :training="training">
-      <div class="border-t border-gray-300 p-6">
-        <h1>
-          {{ $t('training.presences.attendees') }}
-        </h1>
-        <div
-          v-if="hasPresences"
-          class="flex flex-col mb-6"
-        >
-          <div
-            v-for="member in presences"
-            :key="member.id"
-            class="flex flex-row px-2 py-2 first:border-t odd:bg-gray-200 border-b border-gray-400">
-            <div class="flex-grow">
-              <MemberSummary :member="member" />
-            </div>
-            <div class="flex-none">
-              <a class="icon-button text-red-700 hover:bg-gray-300">
-                <i
-                  class="fas fa-times"
-                  @click="removePresence(member)"
-                >
-                </i>
-              </a>
-            </div>
-          </div>
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('training.presences.title')" />
         </div>
-        <p
-          v-else
-          class="mb-6"
-        >
-          {{ $t('training.presences.nobody') }}
-        </p>
-        <h1 class="mb-6">
-          {{ $t('training.presences.possible') }}
-        </h1>
-        <p class="mb-6 text-sm">
-          {{ $t('training.presences.team') }}
-        </p>
-        <div class="flex flex-col mb-6">
-          <div class="flex flex-row px-2 py-2 first:border-t odd:bg-gray-200 border-b border-gray-400"
-            v-for="member in teamMembers"
-            :key="member.id"
-          >
-            <div class="flex-grow">
-              <MemberSummary :member="member" />
-            </div>
-            <div class="flex-none">
-              <a class="icon-button text-gray-700 hover:bg-gray-300">
-                <i
-                  class="fas fa-plus"
-                  @click="addPresence(member)"
-                >
-                </i>
-              </a>
-            </div>
-          </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconLink
+            v-if="training"
+            class="hover:bg-hero text-body_dark"
+            icon="fas fa-university"
+            :route="{ name: 'trainings.read', params: { id: training.id } }"
+          />
         </div>
-        <KwaiForm
-          :form="form"
-          class="mb-6 bg-gray-200 p-4"
-        >
-          <KwaiField
-            name="otherMembers"
-            :label="$t('training.presences.form.other_members.label')"
-            class="max-w-lg md:max-w-2xl"
-          >
-            <div class="relative">
-              <multiselect
-                :options="otherMembers"
-                label="name"
-                track-by="id"
-                :multiple="true"
-                :close-on-select="false"
-                :selectLabel="$t('training.presences.form.select_label')"
-                :deselectLabel="$t('training.presences.form.deselect_label')"
-              >
-              <template slot="tag" slot-scope="{ option, remove }">
-                <span>
-                  <span>{{ option.name }} - </span>
-                  <span @click="remove(option)">❌</span>
-                  <br />
-                </span>
-              </template>
-              </multiselect>
-            </div>
-          </KwaiField>
-          <div class="flex justify-end mt-6">
-            <button
-              class="red-button disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="disableAddOthers"
-              @click.prevent.stop="addAttendeeFromList"
-            >
-              {{ $t('training.presences.form.add_others') }}
-            </button>
-          </div>
-        </KwaiForm>
       </div>
-    </TrainingCard>
+    </PageHeader>
+    <PageSection>
+      <div class="w-full">
+        <div class="mx-auto max-w-md">
+          <TrainingCard
+            v-if="training"
+            :training="training"
+          >
+          </TrainingCard>
+        </div>
+      </div>
+    </PageSection>
+    <PageSection>
+      <HeaderLine content="Aanwezigen" />
+      <p class="text-sm">
+        Klik op een lid om de aanwezigheid te bevestigen. Klik nogmaals om een
+        aanwezigheid te annuleren.
+      </p>
+      <HeaderLine v-if="team" :content="`Leden van het team: ${team.name}`" />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row-dense gap-4 w-full">
+        <div
+          v-for="member in teamMembers"
+          :key="member.id"
+          class="border-2 rounded-md w-full"
+          :class="{
+            'bg-green-600' : presences[member.id],
+            'text-white': presences[member.id]
+          }"
+        >
+          <div class="relative p-2">
+            <a @click.prevent="clickMember(member)" class="absolute inset-0"></a>
+            <MemberSummary class="flex-grow" :member="member" />
+          </div>
+        </div>
+      </div>
+      <HeaderLine
+        class="mt-4"
+        content="Leden van andere teams"
+      />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row-dense gap-4 w-full">
+        <div
+          v-for="member in otherMembers"
+          :key="member.id"
+          class="border-2 rounded-md w-full"
+          :class="{
+            'bg-green-600' : presences[member.id],
+            'text-white': presences[member.id]
+          }"
+        >
+          <div class="relative p-2">
+            <a @click.prevent="clickMember(member)" class="absolute inset-0"></a>
+            <MemberSummary class="flex-grow" :member="member" />
+          </div>
+        </div>
+      </div>
+    </PageSection>
   </div>
 </template>
 
@@ -112,115 +80,89 @@ import messages from './lang';
 import TrainingCard from './TrainingCard';
 import MemberSummary from '@/apps/members/components/MemberSummary';
 
-import makeForm, { makeField } from '@/js/Form';
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiMultiselect from '@/components/forms/KwaiMultiSelect';
+import PageSection from '@/components/PageSection';
+import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
+import {reactive, set, computed, onMounted} from '@vue/composition-api';
+import createMemberService from '@/apps/members/composables/useMembers';
+import createTeamService from '@/apps/teams/composables/useTeams';
+import HeaderLine from '@/components/HeaderLine';
+import Presence from '@/models/trainings/Presence';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import PageHeader from '@/components/PageHeader';
+import IconLink from '@/components/IconLink';
 
 export default {
-  i18n: messages,
-  components: {
-    TrainingCard, MemberSummary, KwaiForm, KwaiField, KwaiMultiselect
-  },
-  data() {
-    return {
-      presences: [],
-      form: makeForm({
-        otherMembers: makeField({
-          value: []
-        })
-      })
-    };
-  },
-  computed: {
-    training() {
-      return this.$store.state.training.active;
-    },
-    hasPresences() {
-      return this.presences.length > 0;
-    },
-    teamMembers() {
-      // TODO: For the moment only one team!
-      if (this.$store.state.training.team.active) {
-        // Create a copy of the members array
-        let members = [...this.$store.state.training.team.active.members || []];
-        if (members.length > 0) {
-          this.presences.forEach((p) => {
-            let index = members.findIndex(o => o.id === p.id);
-            if (index !== -1) {
-              members.splice(index, 1);
-            }
-          });
-        }
-        return members;
-      }
-      return [];
-    },
-    otherMembers() {
-      var others = this.$store.state.training.member.all || [];
-      this.presences.forEach((p) => {
-        let index = others.findIndex(o => o.id === p.id);
-        if (index !== -1) {
-          others.splice(index, 1);
-        }
-      });
-      return others;
-    },
-    disableAddOthers() {
-      return this.form.fields.otherMembers.value.length === 0;
+  props: {
+    id: {
+      type: String,
+      required: true
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.id);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.id);
-    next();
-  },
-  methods: {
-    async fetchData(id) {
-      await this.$store.dispatch('training/read', {
-        id,
-        cache: false
-      }).catch((err) => {
-        console.log(err);
-      });
-      if (this.training) {
-        this.presences = this.training.presences ?
-          [ ... this.training.presences ] : [];
+  setup(props) {
+    const trainings = useTrainingStore();
+    const members = createMemberService();
+    const teams = createTeamService();
+    const presences = reactive({});
+
+    onMounted(async() => {
+      await trainings.read.run(props.id, {cache: false});
+      if (trainings.current.teams && trainings.current.teams.length > 0) {
+        await teams.loadMembers.run(trainings.current.teams[0].id);
       }
-      if (this.training && this.training.teams.length > 0) {
-        // TODO: For the moment only one team!
-        this.$store.dispatch('training/team/getMembers', {
-          id: this.training.teams[0].id
+      if (trainings.current.presences) {
+        trainings.current.presences.forEach((presence) => {
+          set(presences, presence.id, true);
         });
       }
-      this.$store.dispatch('training/member/browse');
-    },
-    removePresence(member) {
-      this.presences = this.presences.filter(p => p.id !== member.id);
-      this.saveAttendees();
-    },
-    addPresence(member) {
-      this.presences.push(member);
-      this.saveAttendees();
-    },
-    addAttendeeFromList() {
-      this.form.fields.otherMembers.value.forEach((member) => {
-        this.presences.push(member);
-      });
-      this.saveAttendees();
-      this.form.fields.otherMembers.value = [];
-    },
-    saveAttendees() {
-      this.$store.dispatch('training/updatePresences', {
-        training: this.training,
-        presences: this.presences
-      });
+    });
+    const training = computed(() => trainings.current);
+    const team = computed(() => teams.current);
+    const teamMembers = computed(() => team.value?.members ?? []);
+
+    onMounted(async() => {
+      await members.load.run();
+    });
+    const otherMembers = computed(() => {
+      const others = members.all.filter((member) =>
+        teamMembers.value.findIndex(teamMember => teamMember.id === member.id)
+          === -1
+      );
+      return others;
+    });
+
+    function clickMember(member) {
+      const newPresenceValue = !presences[member.id];
+      set(presences, member.id, newPresenceValue);
+      const allPresences = [];
+      for (const presence in presences) {
+        if (presences[presence]) {
+          allPresences.push(new Presence(presence));
+        }
+      }
+      trainings.savePresences.run(allPresences);
     }
+
+    return {
+      trainings: reactive(trainings),
+      members: reactive(members),
+      teams: reactive(teams),
+      training,
+      team,
+      teamMembers,
+      otherMembers,
+      presences,
+      clickMember
+    };
+  },
+  i18n: messages,
+  components: {
+    IconLink,
+    ApplicationHeader,
+    HeaderLine,
+    PageSection,
+    PageHeader,
+    TrainingCard,
+    MemberSummary
   }
 };
 </script>

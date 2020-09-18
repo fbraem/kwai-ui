@@ -1,20 +1,25 @@
 <template>
   <div class="container mx-auto mt-6">
-    <Spinner v-if="$wait.is('training.browse')">
+    <Spinner
+      v-if="trainings.load.isRunning"
+      class="text-center"
+    >
     </Spinner>
-    <div v-else>
+    <div
+      v-else
+      class="mb-6"
+    >
       <Calendar
         :year="year"
         :month="month"
-        :trainings="trainings"
+        :trainings="trainings.all"
         @prevMonth="prevMonth"
         @prevYear="prevYear"
         @nextMonth="nextMonth"
         @nextYear="nextYear"
-        class="mb-6"
       />
       <Alert
-        v-if="noData"
+        v-if="trainings.all.length === 0"
         type="warning"
       >
         {{ $t('training.events.no_data') }}
@@ -29,11 +34,10 @@ import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
+import {onMounted, reactive, watch} from '@vue/composition-api';
 
 export default {
-  components: {
-    Calendar, Spinner, Alert
-  },
   props: {
     year: {
       type: Number,
@@ -44,35 +48,28 @@ export default {
       required: true
     }
   },
-  i18n: messages,
-  computed: {
-    trainings() {
-      var trainings = this.$store.state.training.all;
-      return trainings || [];
-    },
-    noData() {
-      return this.trainings.length === 0;
-    },
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.year, to.params.month);
-      next();
+  setup(props) {
+    const trainings = useTrainingStore();
+
+    onMounted(() => {
+      trainings.load.run({ ...props }, true);
     });
+
+    watch(() => [ props.year, props.month ], () => {
+      trainings.load.run({ ...props }, true);
+    });
+
+    return {
+      trainings: reactive(trainings)
+    };
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.year, to.params.month);
-    next();
+  components: {
+    Calendar, Spinner, Alert
   },
+  i18n: messages,
   methods: {
-    fetchData(year, month) {
-      this.$store.dispatch('training/browse', {
-        year: year,
-        month: month
-      });
-    },
-    prevYear() {
-      this.$router.push({
+    async prevYear() {
+      await this.$router.push({
         name: 'trainings.browse',
         params: {
           year: this.year - 1,
@@ -80,8 +77,8 @@ export default {
         }
       });
     },
-    nextYear() {
-      this.$router.push({
+    async nextYear() {
+      await this.$router.push({
         name: 'trainings.browse',
         params: {
           year: this.year + 1,
@@ -89,14 +86,14 @@ export default {
         }
       });
     },
-    prevMonth() {
-      var year = this.year;
-      var month = this.month - 1;
+    async prevMonth() {
+      let year = this.year;
+      let month = this.month - 1;
       if (month === 0) {
         year = this.year - 1;
         month = 12;
       }
-      this.$router.push({
+      await this.$router.push({
         name: 'trainings.browse',
         params: {
           year,
@@ -104,14 +101,14 @@ export default {
         }
       });
     },
-    nextMonth() {
-      var year = this.year;
-      var month = this.month + 1;
+    async nextMonth() {
+      let year = this.year;
+      let month = this.month + 1;
       if (month === 13) {
         year = this.year + 1;
         month = 1;
       }
-      this.$router.push({
+      await this.$router.push({
         name: 'trainings.browse',
         params: {
           year,
