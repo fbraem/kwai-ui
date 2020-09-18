@@ -45,13 +45,15 @@ export default function createTrainingService() {
    * Read the training.
    * @param {int} id
    */
-  const read = useAPI(async(id) => {
+  const read = useAPI(async(id, { cache = true } = {}) => {
     // Don't read it again
-    if (current.value?.id === id) return current;
+    if (cache && current.value?.id === id) return current;
 
     // See if it was already loaded
-    current.value = all.value.find((c) => c.id === id);
-    if (current.value) return current;
+    if (cache) {
+      current.value = all.value.find((c) => c.id === id);
+      if (current.value) return current;
+    }
 
     const json = await http_trainings_api
       .url(`/${id}`)
@@ -89,12 +91,32 @@ export default function createTrainingService() {
       })
     };
 
-    const res = http_trainings_api
+    const res = await http_trainings_api
       .json(json)
       .post()
       .json()
     ;
     return res.data;
+  });
+
+  const savePresences = useAPI(async(presences) => {
+    const transformer = new Transformer();
+    const json = {
+      data: presences.map(
+        (presence) => transformer.serialize(presence)['data']
+      )
+    };
+
+    const res = await http_trainings_api
+      .url(`/${current.value.id}/presences`)
+      .json(json)
+      .post()
+      .json()
+    ;
+    const training = transformer.deserialize(Training, res);
+    if (current.value) {
+      current.value.presences = training.presences;
+    }
   });
 
   /**
@@ -113,7 +135,8 @@ export default function createTrainingService() {
     read,
     reset,
     save,
-    saveAll
+    saveAll,
+    savePresences
   };
 };
 
