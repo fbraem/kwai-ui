@@ -40,7 +40,7 @@ const STATUS_SAVING = 1;
 const STATUS_SUCCESS = 2;
 const STATUS_FAILED = 3;
 
-import { http } from '@/js/http';
+import {http_auth} from '@/js/http';
 
 export default {
   props: {
@@ -81,11 +81,11 @@ export default {
       this.uploadedFiles = [];
       this.uploadError = null;
     },
-    save(formData) {
+    save(fileObject) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
-      this.upload(formData)
+      this.upload(fileObject)
         .then(x => {
           this.uploadedFiles = [].concat(x);
           this.currentStatus = STATUS_SUCCESS;
@@ -96,24 +96,18 @@ export default {
         });
     },
     filesChange(fieldName, fileList) {
-      // handle file changes
-      const formData = new FormData();
-
       if (!fileList.length) return;
 
-      // append the files to FormData
-      Array.from(Array(fileList.length).keys())
-        .map(x => {
-          formData.append(fieldName, fileList[x], fileList[x].name);
-        });
-
-      // save it
-      this.save(formData);
+      // TODO: For now, we save only one file...
+      this.save({
+        [fieldName]: fileList[0]
+      });
     },
-    async upload(formData) {
+    async upload(fileObject) {
       let data = null;
       try {
-        data = await http.post(this.url, { body: formData }).json();
+        data = await http_auth.url(this.url).formData(fileObject).post().json();
+        console.log(data);
         this.currentStatus = STATUS_SUCCESS;
       } catch (error) {
         this.uploadError = error;
