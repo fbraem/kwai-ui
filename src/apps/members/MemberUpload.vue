@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <upload url="/api/sport/judo/members/upload" field="csv" />
+    <upload url="sport/judo/members/upload" field="csv" />
   </div>
 </template>
 
