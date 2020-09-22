@@ -1,12 +1,13 @@
 <template>
   <div class="container mx-auto p-4">
     <Spinner
-       v-if="$wait.is('members.browse')"
+       v-if="members.load.isRunning"
        class="text-center"
-    ></Spinner>
-    <div v-else-if="members">
+    >
+    </Spinner>
+    <div v-else>
       <Alert
-        v-if="members.length == 0"
+        v-if="count === 0"
         type="warning"
       >
         {{ $t('no_members') }}
@@ -61,15 +62,34 @@ import jump from 'jump.js';
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 import MemberListItem from './MemberListItem';
+import {useMemberStore} from '@/apps/members/composables/useMembers';
+import {reactive, computed, onMounted} from '@vue/composition-api';
 
 /**
  * Page for browsing a member
  */
 export default {
-  props: {
-    state: {
-      type: Object
-    }
+  setup() {
+    const members = useMemberStore();
+    const count = computed(() => members.all.length);
+
+    const sortedMembers = computed(() => {
+      const result = {};
+      members.all.forEach((e) => {
+        const firstChar = e.person.lastname.charAt(0).toUpperCase();
+        if (!result[firstChar]) result[firstChar] = [];
+        result[firstChar].push(e);
+      });
+      return result;
+    });
+
+    onMounted(() => members.load.run());
+
+    return {
+      members: reactive(members),
+      count,
+      sortedMembers
+    };
   },
   components: {
     Spinner,
@@ -77,46 +97,7 @@ export default {
     Alert
   },
   i18n: messages,
-  computed: {
-    members() {
-      return this.$store.state.member.all;
-    },
-    count() {
-      if (this.members) {
-        return this.members.length;
-      }
-      return 0;
-    },
-    sortedMembers() {
-      var result = {};
-      if (this.members) {
-        this.members.forEach((e) => {
-          var firstChar = e.person.lastname.charAt(0).toUpperCase();
-          if (!result[firstChar]) result[firstChar] = [];
-          result[firstChar].push(e);
-        });
-      }
-      return result;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
   methods: {
-    fetchData() {
-      if (this.members === null) {
-        this.$store.dispatch('member/browse', {
-          // active: true
-        });
-      }
-    },
     jumpIt(target) {
       jump(target);
     }
