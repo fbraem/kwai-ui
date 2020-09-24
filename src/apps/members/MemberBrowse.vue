@@ -1,55 +1,73 @@
 <template>
-  <div class="container mx-auto p-4">
-    <Spinner
-       v-if="members.load.isRunning"
-       class="text-center"
-    >
-    </Spinner>
-    <div v-else>
-      <Alert
-        v-if="count === 0"
-        type="warning"
-      >
-        {{ $t('no_members') }}
-      </Alert>
-      <div
-        class="flex flex-wrap items-center justify-center"
-        v-else
-      >
-        <div
-          v-for="(group, letter) in sortedMembers"
-          class="mr-2"
-          :key="letter"
-        >
-          <span class="badge bg-red-700 cursor-pointer">
-            <a
-              class="no-underline hover:no-underline text-red-300"
-              @click="jumpIt('#letter-' + letter)">
-              {{letter}}
-            </a>
-          </span>
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('members')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconButton
+            v-if="canUpload"
+            class="bg-primary text-primary_light"
+            icon="fas fa-file-import"
+            :content="$t('upload')"
+            :route="{ name: 'members.upload' }"
+          />
         </div>
       </div>
-      <div style="column-count: 3; column-gap: 30px;margin-top: 30px;">
-        <div
-          v-for="(group, letter) in sortedMembers"
-          :key="letter"
+    </PageHeader>
+    <PageSection>
+      <Spinner
+         v-if="members.load.isRunning"
+         class="text-center"
+      >
+      </Spinner>
+      <div v-else>
+        <Alert
+          v-if="count === 0"
+          type="warning"
         >
-          <h3 class="border-l-4 border-solid pl-2"
-            :id="'letter-' + letter"
+          {{ $t('no_members') }}
+        </Alert>
+        <div
+          class="flex flex-wrap items-center justify-center"
+          v-else
+        >
+          <div
+            v-for="(group, letter) in sortedMembers"
+            class="mr-2"
+            :key="letter"
           >
-            {{ letter }}
-          </h3>
-          <ul>
-            <MemberListItem
-              v-for="member in group"
-              :member="member"
-              :key="member.id"
-            />
-          </ul>
+            <span class="badge bg-red-700 cursor-pointer">
+              <a
+                class="no-underline hover:no-underline text-red-300"
+                @click="jumpIt('#letter-' + letter)">
+                {{letter}}
+              </a>
+            </span>
+          </div>
+        </div>
+        <div style="column-count: 3; column-gap: 30px;margin-top: 30px;">
+          <div
+            v-for="(group, letter) in sortedMembers"
+            :key="letter"
+          >
+            <h3 class="border-l-4 border-solid pl-2"
+              :id="'letter-' + letter"
+            >
+              {{ letter }}
+            </h3>
+            <ul>
+              <MemberListItem
+                v-for="member in group"
+                :member="member"
+                :key="member.id"
+              />
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </PageSection>
   </div>
 </template>
 
@@ -63,7 +81,13 @@ import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 import MemberListItem from './MemberListItem';
 import {useMemberStore} from '@/apps/members/composables/useMembers';
-import {reactive, computed, onMounted} from '@vue/composition-api';
+// eslint-disable-next-line max-len
+import {reactive, computed, onMounted, getCurrentInstance} from '@vue/composition-api';
+import Member from '@/models/Member';
+import PageHeader from '@/components/PageHeader';
+import PageSection from '@/components/PageSection';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import IconButton from '@/components/IconButton';
 
 /**
  * Page for browsing a member
@@ -82,19 +106,28 @@ export default {
       });
       return result;
     });
-
     onMounted(() => members.load.run());
+
+    const vm = getCurrentInstance();
+    const canUpload = computed(() => {
+      return vm.$can('upload', Member.type());
+    });
 
     return {
       members: reactive(members),
       count,
-      sortedMembers
+      sortedMembers,
+      canUpload
     };
   },
   components: {
+    IconButton,
+    ApplicationHeader,
     Spinner,
     MemberListItem,
-    Alert
+    Alert,
+    PageHeader,
+    PageSection
   },
   i18n: messages,
   methods: {

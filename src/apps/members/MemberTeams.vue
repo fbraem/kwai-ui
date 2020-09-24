@@ -40,21 +40,19 @@
 </template>
 
 <script>
+import {useMemberStore} from '@/apps/members/composables/useMembers';
+import {computed, onMounted} from '@vue/composition-api';
+
 export default {
-  computed: {
-    member() {
-      return this.$store.state.member.active;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
+  setup() {
+    const members = useMemberStore();
+
+    const member = computed(() => members.current);
+    onMounted(() => members.loadTeams.run(member.value.id));
+
+    return {
+      member
+    };
   },
   methods: {
     fetchData(params) {

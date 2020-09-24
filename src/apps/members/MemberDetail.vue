@@ -115,25 +115,32 @@
 import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {useMemberStore} from '@/apps/members/composables/useMembers';
+import {computed} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const members = useMemberStore();
+
+    const member = computed(() => members.current);
+    const licenseDateClass = computed(() => {
+      return {
+        'text-red-700': member.value.license_ended,
+        'font-bold': member.value.license_ended
+      };
+    });
+    const flagClass = computed(() => {
+      return 'flag-icon-' + member.value.person.nationality.iso_2.toLowerCase();
+    });
+    return {
+      member,
+      licenseDateClass,
+      flagClass
+    };
+  },
   components: {
     Alert
   },
   i18n: messages,
-  computed: {
-    member() {
-      return this.$store.state.member.active;
-    },
-    licenseDateClass() {
-      return {
-        'text-red-700': this.member.license_ended,
-        'font-bold': this.member.license_ended
-      };
-    },
-    flagClass() {
-      return 'flag-icon-' + this.member.person.nationality.iso_2.toLowerCase();
-    },
-  }
 };
 </script>

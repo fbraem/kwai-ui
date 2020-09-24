@@ -1,6 +1,11 @@
 <template>
-  <div class="container mx-auto">
-    <upload url="sport/judo/members/upload" field="csv" />
+  <div>
+    <PageHeader>
+      <ApplicationHeader :content="$t('upload')" />
+    </PageHeader>
+    <div class="container mx-auto">
+      <upload url="sport/judo/members/upload" field="csv" />
+    </div>
   </div>
 </template>
 
@@ -8,6 +13,8 @@
 import messages from './lang';
 
 import Upload from '@/components/Upload';
+import PageHeader from '@/components/PageHeader';
+import ApplicationHeader from '@/components/ApplicationHeader';
 
 /**
  * Page for uploading members file
@@ -15,7 +22,9 @@ import Upload from '@/components/Upload';
 export default {
   i18n: messages,
   components: {
-    Upload
+    ApplicationHeader,
+    Upload,
+    PageHeader
   }
 };
 </script>

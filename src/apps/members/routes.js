@@ -1,14 +1,5 @@
 import App from './App';
 
-const MembersHeader = () => import(
-  /* webpackChunkName: "member_admin" */
-  '@/apps/members/TheMembersHeader.vue'
-);
-
-const MemberHeader = () => import(
-  /* webpackChunkName: "member_admin" */
-  '@/apps/members/TheMemberHeader.vue'
-);
 const MemberRead = () => import(
   /* webpackChunkName: "member_admin" */
   '@/apps/members/MemberRead.vue'
@@ -24,10 +15,6 @@ const NotImplemented = () => import(
 const MemberTeams = () => import(
   /* webpackChunkName: "member_admin" */
   '@/apps/members/MemberTeams.vue'
-);
-const MemberUploadHeader = () => import(
-  /* webpackChunkName: "member_admin" */
-  '@/apps/members/TheMemberUploadHeader.vue'
 );
 const MemberUpload = () => import(
   /* webpackChunkName: "member_admin" */
@@ -45,10 +32,8 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: MemberHeader,
-          default: MemberRead
-        },
+        component: MemberRead,
+        props: true,
         children: [
           {
             path: 'teams',
@@ -82,18 +67,12 @@ export default [
       },
       {
         path: 'upload',
-        components: {
-          hero: MemberUploadHeader,
-          default: MemberUpload
-        },
+        component: MemberUpload,
         name: 'members.upload',
       },
       {
         path: '',
-        components: {
-          hero: MembersHeader,
-          default: MemberBrowse
-        },
+        component: MemberBrowse,
         name: 'members.browse',
       },
     ]
