@@ -59,6 +59,25 @@ export default function createMemberService() {
     return current;
   });
 
+  const loadTeams = useAPI(async(id) => {
+    if (!current.value) {
+      current.value = all.value.find(
+        (m) => m.id === id
+      );
+    }
+    if (current.value?.id === id) {
+      if (current.value.teams) {
+        return current;
+      }
+    }
+
+    const api = http_members_api.query({ include: 'teams' });
+    const json = await api.url(`/${id}`).get().json();
+
+    current.value = (new Transformer()).deserialize(Member, json);
+    return current;
+  });
+
   /**
    * Clear all members
    */
@@ -73,6 +92,7 @@ export default function createMemberService() {
     current: computed(() => current.value),
     load,
     read,
+    loadTeams,
     reset
   };
 };
