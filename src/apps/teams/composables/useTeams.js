@@ -3,6 +3,7 @@ import { http_api } from '@/js/http';
 import Team from '@/models/Team';
 import Transformer from '@/js/jsonapi/Transformer';
 import { useAPI } from '@/js/useAPI';
+import Member from '@/models/Member';
 
 const http_teams_api = http_api.url('teams');
 
@@ -47,21 +48,6 @@ export default function createTeamService() {
     return current;
   });
 
-  const loadMembers = useAPI(async(id) => {
-    if (current.value?.id === id && current.value.members) {
-      return;
-    }
-    current.value = all.value.find((t) => t.id === id);
-    if (current.value && current.value.members) return current;
-
-    const api = http_teams_api.query({ include: 'members' });
-
-    const json = await api.url(`/${id}`).get().json();
-
-    current.value = (new Transformer()).deserialize(Team, json);
-    return current;
-  });
-
   /**
    * Save the team
    * @param team
@@ -91,6 +77,40 @@ export default function createTeamService() {
   }
 
   /**
+   * Load members of the team
+   */
+  const loadMembers = useAPI(async(id) => {
+    if (current.value?.id === id && current.value.members) {
+      return;
+    }
+    current.value = all.value.find((t) => t.id === id);
+    if (current.value && current.value.members) return current;
+
+    const api = http_teams_api.query({ include: 'members' });
+
+    const json = await api.url(`/${id}`).get().json();
+
+    current.value = (new Transformer()).deserialize(Team, json);
+    return current;
+  });
+
+  const removeMember = useAPI(async(id, member) => {
+    const transformer = new Transformer();
+
+    // TODO: For now we wrap member in an array, because TeamMembersDeleteAction
+    // TODO: expects an array of members...
+    const json = await http_teams_api
+      .url(`/${id}/members`)
+      .json({ data: [transformer.serialize(member).data] })
+      .delete()
+      .json()
+    ;
+    current.value.members = transformer.deserialize(Member, json);
+
+    return current;
+  });
+
+  /**
    * Clear cached teams
    */
   function reset() {
@@ -104,8 +124,9 @@ export default function createTeamService() {
     current: computed(() => current.value),
     load,
     read,
-    loadMembers,
     save,
+    loadMembers,
+    removeMember,
     asOptions: computed(() => asOptions()),
     reset
   };
