@@ -13,6 +13,8 @@ const http_teams_api = http_api.url('teams');
 export default function createTeamService() {
   const all = ref([]);
   const current = ref();
+  // Members that can be added to the current team
+  const availableMembers = ref([]);
 
   /**
    * Load all teams
@@ -106,7 +108,49 @@ export default function createTeamService() {
       .json()
     ;
     current.value.members = transformer.deserialize(Member, json);
+    current.value.members_count = current.value.members.length;
 
+    return current;
+  });
+
+  const loadAvailableMembers = useAPI(async(
+    id,
+    { start_age = null, end_age = null, gender = null }
+  ) => {
+    availableMembers.value = [];
+    const transformer = new Transformer();
+
+    let api = http_teams_api.url(`/${id}/available_members`);
+    if (start_age) {
+      api = api.query({ 'filter[start_age]': '>=' + start_age});
+    }
+    if (end_age) {
+      api = api.query({ 'filter[end_age]': '<=' + end_age});
+    }
+    if (gender) {
+      api = api.query({ 'filter[gender]': gender});
+    }
+    const json = await api.get().json();
+    availableMembers.value = transformer.deserialize(Member, json);
+    return availableMembers;
+  });
+
+  const addMembers = useAPI(async(id, members) => {
+    const transformer = new Transformer();
+
+    const data = {
+      data: members.map((m) => transformer.serialize(m).data)
+    };
+
+    const json = await http_teams_api
+      .url(`/${id}/members`)
+      .json(data)
+      .post()
+      .json()
+    ;
+
+    current.value.members = transformer.deserialize(Member, json);
+    current.value.members_count = current.value.members.length;
     return current;
   });
 
@@ -116,6 +160,7 @@ export default function createTeamService() {
   function reset() {
     all.value = [];
     current.value = null;
+    availableMembers.value = [];
   }
 
   return {
@@ -127,6 +172,9 @@ export default function createTeamService() {
     save,
     loadMembers,
     removeMember,
+    addMembers,
+    loadAvailableMembers,
+    availableMembers: computed(() => availableMembers.value),
     asOptions: computed(() => asOptions()),
     reset
   };

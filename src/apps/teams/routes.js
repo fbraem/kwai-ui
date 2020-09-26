@@ -16,6 +16,10 @@ const TeamMembers = () => import(
   /* webpackChunkName: "teams_chunk" */
   './TeamMembers.vue'
 );
+const AddMembers = () => import(
+  /* webpackChunkName: "teams_admin_chunk" */
+  './AddMembers.vue'
+);
 const TeamTournaments = () => import(
   /* webpackChunkName: "teams_chunk" */
   './NotImplemented.vue'
@@ -72,6 +76,16 @@ export default [
               team_information: TeamTrainings
             },
             name: 'team.trainings'
+          },
+          {
+            path: 'add_members',
+            components: {
+              team_information: AddMembers
+            },
+            props: {
+              team_information: true
+            },
+            name: 'team.add_members'
           },
           {
             path: '',
