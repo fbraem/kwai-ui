@@ -10,7 +10,7 @@
             v-if="canCreate"
             class="bg-primary text-primary_light"
             icon="fas fa-plus"
-            :content="$t('create')"
+            :content="$t('create_category')"
             :route="{ name: 'team_categories.create' }"
           />
         </div>
