@@ -4,12 +4,12 @@
     <ApplicationHeader content="Leden Toevoegen">
     </ApplicationHeader>
     <p
-      v-if="team.team_type"
+      v-if="team.team_category"
       class="text-sm"
     >
       {{ $t('add_members_info') }}
     </p>
-    <PageSection v-if="!team.team_type">
+    <PageSection v-if="!team.team_category">
       <HeaderLine content="Filter" />
       <FormulateForm
         name="addMember"
@@ -61,7 +61,7 @@
     </PageSection>
     <PageSection>
       <p
-        v-if="! team.team_type"
+        v-if="! team.team_category"
         class="text-sm"
       >
         {{ $t('use_filter') }}
