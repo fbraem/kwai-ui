@@ -28,17 +28,6 @@
     >
       {{ $t('no_members') }}
     </Alert>
-    <div
-      v-if="hasMembers"
-      class="mb-4"
-    >
-      <a
-        v-if="team && $can('attachMember', team)"
-        class="icon-button text-gray-700 hover:bg-gray-300"
-      >
-        <i class="fas fa-plus"></i>
-      </a>
-    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row-dense gap-4 w-full">
       <div
         v-for="member in team.members"
@@ -62,22 +51,18 @@
         </div>
       </div>
     </div>
-    <div>
-      <IconLink
+    <div class="mt-3">
+      <IconButton
         v-if="team && $can('attachMember', team)"
-        icon="fas fa-plus"
+        icon="fa fa-plus"
+        class="bg-primary hover:bg-primary_dark text-primary_light"
+        :content="$t('add')"
         :route="{ name: 'team.add_members', params: { id: team.id }}"
       >
-      </IconLink>
+      </IconButton>
     </div>
   </div>
 </template>
-
-<style scoped>
-.checkbox_cell {
-  @apply align-middle !important;
-}
-</style>
 
 <script>
 import messages from './lang';
@@ -89,6 +74,7 @@ import {useTeamStore} from '@/apps/teams/composables/useTeams';
 import {reactive, computed} from '@vue/composition-api';
 import MemberSummary from '@/apps/members/components/MemberSummary';
 import moment from 'moment';
+import IconButton from '@/components/IconButton';
 import IconLink from '@/components/IconLink';
 
 export default {
@@ -121,6 +107,7 @@ export default {
     };
   },
   components: {
+    IconButton,
     IconLink,
     MemberSummary,
     HeaderLine,
