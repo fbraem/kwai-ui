@@ -25,16 +25,18 @@ module.exports = (env, argv) => {
 
   return {
     watch: isDev,
+    watchOptions: {
+      poll: true
+    },
     devtool: isDev ? 'eval-cheap-source-map' : false,
     mode,
     entry: {
-      site: resolve('src/site/main.js'),
+      site: resolve('src/site/main.js')
     },
     output: {
-      path: path.join(__dirname, 'build', 'build'),
+      path: path.join(__dirname, 'build'),
       filename: '[name].[chunkhash].js',
-      chunkFilename: '[name].[chunkhash].js',
-      publicPath: '/build/'
+      chunkFilename: '[name].[chunkhash].js'
     },
     optimization: {
       runtimeChunk: 'single',
@@ -174,7 +176,9 @@ module.exports = (env, argv) => {
       mainFiles: [ 'index' ],
     },
     plugins: [
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({
+        cleanStaleWebpackAssets: false
+      }),
       new VueLoaderPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css'
@@ -186,7 +190,7 @@ module.exports = (env, argv) => {
         ]
       }),
       new HtmlPlugin({
-        filename: '../index.html',
+        filename: 'index.html',
         template: './src/index.template.html'
       }),
       new MinifyPlugin(),
