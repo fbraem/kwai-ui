@@ -36,6 +36,10 @@ export default [
           hero: NewsStoryHeader,
           default: NewsRead
         },
+        props: {
+          hero: true,
+          default: true
+        },
         name: 'news.story',
       },
       {
@@ -44,6 +48,10 @@ export default [
           hero: NewsCategoryHeader,
           default: NewsBrowse
         },
+        props: {
+          hero: true,
+          default: true
+        },
         name: 'news.category',
       },
       {
@@ -51,6 +59,10 @@ export default [
         components: {
           hero: NewsArchiveHeader,
           default: NewsBrowse
+        },
+        props: {
+          hero: true,
+          default: true
         },
         name: 'news.archive',
       },
