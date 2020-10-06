@@ -11,10 +11,13 @@
 </template>
 
 <script>
-import store from './store';
 import CategoryCards from '@/apps/categories/components/CategoryCards';
+import {provideNewsStore} from '@/apps/news/composables/useNews';
 
 export default {
+  setup() {
+    provideNewsStore();
+  },
   components: {
     CategoryCards
   },
@@ -24,26 +27,6 @@ export default {
         app => app.news
       );
     }
-  },
-  beforeCreate() {
-    this.$store.registerModule('news', store);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('news/reset');
-    this.$store.unregisterModule('news');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('news/setCurrent', to.meta.active);
-      }
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'author.news.update') {
-      to.meta.active = this.$store.state.news.current;
-    }
-    next();
   }
 };
 </script>

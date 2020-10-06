@@ -38,25 +38,49 @@ import messages from './lang';
 import CoverLink from '@/components/CoverLink';
 import HeaderLine from '@/components/HeaderLine';
 import Badge from '@/components/Badge';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, onMounted, computed} from '@vue/composition-api';
+import moment from 'moment';
 
 export default {
+  setup() {
+    const news = useNewsStore();
+
+    onMounted(() => {
+      news.loadArchive.run();
+    });
+
+    const archive = computed(() => {
+      let archive = {};
+      news.archive.forEach((element) => {
+        if (!archive[element.year]) {
+          archive[element.year] = [];
+        }
+        archive[element.year].push({
+          monthName: moment.months()[element.month - 1],
+          month: element.month,
+          year: element.year,
+          count: element.count,
+        });
+      });
+      return archive;
+    });
+
+    const archiveYears = computed(() => {
+      return Object.keys(archive.value).reverse();
+    });
+
+    return {
+      news: reactive(news),
+      archive,
+      archiveYears
+    };
+  },
   components: {
     Badge,
     HeaderLine,
     CoverLink
   },
-  i18n: messages,
-  computed: {
-    archiveYears() {
-      const archive = this.$store.state.news.archive;
-      return Object.keys(archive).reverse();
-    },
-    archive() {
-      return this.$store.state.news.archive;
-    }
-  },
-  created() {
-    this.$store.dispatch('news/loadArchive');
-  }
+  i18n: messages
 };
 </script>

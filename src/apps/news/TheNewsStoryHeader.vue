@@ -83,15 +83,6 @@
         />
       </div>
     </div>
-    <AreYouSure
-      :show="showAreYouSure"
-      @close="showAreYouSure = false;"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="deleteStory"
-    >
-    {{ $t('are_you_sure') }}
-    </AreYouSure>
   </div>
 </template>
 
@@ -130,24 +121,25 @@
 <script>
 import messages from './lang';
 
-import AreYouSure from '@/components/AreYouSure';
 import IconButtons from '@/components/IconButtons';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, computed} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const news = useNewsStore();
+
+    const story = computed(() => news.current );
+    return {
+      news: reactive(news),
+      story
+    };
+  },
   components: {
-    AreYouSure,
     IconButtons
   },
   i18n: messages,
-  data() {
-    return {
-      showAreYouSure: false
-    };
-  },
   computed: {
-    story() {
-      return this.$store.state.news.current;
-    },
     picture() {
       if (this.story) {
         return this.story.overview_picture;
@@ -175,26 +167,7 @@ export default {
           }
         });
       }
-      if (this.$can('delete', this.story)) {
-        buttons.push({
-          icon: 'fas fa-trash',
-          method: this.showModal
-        });
-      }
       return buttons;
-    }
-  },
-  methods: {
-    deleteStory() {
-      this.showAreYouSure = false;
-      this.$store.dispatch('news/remove', {
-        story: this.story
-      }).then(() => {
-        this.$router.push({ name: 'news' });
-      });
-    },
-    showModal() {
-      this.showAreYouSure = true;
     }
   }
 };

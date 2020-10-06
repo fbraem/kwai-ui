@@ -63,46 +63,35 @@ import config from 'config';
 import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import Spinner from '@/components/Spinner';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, computed, watch, onMounted} from '@vue/composition-api';
 
 export default {
-  components: {
-    Page,
-    Sidebar,
-    Spinner
-  },
-  i18n: messages,
-  computed: {
-    story() {
-      return this.$store.state.news.current;
-    },
-    facebookUrl() {
-      return config.site + '/facebook/news/' + this.story.id;
-    },
-    error() {
-      return this.$store.state.news.error;
+  props: {
+    id: {
+      type: String,
+      required: true
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
+  setup(props) {
+    const news = useNewsStore();
+
+    onMounted(() => {
+      news.read.run(props.id);
     });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData(params) {
-      try {
-        this.$store.dispatch('news/read', {
-          id: params.id
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    copyText(text) {
+    watch(() => props.id, (newValue) => {
+      news.read.run(newValue);
+    });
+
+    const story = computed(() => {
+      return news.current;
+    });
+
+    const facebookUrl = computed(() => {
+      return config.site + '/facebook/news/' + this.story.id;
+    });
+
+    const copyText = (text) => {
       const cb = document.getElementById('cb');
       cb.value = text;
       cb.style.display = 'block';
@@ -114,7 +103,20 @@ export default {
         text: 'De link om te delen op Facebook is in de clipboard geplaatst!',
         duration: 10000
       });
-    }
-  }
+    };
+
+    return {
+      news: reactive(news),
+      story,
+      facebookUrl,
+      copyText
+    };
+  },
+  components: {
+    Page,
+    Sidebar,
+    Spinner
+  },
+  i18n: messages
 };
 </script>

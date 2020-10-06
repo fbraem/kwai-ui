@@ -10,13 +10,13 @@
         />
       </div>
       <div class="flex flex-wrap justify-center mb-4">
-        <Spinner v-if="$wait.is('news.load')" />
+        <Spinner v-if="news.load.isRunning" />
         <div
-          v-for="story in stories"
+          v-for="story in news.all"
           :key="story.id"
           class="p-2 w-full"
         >
-          <NewsCard :story="story" />
+          <NewsCard :story="story" :application="story.application" />
         </div>
       </div>
       <div class="flex justify-center mb-4">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div
-      v-if="! $wait.is('news.load') && newsCount === 0"
+      v-if="!news.load.isRunning && news.fullCount === 0"
     >
       <Alert type="danger">
         {{ $t('no_news') }}
@@ -50,8 +50,54 @@ import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, onMounted} from '@vue/composition-api';
 
 export default {
+  props: {
+    application: {
+      type: String
+    },
+    year: {
+      type: Number
+    },
+    month: {
+      type: Number
+    }
+  },
+  setup(props) {
+    const news = useNewsStore();
+    const paginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 10
+    });
+
+    onMounted(() => {
+      news.load.run({
+        application: props.application,
+        year: props.year,
+        month: props.month
+      });
+      paginator.count = news.fullCount;
+    });
+
+    const readPage = async(offset) => {
+      news.load.run({
+        offset: offset,
+        year: this.year,
+        month: this.month,
+        application: this.application,
+      });
+      paginator.offset = offset;
+    };
+
+    return {
+      news: reactive(news),
+      paginator,
+      readPage
+    };
+  },
   i18n: messages,
   components: {
     Page,
@@ -60,60 +106,6 @@ export default {
     Spinner,
     Alert,
     Sidebar
-  },
-  data() {
-    return {
-      offset: 0,
-      applicationId: null
-    };
-  },
-  computed: {
-    paginator() {
-      return {
-        offset: this.offset,
-        count: this.$store.state.news.count,
-        limit: 10
-      };
-    },
-    stories() {
-      return this.$store.state.news.cache[this.offset];
-    },
-    newsCount() {
-      return this.$store.state.news.count;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchData(params) {
-      if (params.application) {
-        this.applicationId = params.application;
-      }
-      await this.$store.dispatch('news/load', {
-        year: params.year,
-        month: params.month,
-        application: params.application,
-        promoted: params.promoted
-      });
-    },
-    async readPage(offset) {
-      await this.$store.dispatch('news/load', {
-        offset: offset,
-        year: this.year,
-        month: this.month,
-        application: this.applicationId,
-        promoted: this.promoted
-      });
-      this.offset = offset;
-    }
   }
 };
 </script>
