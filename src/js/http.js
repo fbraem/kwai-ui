@@ -4,7 +4,11 @@ import config from 'config';
 
 import store from '@/site/store';
 
-export const http = wretch(config.api);
+export const http = wretch(config.api, {
+  options: {
+    mode: 'cors'
+  }
+});
 
 export const http_auth = http.defer(w => {
   const token = store.state.authentication.access_token;
