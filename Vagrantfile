@@ -21,6 +21,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder kwai_config['custom'], "/vagrant_custom"
 
   config.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
       curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
       apt-get install -y nodejs
       node -v
