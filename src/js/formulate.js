@@ -7,6 +7,8 @@ import KwaiLabel from '@/components/forms/KwaiLabel';
 Vue.component('KwaiLabel', KwaiLabel);
 import KwaiAutoComplete from '@/components/forms/KwaiAutoComplete';
 Vue.component('KwaiAutoComplete', KwaiAutoComplete);
+import KwaiMultiSelect from '@/components/forms/KwaiMultiSelect';
+Vue.component('KwaiMultiSelect', KwaiMultiSelect);
 
 import moment from 'moment';
 
@@ -51,6 +53,10 @@ export default function init() {
       kwaiautocomplete: {
         classification: 'text',
         component: 'KwaiAutoComplete'
+      },
+      kwaimulti: {
+        classification: 'select',
+        component: 'KwaiMultiSelect'
       }
     },
     classes: {
@@ -78,6 +84,8 @@ export default function init() {
         case 'submit':
           // eslint-disable-next-line max-len
           return 'py-3 px-4 rounded focus:outline-none hover:no-underline disabled:opacity-50 disabled:cursor-not-allowed';
+        case 'select':
+          return '';
         default:
           // eslint-disable-next-line max-len
           return 'appearance-once block w-full bg-gray-200 border rounded py-3 px-4 leading-thight focus:outline-none focus:shadow-outline';
