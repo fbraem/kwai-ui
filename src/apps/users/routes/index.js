@@ -83,6 +83,4 @@ const routes = [
   },
 ];
 
-// routes = routes.concat(abilitiesRouter);
-
 export default routes;
