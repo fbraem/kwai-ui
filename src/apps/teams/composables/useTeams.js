@@ -83,7 +83,7 @@ export default function createTeamService() {
    */
   const loadMembers = useAPI(async(id) => {
     if (current.value?.id === id && current.value.members) {
-      return;
+      return current;
     }
     current.value = all.value.find((t) => t.id === id);
     if (current.value && current.value.members) return current;
