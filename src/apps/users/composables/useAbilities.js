@@ -48,7 +48,6 @@ export default function createAbilityService() {
 
     let api = http_abilities_api;
     if (ability.id) api = api.url(`/${ability.id}`);
-    console.log(ability);
     api = api.json(transformer.serialize(ability));
 
     const json = await (ability.id ? api.patch() : api.post()).json();
