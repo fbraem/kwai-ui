@@ -50,8 +50,10 @@ class JSONAPI {
     if (app.length > 0) {
       segments.push(app);
     }
-    if (source.namespace().length > 0) {
-      segments = segments.concat(source.namespace());
+    if (source.namespace) {
+      if (source.namespace().length > 0) {
+        segments = segments.concat(source.namespace());
+      }
     }
     if (segments.length > 0) {
       this.base_uri.segment(segments);
