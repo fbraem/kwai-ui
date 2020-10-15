@@ -1,159 +1,178 @@
 <template>
   <div class="mt-6 container mx-auto">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
+    <FormulateForm
+      name="ability"
+      v-model="form"
       @submit="submit"
+      @submit-raw="checkValidation"
+      class="w-full"
     >
-      <KwaiField
-        name="name"
-        :label="$t('rules.form.name.label')"
+      <KwaiFieldset
+       title="Toelating"
       >
-        <KwaiInputText :placeholder="$t('rules.form.name.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="remark"
-        :label="$t('rules.form.remark.label')"
-      >
-        <KwaiTextarea
-          :rows="5"
-          :placeholder="$t('rules.form.remark.placeholder')"
-        />
-      </KwaiField>
-      <KwaiField
-        name="rules"
-        :label="$t('rules.form.rules.label')"
-      >
-        <multiselect
-          :options="rules"
-          group-values="actions"
-          group-label="subject"
-          label="name"
-          track-by="id"
-          :multiple="true"
-          :close-on-select="false"
-          :selectLabel="$t('rules.form.rules.selectLabel')"
-          :deselectLabel="$t('rules.form.rules.deselectLabel')"
-        />
-      </KwaiField>
-    </KwaiForm>
+        <div class="w-full">
+          <FormulateInput
+            name="name"
+            :label="$t('rules.form.name.label')"
+            :required="true"
+            :placeholder="$t('rules.form.name.placeholder')"
+            validation="required"
+            :validation-messages="{
+              required: 'Dit veld is verplicht in te vullen'
+            }"
+          >
+          </FormulateInput>
+        </div>
+        <div class="w-full">
+          <FormulateInput
+            type="kwaimulti"
+            name="rules"
+            :options="rules"
+            :label="$t('rules.form.rules.label')"
+            group-values="actions"
+            group-label="subject"
+            multi-label="name"
+            track-by="id"
+            :multiple="true"
+            :close-on-select="false"
+            :selectLabel="$t('rules.form.rules.selectLabel')"
+            :deselectLabel="$t('rules.form.rules.deselectLabel')"
+            validation="required"
+            :validation-messages="{
+              required: 'Dit veld is verplicht in te vullen'
+            }"
+          >
+          </FormulateInput>
+        </div>
+        <div class="w-full">
+          <FormulateInput
+            type="textarea"
+            name="remark"
+            :label="$t('rules.form.remark.label')"
+            :placeholder="$t('rules.form.remark.placeholder')"
+            :rows="5"
+          />
+        </div>
+        <Alert v-if="hasFormErrors">
+          <FormulateErrors />
+        </Alert>
+        <div class="flex justify-end mt-3">
+          <FormulateInput
+            type="submit"
+            :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
+          >
+            <i
+              v-if="abilityStore.save.isRunning"
+              class="fas fa-spinner fa-spin mr-2"
+            ></i>
+            <i v-else class="fas fa-save mr-2"></i>
+            {{ $t('save') }}
+          </FormulateInput>
+        </div>
+      </KwaiFieldset>
+    </FormulateForm>
   </div>
 </template>
 
 <script>
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText';
-import KwaiTextarea from '@/components/forms/KwaiTextarea';
-import Multiselect from '@/components/forms/MultiSelect.vue';
-
-import makeForm, { makeField, notEmpty } from '@/js/Form';
-const makeAbilityForm = (fields, validations) => {
-  const writeForm = (ability) => {
-    fields.name.value = ability.name;
-    fields.remark.value = ability.remark;
-    fields.rules.value = ability.rules || [];
-  };
-
-  const readForm = (ability) => {
-    ability.name = fields.name.value;
-    ability.remark = fields.remark.value;
-    ability.rules = fields.rules.value;
-  };
-  return { ...makeForm(fields, validations), writeForm, readForm };
-};
+import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';
 
 import messages from './lang';
+import {useRuleStore} from '@/apps/users/composables/useRules';
+import {useAbilityStore} from '@/apps/users/composables/useAbilities';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import Alert from '@/components/Alert';
+import Ability from '@/models/users/Ability';
+import Rule from '@/models/users/Rule';
 
 export default {
-  components: {
-    KwaiForm, KwaiField, KwaiInputText, KwaiTextarea, Multiselect
+  props: {
+    id: {
+      type: String,
+      required: false
+    }
   },
-  i18n: messages,
-  data() {
-    return {
-      form: makeAbilityForm({
-        name: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('rules.form.name.required'),
-            },
-          ]
-        }),
-        remark: makeField(),
-        rules: makeField()
-      })
-    };
-  },
-  async created() {
-    await this.$store.dispatch('user/rule/browse');
-  },
-  computed: {
-    ability() {
-      return this.$store.state.user.ability.active;
-    },
-    error() {
-      return this.$store.state.user.ability.error;
-    },
-    rules() {
-      var options = [];
-      if (this.$store.state.user.rule.all) {
-        for (let rule of this.$store.state.user.rule.all) {
-          var option = options.find((r) => {
-            return r.subject === rule.subject.name;
-          });
-          if (!option) {
-            option = {
-              subject: rule.subject.name,
-              actions: []
-            };
-            options.push(option);
-          }
-          option.actions.push({
-            id: rule.id,
-            action: rule.action.name,
-            name: rule.name
-          });
+  setup(props) {
+    const abilityStore = useAbilityStore();
+    const ruleStore = useRuleStore();
+
+    const form = ref({
+      name: '',
+      remark: '',
+      rules: []
+    });
+    let hasFormErrors = ref(false);
+    let hasValidationErrors = ref(false);
+
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    const vm = getCurrentInstance();
+    async function submit() {
+      const ability = props.id ? abilityStore.current : new Ability();
+      ability.name = form.value.name;
+      ability.remark = form.value.remark;
+      ability.rules = form.value.rules.map(value => new Rule(value.id));
+      await abilityStore.save.run(ability);
+      if (!abilityStore.save.error) {
+        await vm.$router.push({
+          name: 'users.abilities.browse'
+        });
+      } else {
+        console.log(abilityStore.save.error);
+      }
+    }
+
+    onMounted(async() => {
+      await abilityStore.read.run(props.id);
+      if (abilityStore.current) {
+        form.value.name = abilityStore.current.name;
+        form.value.remark = abilityStore.current.remark;
+        form.value.rules = abilityStore.current.rules;
+      }
+    });
+
+    onMounted(() => ruleStore.load.run());
+    const rules = computed(() => {
+      const options = [];
+      for (let rule of Object.values(ruleStore.all)) {
+        let option = options.find((r) => {
+          return r.subject === rule.subject;
+        });
+        if (!option) {
+          option = {
+            subject: rule.subject,
+            actions: []
+          };
+          options.push(option);
         }
+        option.actions.push({
+          name: rule.name,
+          id: rule.id,
+          action: rule.action,
+        });
       }
       return options;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.setupForm(to.params);
-      next();
     });
+
+    return {
+      abilityStore: reactive(abilityStore),
+      ruleStore: reactive(ruleStore),
+      form,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      submit,
+      rules
+    };
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.setupForm(to.params);
-    next();
+  components: {
+    Alert,
+    KwaiFieldset
   },
-  methods: {
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('user/ability/read', {
-          id: params.id
-        });
-        this.form.writeForm(this.ability);
-      } else {
-        this.$store.dispatch('user/ability/create');
-      }
-    },
-    submit() {
-      this.form.clearErrors();
-      this.form.readForm(this.ability);
-      this.$store.dispatch('user/ability/save', this.ability)
-        .then((newAbility) => {
-          this.$router.push({
-            name: 'users.abilities.read',
-            params: { id: newAbility.id }
-          });
-        });
-    }
-  }
+  i18n: messages
 };
 </script>

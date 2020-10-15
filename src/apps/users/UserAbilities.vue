@@ -14,7 +14,7 @@
       </p>
       <ul v-if="user">
         <li
-          v-for="ability in userAbilities"
+          v-for="ability in user.abilities"
           :key="ability.id"
           class="px-2 py-2 first:border-t border-b border-gray-400 odd:bg-gray-200"
         >
@@ -51,69 +51,58 @@ import UserAbility from './TheUserAbility';
 import Page from '@/components/Page';
 
 import messages from './lang';
+import {useUserStore} from '@/apps/users/composables/useUsers';
+import {onMounted, reactive, computed} from '@vue/composition-api';
+import {useAbilityStore} from '@/apps/users/composables/useAbilities';
 
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const userStore = useUserStore();
+
+    const user = computed(() => userStore.current);
+
+    onMounted(async() => {
+      await userStore.loadAbilities.run(props.id);
+    });
+
+    const addAbility = async(ability) => {
+      await userStore.attachAbility.run(props.id, ability);
+    };
+    const removeAbility = async(ability) => {
+      await userStore.detachAbility.run(props.id, ability);
+    };
+
+    const abilityStore = useAbilityStore();
+    onMounted(async() => {
+      await abilityStore.load.run();
+    });
+
+    const availableAbilities = computed(() => {
+      if (user.value?.abilities) {
+        const userAbilities = user.value.abilities.map(x => x.name);
+        return Object.values(abilityStore.all.value)
+          .filter(x => !userAbilities.includes(x.name));
+      }
+      return [];
+    });
+
+    return {
+      store: reactive(userStore),
+      user,
+      addAbility,
+      removeAbility,
+      availableAbilities
+    };
+  },
   i18n: messages,
   components: {
     UserCard, UserAbility, Page
-  },
-  data() {
-    return {
-      show: {
-      }
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.state.user.active;
-    },
-    userAbilities() {
-      return this.user?.abilities ?? [];
-    },
-    abilities() {
-      return this.$store.state.user.ability.all ?? [];
-    },
-    /**
-      Return all abilities which are not yet attached to this user
-    */
-    availableAbilities() {
-      const userAbilities = this.userAbilities.map(x => x.name);
-      return this.abilities.filter(x => !userAbilities.includes(x.name));
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.id);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.id);
-    next();
-  },
-  methods: {
-    async fetchData(id) {
-      await this.$store.dispatch('user/readWithAbilities', { id })
-        .catch((error) => {
-          console.log(error);
-        });
-      await this.$store.dispatch('user/ability/browse')
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    addAbility(ability) {
-      this.$store.dispatch('user/attachAbility', {
-        user: this.user,
-        ability
-      });
-    },
-    removeAbility(ability) {
-      this.$store.dispatch('user/detachAbility', {
-        user: this.user,
-        ability
-      });
-    }
   }
 };
 </script>

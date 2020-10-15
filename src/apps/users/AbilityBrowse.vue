@@ -3,7 +3,7 @@
   <div class="container mt-6 mx-auto">
     <ul>
       <li
-        v-for="ability in abilities"
+        v-for="ability in store.all"
         :key="ability.id"
         class="px-2 py-2 first:border-t border-b border-gray-400 odd:bg-gray-200"
       >
@@ -20,34 +20,24 @@
 import Ability from './TheUserAbility';
 
 import messages from './lang';
+import {useAbilityStore} from '@/apps/users/composables/useAbilities';
+import {onMounted, reactive} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const store = useAbilityStore();
+
+    onMounted(() => {
+      store.load.run(true);
+    });
+
+    return {
+      store: reactive(store)
+    };
+  },
   components: {
     Ability
   },
-  i18n: messages,
-  computed: {
-    abilities() {
-      return this.$store.state.user.ability.all || [];
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.id);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.id);
-    next();
-  },
-  methods: {
-    fetchData(id) {
-      this.$store.dispatch('user/ability/browse')
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  }
+  i18n: messages
 };
 </script>
