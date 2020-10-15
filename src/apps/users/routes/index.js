@@ -37,7 +37,7 @@ const UserRegisterWithInvite = () => import(
   '@/apps/users/UserRegisterWithInvite.vue'
 );
 
-var routes = [
+const routes = [
   {
     path: '/users',
     component: App,
@@ -58,11 +58,16 @@ var routes = [
         },
         name: 'users.register.invite',
       },
+      ...abilitiesRouter,
       {
         path: ':id',
         components: {
           hero: UserHeader,
           default: UserRead
+        },
+        props: {
+          hero: true,
+          default: true
         },
         name: 'users.read',
       },
@@ -78,6 +83,6 @@ var routes = [
   },
 ];
 
-routes = routes.concat(abilitiesRouter);
+// routes = routes.concat(abilitiesRouter);
 
 export default routes;
