@@ -29,7 +29,7 @@ const UserInvite = () => import(
 );
 
 const UserRegisterWithInviteHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUserRegisterWithInviteHeader.vue'
 );
 const UserRegisterWithInvite = () => import(
