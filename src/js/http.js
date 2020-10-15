@@ -6,6 +6,7 @@ import store from '@/site/store';
 
 export const http = wretch(config.api, {
   options: {
+    credentials: 'include',
     mode: 'cors'
   }
 });
