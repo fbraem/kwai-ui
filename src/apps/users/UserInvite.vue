@@ -4,126 +4,143 @@
       <Alert type="warning">
         {{ $t('invite_intro') }}
       </Alert>
-      <KwaiForm
-        :form="form"
-        :error="error"
-        :save="$t('save')"
+      <FormulateForm
+        name="invite"
+        v-model="form"
         @submit="submit"
+        @submit-raw="checkValidation"
+        class="w-full"
       >
-        <KwaiField
-          name="first_name"
-          :label="$t('form.first_name.label')"
+        <KwaiFieldset title="Gebruiker">
+          <template slot="description">
+            Geef de naam van de gebruiker.
+          </template>
+          <div class="w-full">
+            <FormulateInput
+              name="first_name"
+              :label="$t('form.first_name.label')"
+              :placeholder="$t('form.first_name.placeholder')"
+              :required="true"
+              validation="required"
+              :validation-messages="{
+                required: $t('required')
+              }"
+            >
+            </FormulateInput>
+          </div>
+          <div class="w-full">
+            <FormulateInput
+              name="last_name"
+              :label="$t('form.last_name.label')"
+              :placeholder="$t('form.last_name.placeholder')"
+              :required="true"
+              validation="required"
+              :validation-messages="{
+                required: $t('required')
+              }"
+            >
+            </FormulateInput>
+          </div>
+        </KwaiFieldset>
+        <KwaiFieldset title="Email">
+          <template slot="description">
+            Het emailadres waar de uitnodiging naar gestuurd wordt.
+          </template>
+          <div class="w-full">
+            <FormulateInput
+              name="email"
+              :label="$t('form.email.label')"
+              :placeholder="$t('form.email.placeholder')"
+              :required="true"
+              validation="^required|email"
+              :validation-messages="{
+                required: $t('required'),
+                email: 'Dit is geen geldig emailadres'
+              }"
+            >
+            </FormulateInput>
+          </div>
+        </KwaiFieldset>
+        <Alert
+          v-if="hasFormErrors"
+          type="danger"
         >
-          <KwaiInput-text :placeholder="$t('form.first_name.placeholder')" />
-        </KwaiField>
-        <KwaiField
-          name="last_name"
-          :label="$t('form.last_name.label')"
-        >
-          <KwaiInputText :placeholder="$t('form.last_name.placeholder')" />
-        </KwaiField>
-        <KwaiField
-          name="email"
-          :label="$t('form.email.label')"
-        >
-          <KwaiEmail :placeholder="$t('form.email.placeholder')" />
-        </KwaiField>
-      </KwaiForm>
+          <FormulateErrors />
+        </Alert>
+        <div class="flex justify-end mt-3">
+          <FormulateInput
+            type="submit"
+            :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
+          >
+            <i
+              v-if="store.save.isRunning"
+              class="fas fa-spinner fa-spin mr-2"
+            ></i>
+            <i v-else class="fas fa-save mr-2"></i>
+            Bewaar
+          </FormulateInput>
+        </div>
+      </FormulateForm>
     </div>
   </div>
 </template>
 
 <script>
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText';
-import KwaiEmail from '@/components/forms/KwaiEmail';
-
-import makeForm, { makeField, isEmail, notEmpty } from '@/js/Form';
-const makeInviteForm = (fields) => {
-  const writeForm = (invitation) => {
-    fields.first_name.value = invitation.first_name;
-    fields.last_name.value = invitation.last_name;
-    fields.email.value = invitation.email;
-  };
-  const readForm = (invitation) => {
-    invitation.first_name = fields.first_name.value;
-    invitation.last_name = fields.last_name.value;
-    invitation.email = fields.email.value;
-  };
-
-  return { ...makeForm(fields), writeForm, readForm };
-};
-
 import messages from './lang';
 
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import Alert from '@/components/Alert';
+import {useInvitationStore} from '@/apps/users/composables/useInvitations';
+import {getCurrentInstance, reactive, ref} from '@vue/composition-api';
 import Invitation from '@/models/users/Invitation';
 
 export default {
-  i18n: messages,
-  components: {
-    KwaiForm,
-    KwaiField,
-    KwaiInputText,
-    KwaiEmail
-  },
-  data() {
+  setup() {
+    const store = useInvitationStore();
+
+    const form = ref({
+      first_name: '',
+      last_name: '',
+      email: ''
+    });
+    let hasFormErrors = ref(false);
+    let hasValidationErrors = ref(false);
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    const vm = getCurrentInstance();
+    async function submit() {
+      hasFormErrors.value = false;
+      let invitation = new Invitation();
+      invitation.name = form.value.first_name + ' ' + form.value.last_name;
+      invitation.email = form.value.email;
+      await store.save.run(invitation);
+      if (!store.save.error) {
+        await vm.$router.push({
+          name: 'users.browse'
+        });
+      } else {
+        hasFormErrors.value = true;
+        this.$formulate.handle(store.save.error, 'invite');
+      }
+    }
+
     return {
-      form: makeInviteForm({
-        first_name: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-          ]
-        }),
-        last_name: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-          ]
-        }),
-        email: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-            {
-              v: isEmail,
-              error: this.$t('form.email.invalid')
-            },
-          ]
-        }),
-      })
+      store: reactive(store),
+      form,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      submit
     };
   },
-  computed: {
-    error() {
-      return this.$store.state.user.error;
-    }
+  i18n: messages,
+  components: {
+    KwaiFieldset,
+    Alert
   },
-  methods: {
-    submit() {
-      this.form.clearErrors();
-      var invitation = new Invitation();
-      this.form.readForm(invitation);
-      this.$store.dispatch('user/invitation/invite', invitation)
-        .then((invitation) => {
-          this.$router.push({
-            name: 'home'
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }
 };
 </script>

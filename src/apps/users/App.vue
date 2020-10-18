@@ -13,6 +13,7 @@ import {provideNewsStore} from '@/apps/users/composables/useNews';
 import {providePageStore} from '@/apps/users/composables/usePages';
 import {provideAbilityStore} from '@/apps/users/composables/useAbilities';
 import {provideRuleStore} from '@/apps/users/composables/useRules';
+import {provideInvitationStore} from '@/apps/users/composables/useInvitations';
 
 export default {
   setup() {
@@ -21,6 +22,7 @@ export default {
     providePageStore();
     provideAbilityStore();
     provideRuleStore();
+    provideInvitationStore();
   },
 };
 </script>

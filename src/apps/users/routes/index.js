@@ -43,20 +43,28 @@ const routes = [
     component: App,
     children: [
       {
-        path: 'invite',
+        path: 'invitation',
         components: {
           hero: UserInviteHeader,
           default: UserInvite
         },
-        name: 'users.invite',
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.invitation',
       },
       {
-        path: 'invite/:token',
+        path: 'invitation/:token',
         components: {
           hero: UserRegisterWithInviteHeader,
           default: UserRegisterWithInvite
         },
-        name: 'users.register.invite',
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.invitation.confirm',
       },
       ...abilitiesRouter,
       {

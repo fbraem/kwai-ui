@@ -12,212 +12,195 @@
         <Alert type="info">
           {{ $t('invitation.intro') }}
         </Alert>
-        <KwaiForm
-          :form="form"
-          :error="error"
-          :save="$t('save')"
+        <FormulateForm
+          name="confirm"
+          v-model="form"
           @submit="submit"
+          @submit-raw="checkValidation"
+          class="w-full"
         >
-          <KwaiField
-            name="first_name"
-            :label="$t('form.first_name.label')"
+          <KwaiFieldset title="Gebruiker">
+            <template slot="description">
+              Geef uw naam in.
+            </template>
+            <div class="w-full">
+              <FormulateInput
+                name="first_name"
+                :label="$t('form.first_name.label')"
+                :placeholder="$t('form.first_name.placeholder')"
+                :required="true"
+                validation="required"
+                :validation-messages="{
+                required: $t('required')
+              }"
+              >
+              </FormulateInput>
+            </div>
+            <div class="w-full">
+              <FormulateInput
+                name="last_name"
+                :label="$t('form.last_name.label')"
+                :placeholder="$t('form.last_name.placeholder')"
+                :required="true"
+                validation="required"
+                :validation-messages="{
+                required: $t('required')
+              }"
+              >
+              </FormulateInput>
+            </div>
+          </KwaiFieldset>
+          <KwaiFieldset title="Email">
+            <template slot="description">
+              Het emailadres waarmee je zal inloggen op onze website.
+            </template>
+            <div class="w-full">
+              <FormulateInput
+                name="email"
+                :label="$t('form.email.label')"
+                :placeholder="$t('form.email.placeholder')"
+                :required="true"
+                validation="^required|email"
+                :validation-messages="{
+                required: $t('required'),
+                email: 'Dit is geen geldig emailadres'
+              }"
+              >
+              </FormulateInput>
+            </div>
+          </KwaiFieldset>
+          <KwaiFieldset title="Paswoord">
+            <template slot="description">
+              Geef een paswoord in.
+            </template>
+            <FormulateInput
+              name="password"
+              type="password"
+              :label="$t('form.password.label')"
+              :placeholder="$t('form.password.placeholder')"
+              :required="true"
+              validation="^required|min:10,length|complex"
+              :validation-rules="{
+                complex: ({ value }) => passwordComplexity(value)
+              }"
+              :validation-messages="{
+                required: $t('required'),
+                min: 'Paswoord moet minstens 10 karakters bevatten',
+                complex: 'Paswoord is niet complex genoeg'
+              }"
+            >
+            </FormulateInput>
+            <FormulateInput
+              name="password_confirm"
+              type="password"
+              :label="$t('form.retype_password.label')"
+              :placeholder="$t('form.retype_password.placeholder')"
+              :required="true"
+              validation="^required|confirm"
+              :validation-messages="{
+                required: $t('required'),
+                confirm: 'De paswoorden zijn niet gelijk'
+              }"
+            >
+            </FormulateInput>
+          </KwaiFieldset>
+          <Alert
+            v-if="hasFormErrors"
+            type="danger"
           >
-            <KwaiInputText :placeholder="$t('form.first_name.placeholder')"/>
-          </KwaiField>
-          <KwaiField
-            name="last_name"
-            :label="$t('form.last_name.label')"
-          >
-            <KwaiInputText :placeholder="$t('form.last_name.placeholder')" />
-          </KwaiField>
-          <KwaiField
-            name="email"
-            :label="$t('form.email.label')"
-          >
-            <KwaiEmail :placeholder="$t('form.email.placeholder')" />
-          </KwaiField>
-          <KwaiField
-            name="password"
-            :label="$t('form.password.label')"
-          >
-            <KwaiPassword :placeholder="$t('form.password.placeholder')" />
-          </KwaiField>
-          <KwaiField
-            name="retype_password"
-            :label="$t('form.retype_password.label')"
-          >
-            <KwaiPassword :placeholder="$t('form.retype_password.placeholder')" />
-          </KwaiField>
-        </KwaiForm>
+            <FormulateErrors />
+          </Alert>
+          <div class="flex justify-end mt-3">
+            <FormulateInput
+              type="submit"
+              :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
+            >
+              <i
+                v-if="store.save.isRunning"
+                class="fas fa-spinner fa-spin mr-2"
+              ></i>
+              <i v-else class="fas fa-save mr-2"></i>
+              Bewaar
+            </FormulateInput>
+          </div>
+        </FormulateForm>
       </div>
-    </div>
-    <div v-else>
-      <Alert
-        v-if="invitationError && invitationError.response.status == 404"
-        type="danger"
-      >
-        {{ $t('invitation.not_found') }}
-      </Alert>
     </div>
   </div>
 </template>
 
 <script>
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiPassword from '@/components/forms/KwaiPassword.vue';
-import KwaiEmail from '@/components/forms/KwaiEmail.vue';
 import Alert from '@/components/Alert';
-
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
 import passwordComplexity from '@/js/passwordComplexity';
-
-import makeForm, { makeField, notEmpty, minLength, isEmail } from '@/js/Form';
-const makeRegisterWithInviteForm = (fields, validations) => {
-  const writeForm = (user) => {
-  };
-  const readForm = (user) => {
-    user.first_name = fields.first_name.value;
-    user.last_name = fields.last_name.value;
-    user.email = fields.email.value;
-    user.password = fields.password.value;
-  };
-
-  return { ...makeForm(fields, validations), writeForm, readForm };
-};
-
 import messages from './lang';
-
 import User from '@/models/users/User';
+import {useInvitationStore} from '@/apps/users/composables/useInvitations';
+// eslint-disable-next-line max-len
+import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';
 
 export default {
-  i18n: messages,
-  components: {
-    KwaiForm,
-    KwaiField,
-    KwaiInputText,
-    KwaiPassword,
-    KwaiEmail,
-    Alert
-  },
-  data() {
-    return {
-      invitation: null,
-      form: makeRegisterWithInviteForm({
-        first_name: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-          ]
-        }),
-        last_name: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-          ]
-        }),
-        email: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-            {
-              v: isEmail,
-              error: this.$t('form.email.invalid')
-            },
-          ]
-        }),
-        password: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-            {
-              v: minLength,
-              params: {
-                min: 8
-              },
-              error: this.$t('form.password.minLength')
-            },
-            {
-              v: passwordComplexity,
-              error: this.$t('form.password.complex')
-            },
-          ]
-        }),
-        retype_password: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('required')
-            },
-          ]
-        }),
-      },
-      [
-        ({password, retype_password}) => {
-          if (password.value === retype_password.value) {
-            retype_password.errors.splice(0, retype_password.errors.length);
-            return true;
-          }
-          retype_password.errors.push(this.$t('form.retype_password.sameas'));
-          return false;
-        },
-      ]),
-    };
-  },
-  computed: {
-    error() {
-      return this.$store.state.user.error;
-    },
-    invitationError() {
-      return this.$store.state.user.invitation.error;
+  props: {
+    token: {
+      type: String,
+      required: true
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.token);
-      next();
+  setup(props) {
+    const store = useInvitationStore();
+    const invitation = computed(() => store.current);
+    onMounted(async() => {
+      await store.readWithToken.run(props.token);
+      form.value.email = store.current.email;
     });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.token);
-    next();
-  },
-  methods: {
-    async fetchData(token) {
-      this.$store.dispatch('user/invitation/readInvitationByToken',
-        { token }
-      ).then((invitation) => {
-        this.invitation = invitation;
-      }).catch((error) => {
-        console.log(error);
-      });
-    },
-    submit() {
-      var user = new User();
-      this.form.clearErrors();
-      this.form.readForm(user);
-      this.$store.dispatch('user/createWithToken', {
-        user,
-        token: this.$route.params.token
-      }).then((user) => {
-        this.$router.push({
+
+    const form = ref({
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      retype_password: ''
+    });
+    let hasFormErrors = ref(false);
+    let hasValidationErrors = ref(false);
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    const vm = getCurrentInstance();
+    async function submit() {
+      const user = new User();
+      user.first_name = form.value.first_name;
+      user.last_name = form.value.last_name;
+      user.email = form.value.email;
+      user.password = form.value.password;
+      await store.confirm.run(props.token, user);
+      if (!store.confirm.error) {
+        await vm.$router.push({
           name: 'home'
         });
-      });
+      } else {
+        hasFormErrors.value = true;
+        this.$formulate.handle(store.save.error, 'confirm');
+      }
     }
+
+    return {
+      store: reactive(store),
+      invitation,
+      form,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      submit,
+      passwordComplexity,
+    };
+  },
+  i18n: messages,
+  components: {
+    Alert, KwaiFieldset
   }
 };
 </script>
