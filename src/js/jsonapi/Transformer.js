@@ -123,14 +123,15 @@ export default class Transformer {
     // Handle all relations
     let relationships = Object.create(null);
     Object.keys(modelClass.relationships()).forEach(relation => {
-      relationships[relation] = Object.create(null);
       if (Array.isArray(modelInstance[relation])) {
-        relationships[relation].data = modelInstance[relation].map(
-          element => ({
-            type: element.constructor.type(),
-            id: element.id
-          })
-        );
+        relationships[relation] = {
+          data: modelInstance[relation].map(
+            element => ({
+              type: element.constructor.type(),
+              id: element.id
+            })
+          )
+        };
       } else {
         if (modelInstance[relation]) {
           relationships[relation] = {
@@ -141,7 +142,9 @@ export default class Transformer {
           };
         }
       }
-      json.data.relationships = relationships;
+      if (Object.keys(relationships).length > 0) {
+        json.data.relationships = relationships;
+      }
     });
 
     return json;
