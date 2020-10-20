@@ -12,7 +12,7 @@ export default function createPageService() {
   const current = ref();
 
   const load = useAPI(async(
-    { offset = 0, limit = 10, application, user },
+    { offset = 0, limit = 10, application, user, sort },
     reload = false
   ) => {
     if (!reload && all.value.length > 0) return all;
@@ -25,6 +25,13 @@ export default function createPageService() {
     if (user) {
       api = api.query({ 'filter[user]': user });
     }
+    if (application) {
+      api = api.query({'filter[application]': application});
+    }
+    if (sort) {
+      api = api.query({ sort });
+    }
+
     const json = await api
       .get()
       .json()
