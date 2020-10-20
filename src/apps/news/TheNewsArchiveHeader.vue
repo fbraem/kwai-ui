@@ -52,7 +52,7 @@ export default {
         buttons.push({
           icon: 'fas fa-plus',
           route: {
-            name: 'news.create'
+            name: 'author.news.create'
           }
         });
       }
