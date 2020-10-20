@@ -85,7 +85,10 @@ export default function init() {
           // eslint-disable-next-line max-len
           return 'py-3 px-4 rounded focus:outline-none hover:no-underline disabled:opacity-50 disabled:cursor-not-allowed';
         case 'select':
-          return '';
+          if (context.type === 'kwaimulti') {
+            return '';
+          }
+          // noinspection FallThroughInSwitchStatementJS
         default:
           // eslint-disable-next-line max-len
           return 'appearance-once block w-full bg-gray-200 border rounded py-3 px-4 leading-thight focus:outline-none focus:shadow-outline';
