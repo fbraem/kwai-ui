@@ -31,9 +31,7 @@ export default [
         name: 'author.news.update',
         path: 'news/update/:id(\\d+)',
         component: NewsForm,
-        props: {
-          creating: false
-        },
+        props: true,
         meta: {
           auth: {
             action: 'update',
@@ -45,9 +43,6 @@ export default [
         name: 'author.news.create',
         path: 'news/create',
         component: NewsForm,
-        props: {
-          creating: true
-        },
         meta: {
           auth: {
             action: 'create',
