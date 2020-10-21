@@ -37,38 +37,22 @@
 <script>
 import lang from './lang';
 
-import store from './store';
-
 import Hero from '@/components/Hero';
 import IconButton from '@/components/IconButton';
 import ApplicationHeader from '@/components/ApplicationHeader';
+import {provideAuthorNewsStore} from '@/apps/author/composables/useNews';
+import {provideAuthorPageStore} from '@/apps/author/composables/usePages';
 
 export default {
+  setup() {
+    provideAuthorNewsStore();
+    provideAuthorPageStore();
+  },
   components: {
     Hero,
     IconButton,
     ApplicationHeader
   },
-  i18n: lang,
-  beforeCreate() {
-    this.$store.registerModule('author', store);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('author/news/reset');
-    this.$store.unregisterModule('author');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('author/news/setCurrent', to.meta.active);
-      }
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'news.story') {
-      to.meta.active = this.$store.state.author.news.current;
-    }
-    next();
-  }
+  i18n: lang
 };
 </script>

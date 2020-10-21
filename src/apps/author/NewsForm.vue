@@ -5,7 +5,6 @@
     <FormulateForm
       name="newsstory"
       v-model="form"
-      ref="form"
       @submit="submit"
       @submit-raw="checkValidation"
     >
@@ -212,7 +211,7 @@
           :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
         >
           <i
-            v-if="saving"
+            v-if="store.save.isRunning"
             class="fas fa-spinner fa-spin mr-2"
           ></i>
           <i v-else class="fas fa-save mr-2"></i>
@@ -234,6 +233,10 @@ import HeaderLine from '@/components/HeaderLine';
 import PageSection from '@/components/PageSection';
 import Application from '@/models/Application';
 import Alert from '@/components/Alert';
+import {useAuthorNewsStore} from '@/apps/author/composables/useNews';
+// eslint-disable-next-line max-len
+import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';
+import Story from '@/models/Story';
 
 const createDatetime = (date, time) => {
   if (time == null || time.length === 0) {
@@ -244,57 +247,73 @@ const createDatetime = (date, time) => {
 };
 
 export default {
-  i18n: lang,
-  components: {
-    HeaderLine,
-    KwaiFieldset,
-    Alert,
-    PageSection
-  },
   props: {
-    creating: {
-      type: Boolean
+    id: {
+      type: String,
+      required: false
     }
   },
-  data() {
-    return {
-      form: {
-        title: '',
-        enabled: false,
-        summary: '',
-        content: '',
-        application: 0,
-        publish_date: moment().format('L'),
-        publish_time: moment().format('HH:MM'),
-        end_date: '',
-        end_time: '',
-        promotion: 0,
-        promotion_end_date: '',
-        promotion_end_time: '',
-        remark: ''
-      },
-      hasFormErrors: false,
-      hasValidationErrors: false
-    };
-  },
-  computed: {
-    title() {
-      if (this.creating) return this.$t('news.create');
-      return this.$t('news.update');
-    },
-    story() {
-      return this.$store.state.author.news.current;
-    },
-    dateFormat() {
-      return moment.localeData().longDateFormat('L');
-    },
-    applications() {
-      return this.$store.getters['applications/asOptions'](
-        (application) => application.news
-      );
-    },
-    endTimeValidation() {
-      if (this.form.end_date) {
+  setup(props) {
+    const store = useAuthorNewsStore();
+
+    const form = ref({
+      title: '',
+      enabled: false,
+      summary: '',
+      content: '',
+      application: 0,
+      publish_date: moment().format('L'),
+      publish_time: moment().format('HH:MM'),
+      end_date: '',
+      end_time: '',
+      promotion: 0,
+      promotion_end_date: '',
+      promotion_end_time: '',
+      remark: ''
+    });
+
+    const hasFormErrors = ref(false);
+    const hasValidationErrors = ref(false);
+
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    if (props.id) {
+      onMounted(async() => {
+        await store.read.run(props.id);
+        form.value.application = store.current.application.id;
+        form.value.enabled = store.current.enabled;
+        if (store.current.publish_date) {
+          form.value.publish_date = store.current.localPublishDate;
+          form.value.publish_time = store.current.localPublishTime;
+        }
+        if (store.current.end_date) {
+          form.value.end_date = store.current.localEndDate;
+          form.value.end_time = store.current.localEndTime;
+        }
+        form.value.promotion = store.current.promotion;
+        if (store.current.promotion_end_date) {
+          form.value.promotion_end_date = store.current.localPromotionEndDate;
+          form.value.promotion_end_time = store.current.localPromotionEndTime;
+        }
+        form.value.remark = store.current.remark;
+
+        form.value.title = store.current.content.title;
+        form.value.summary = store.current.content.summary;
+        form.value.content = store.current.content.content;
+      });
+    }
+
+    const vm = getCurrentInstance();
+    const title = computed(() =>
+      props.id ? vm.$t('news.create') : vm.$t('news.update')
+    );
+
+    const dateFormat = computed(() => moment.localeData().longDateFormat('L'));
+
+    const endTimeValidation = computed(() => {
+      if (form.value.end_date) {
         return [
           [ 'bail' ],
           [ 'required' ],
@@ -303,9 +322,9 @@ export default {
         ];
       }
       return [ ['optional'], ['kwaitime'] ];
-    },
-    promotionTimeValidation() {
-      if (this.form.promotion_end_date) {
+    });
+    const promotionTimeValidation = computed(() => {
+      if (form.value.promotion_end_date) {
         return [
           [ 'bail' ],
           [ 'required' ],
@@ -314,140 +333,88 @@ export default {
         ];
       }
       return [ 'optional', 'kwaitime' ];
-    },
-    error() {
-      return this.$store.state.author.news.error;
-    },
-    saving() {
-      return this.$wait.is('author.news.save');
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      try {
-        await vm.setupForm(to.params);
-        return next();
-      } catch (err) {
-        console.log(err);
-        vm.$notify({
-          group: 'error',
-          type: 'error',
-          title: 'Unexpected error',
-          text: err
-        });
-        return next('/author/news');
-      }
     });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    try {
-      await this.setupForm(to.params);
-      return next();
-    } catch (err) {
-      console.log(err);
-      this.$notify({
-        group: 'error',
-        type: 'error',
-        title: 'Unexpected error',
-        text: err
-      });
-      return next('/author/news');
+
+    async function submit() {
+      const story = props.id ? store.current : new Story();
+
+      story.timezone = moment.tz.guess();
+      story.enabled = form.value.enabled;
+      story.remark = form.value.remark;
+      story.application = new Application();
+      story.application.id = form.value.application;
+      story.publish_date = createDatetime(
+        form.value.publish_date,
+        form.value.publish_time
+      ).utc();
+      if (form.value.end_date) {
+        story.end_date = createDatetime(
+          form.value.end_date,
+          form.value.end_time
+        ).utc();
+      } else {
+        story.end_date = null;
+      }
+      story.promotion = parseInt(form.value.promotion, 10);
+      if (form.value.promotion_end_date) {
+        story.promotion_end_date = createDatetime(
+          form.value.promotion_end_date,
+          form.value.promotion_end_time
+        ).utc();
+      } else {
+        story.promotion_end_date = null;
+      }
+
+      if (!story.contents) {
+        story.contents = [ Object.create(null) ];
+      }
+      story.contents[0].locale = 'nl';
+      story.contents[0].format = 'md';
+      story.contents[0].title = form.value.title;
+      story.contents[0].summary = form.value.summary;
+      story.contents[0].content = form.value.content;
+
+      await store.save.run(story);
+      if (!store.save.error) {
+        await vm.$router.push({
+          name: 'news.story',
+          params: {
+            id: store.current.id
+          }
+        });
+      } else {
+        console.log(store.save.error);
+      }
     }
+
+    return {
+      store: reactive(store),
+      form,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      title,
+      dateFormat,
+      endTimeValidation,
+      promotionTimeValidation,
+      submit
+    };
+  },
+  i18n: lang,
+  components: {
+    HeaderLine,
+    KwaiFieldset,
+    Alert,
+    PageSection
+  },
+  computed: {
+    applications() {
+      return this.$store.getters['applications/asOptions'](
+        (application) => application.news
+      );
+    },
   },
   methods: {
-    async checkValidation(submission) {
-      this.hasValidationErrors = await submission.hasValidationErrors();
-    },
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('author/news/read', {
-          id: params.id
-        });
-
-        this.form.application = this.story.application.id;
-        this.form.enabled = this.story.enabled;
-        if (this.story.publish_date) {
-          this.form.publish_date = this.story.localPublishDate;
-          this.form.publish_time = this.story.localPublishTime;
-        }
-        if (this.story.end_date) {
-          this.form.end_date = this.story.localEndDate;
-          this.form.end_time = this.story.localEndTime;
-        }
-        this.form.promotion = this.story.promotion;
-        if (this.story.promotion_end_date) {
-          this.form.promotion_end_date = this.story.localPromotionEndDate;
-          this.form.promotion_end_time = this.story.localPromotionEndTime;
-        }
-        this.form.remark = this.story.remark;
-
-        this.form.title = this.story.content.title;
-        this.form.summary = this.story.content.summary;
-        this.form.content = this.story.content.content;
-      } else {
-        await this.$store.dispatch('author/news/create');
-      }
-    },
-    readForm() {
-      this.story.timezone = moment.tz.guess();
-      this.story.enabled = this.form.enabled;
-      this.story.remark = this.form.remark;
-      this.story.application = new Application();
-      this.story.application.id = this.form.application;
-      this.story.publish_date = createDatetime(
-        this.form.publish_date,
-        this.form.publish_time
-      ).utc();
-      if (this.form.end_date) {
-        this.story.end_date = createDatetime(
-          this.form.end_date,
-          this.form.end_time
-        ).utc();
-      } else {
-        this.story.end_date = null;
-      }
-      this.story.promotion = parseInt(this.form.promotion, 10);
-      if (this.form.promotion_end_date) {
-        this.story.promotion_end_date = createDatetime(
-          this.form.promotion_end_date,
-          this.form.promotion_end_time
-        ).utc();
-      } else {
-        this.story.promotion_end_date = null;
-      }
-
-      if (!this.story.contents) {
-        this.story.contents = [ Object.create(null) ];
-      }
-      this.story.contents[0].locale = 'nl';
-      this.story.contents[0].format = 'md';
-      this.story.contents[0].title = this.form.title;
-      this.story.contents[0].summary = this.form.summary;
-      this.story.contents[0].content = this.form.content;
-    },
-    async submit() {
-      this.readForm();
-      try {
-        const story = await this.$store.dispatch(
-          'author/news/save',
-          this.story
-        );
-        const route = {};
-        if (this.$route.meta.back?.name) {
-          route.name = this.$route.meta.back.name;
-          route.params = this.$route.meta.back.params;
-        } else {
-          route.name = 'news.story';
-          route.params = { id: story.id };
-        }
-        await this.$router.push(route);
-      } catch (err) {
-        this.$formulate.handle(err, 'newsstory');
-        if (this.$refs.form) {
-          this.hasFormErrors = this.$refs.form.mergedFormErrors.length > 0;
-        }
-      }
-    },
     isAfterPublishTimestamp({ value, getFormValues, name }, dateField) {
       const after_timestamp = moment(
         this.form.publish_date + ' ' + this.form.publish_time,

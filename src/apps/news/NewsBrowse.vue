@@ -51,7 +51,7 @@ import Alert from '@/components/Alert';
 
 import messages from './lang';
 import {useNewsStore} from '@/apps/news/composables/useNews';
-import {reactive, onMounted} from '@vue/composition-api';
+import {reactive, onMounted, watch} from '@vue/composition-api';
 
 export default {
   props: {
@@ -59,10 +59,10 @@ export default {
       type: String
     },
     year: {
-      type: Number
+      type: [Number, String]
     },
     month: {
-      type: Number
+      type: [Number, String]
     }
   },
   setup(props) {
@@ -82,13 +82,17 @@ export default {
       paginator.count = news.fullCount;
     });
 
+    watch(props, () => {
+      readPage(0);
+    });
+
     const readPage = async(offset) => {
       news.load.run({
         offset: offset,
-        year: this.year,
-        month: this.month,
-        application: this.application,
-      });
+        year: props.year,
+        month: props.month,
+        application: props.application,
+      }, true);
       paginator.offset = offset;
     };
 

@@ -15,7 +15,7 @@
         />
       </div>
     </PageSectionHeader>
-    <PageSection v-if="error">
+    <PageSection v-if="store.load.error">
       <Alert
         type="danger"
         class="w-full"
@@ -62,7 +62,7 @@
               @click="resetFilter"
             >
               <i
-                v-if="action === 'reset' && loading"
+                v-if="action === 'reset' && store.load.isRunning"
                 class="fas fa-spinner fa-spin mr-2"
               ></i>
               <i v-else class="fas fa-undo mr-2"></i>Reset
@@ -72,7 +72,7 @@
               :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
             >
               <i
-                v-if="action === 'filter' && loading"
+                v-if="action === 'filter' && store.load.isRunning"
                 class="fas fa-spinner fa-spin mr-2"
               ></i>
               <i v-else class="fas fa-filter mr-2"></i>
@@ -84,7 +84,7 @@
     </PageSection>
     <PageSection>
       <div
-        v-if="count > limit"
+        v-if="paginator.count > paginator.limit"
         class="flex-col sm:flex-row flex-1 flex items-center sm:justify-between"
       >
         <div>
@@ -99,22 +99,22 @@
             </span>
             {{ $t('pages.of') }}
             <span class="font-medium">
-              {{ count }}
+              {{ paginator.count }}
             </span>
             {{ $t('pages.articles') }}
           </p>
         </div>
         <div>
           <Paginator
-            :limit="limit"
-            :offset="offset"
-            :count="count"
+            :limit="paginator.limit"
+            :offset="paginator.offset"
+            :count="paginator.count"
             @page="readPage"
           />
         </div>
       </div>
       <div
-        v-for="page in pages"
+        v-for="page in store.all"
         :key="page.id"
         class="py-8 flex flex-wrap md:flex-no-wrap w-full"
       >
@@ -156,8 +156,70 @@ import Link from '@/components/Link';
 import Alert from '@/components/Alert';
 
 import lang from './lang';
+import {useAuthorPageStore} from '@/apps/author/composables/usePages';
+// eslint-disable-next-line max-len
+import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const store = useAuthorPageStore();
+
+    const action = ref('');
+
+    const paginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 5
+    });
+    const readPage = async(offset) => {
+      await store.load.run({
+        offset,
+        limit: paginator.limit,
+        application: filter.value.application,
+        sort: (filter.value.sort === '1' ? 'application' : null)
+      }, true);
+      paginator.count = store.fullCount;
+      paginator.offset = offset;
+    };
+    onMounted(async() => await readPage(0));
+
+    const filter = ref({
+      application: 0,
+      sort: 0
+    });
+    const submitFilter = async() => {
+      action.value = 'filter';
+      await readPage(0);
+    };
+
+    const vm = getCurrentInstance();
+    const resetFilter = async() => {
+      action.value = 'reset';
+      vm.$formulate.reset('filterForm');
+      await readPage(0);
+    };
+
+    const to = computed(
+      () => Math.min(paginator.offset + paginator.limit, paginator.count)
+    );
+
+    const sort = {
+      1: vm.$t('pages.filter.sort.options.application'),
+      2: vm.$t('pages.filter.sort.options.creation_date'),
+    };
+
+    return {
+      store: reactive(store),
+      paginator,
+      readPage,
+      filter,
+      sort,
+      resetFilter,
+      submitFilter,
+      action,
+      to
+    };
+  },
   components: {
     PageSectionHeader,
     PageSection,
@@ -167,21 +229,6 @@ export default {
     Alert
   },
   i18n: lang,
-  data() {
-    return {
-      offset: 0,
-      limit: 5,
-      filter: {
-        application: 0,
-        sort: 0
-      },
-      sort: {
-        1: this.$t('pages.filter.sort.options.application'),
-        2: this.$t('pages.filter.sort.options.creation_date'),
-      },
-      action: null
-    };
-  },
   computed: {
     applications() {
       return this.$store.getters['applications/asOptions'](
@@ -191,71 +238,9 @@ export default {
     canCreate() {
       return this.$can('create', Page);
     },
-    count() {
-      return this.$store.state.author.pages.count;
-    },
-    error() {
-      return this.$store.state.author.pages.error;
-    },
     from() {
-      return this.offset + 1;
+      return this.paginator.offset + 1;
     },
-    loading() {
-      return this.$wait.is('author.pages.load');
-    },
-    pages() {
-      return this.$store.state.author.pages.cache[this.offset];
-    },
-    to() {
-      return Math.min(this.offset + this.limit, this.count);
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchData(params) {
-      await this.$store.dispatch('author/pages/load', {
-        ...params,
-        limit: this.limit
-      });
-    },
-    async readPage(offset) {
-      await this.fetchData({
-        application: this.filter.application,
-        sort: this.filter.sort,
-        offset: offset
-      });
-      this.offset = offset;
-    },
-    submitFilter() {
-      this.action = 'filter';
-      this.offset = 0;
-      this.fetchData({
-        application: this.filter.application,
-        sort: this.filter.sort,
-        offset: this.offset,
-        reload: true
-      });
-    },
-    resetFilter() {
-      this.action = 'reset';
-      this.$formulate.reset('filterForm');
-      this.offset = 0;
-      this.fetchData({
-        application: this.filter.application,
-        sort: this.filter.sort,
-        offset: this.offset,
-        reload: true
-      });
-    }
   }
 };
 </script>

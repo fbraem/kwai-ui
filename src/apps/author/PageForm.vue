@@ -4,7 +4,6 @@
     <FormulateForm
       name="page"
       v-model="form"
-      ref="form"
       @submit="submit"
       @submit-raw="checkValidation"
     >
@@ -106,7 +105,7 @@
           ]"
         >
           <i
-            v-if="saving"
+            v-if="store.save.isRunning"
             class="fas fa-spinner fa-spin mr-2"
           ></i>
           <i v-else class="fas fa-save mr-2"></i>
@@ -126,8 +125,92 @@ import Alert from '@/components/Alert';
 import Application from '@/models/Application';
 
 import lang from './lang';
+import {useAuthorPageStore} from '@/apps/author/composables/usePages';
+// eslint-disable-next-line max-len
+import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
+import Page from '@/components/Page';
 
 export default {
+  props: {
+    id: {
+      type: String
+    }
+  },
+  setup(props) {
+    const store = useAuthorPageStore();
+
+    const form = ref({
+      title: '',
+      enabled: false,
+      summary: '',
+      content: '',
+      application: 0,
+      remark: ''
+    });
+
+    const hasFormErrors = ref(false);
+    const hasValidationErrors = ref(false);
+
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    if (props.id) {
+      onMounted(async() => {
+        await store.read.run(props.id);
+        form.value.application = store.current.application.id;
+        form.value.enabled = store.current.enabled;
+        form.value.remark = store.current.remark;
+        form.value.title = store.current.content.title;
+        form.value.summary = store.current.content.summary;
+        form.value.content = store.current.content.content;
+      });
+    }
+
+    async function submit() {
+      const page = props.id ? store.current : new Page();
+      page.enabled = form.value.enabled;
+      page.remark = form.value.remark;
+      page.application = new Application();
+      page.application.id = form.value.application;
+      if (!page.contents) {
+        page.contents = [Object.create(null)];
+      }
+      page.contents[0].locale = 'nl';
+      page.contents[0].format = 'md';
+      page.contents[0].title = form.value.title;
+      page.contents[0].summary = form.value.summary;
+      page.contents[0].content = form.value.content;
+
+      await store.save.run(page);
+      if (!store.save.error) {
+        await vm.$router.push({
+          name: 'pages.read',
+          params: {
+            id: store.current.id
+          }
+        });
+      } else {
+        this.$formulate.handle(store.save.error, 'page');
+        console.log(store.save.error);
+      }
+    }
+
+    const vm = getCurrentInstance();
+    const title = computed(() =>
+      props.id ? vm.$t('pages.create') : vm.$t('pages.update')
+    );
+
+    return {
+      store: reactive(store),
+      form,
+      hasFormErrors,
+      hasValidationErrors,
+      checkValidation,
+      title,
+      submit
+    };
+  },
   components: {
     HeaderLine,
     PageSection,
@@ -135,133 +218,11 @@ export default {
     Alert
   },
   i18n: lang,
-  props: {
-    creating: {
-      type: Boolean
-    }
-  },
-  data() {
-    return {
-      form: {
-        title: '',
-        enabled: false,
-        summary: '',
-        content: '',
-        application: 0,
-        remark: ''
-      },
-      hasFormErrors: false,
-      hasValidationErrors: false
-    };
-  },
   computed: {
-    title() {
-      if (this.creating) return this.$t('pages.create');
-      return this.$t('pages.update');
-    },
-    page() {
-      return this.$store.state.author.pages.current;
-    },
     applications() {
       return this.$store.getters['applications/asOptions'](
         (application) => application.pages
       );
-    },
-    error() {
-      return this.$store.state.author.news.error;
-    },
-    saving() {
-      return this.$wait.is('author.news.save');
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      try {
-        await vm.setupForm(to.params);
-        return next();
-      } catch (err) {
-        console.log(err);
-        vm.$notify({
-          group: 'error',
-          type: 'error',
-          title: 'Unexpected error',
-          text: err
-        });
-        return next('/author/pages');
-      }
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    try {
-      await this.setupForm(to.params);
-      return next();
-    } catch (err) {
-      console.log(err);
-      this.$notify({
-        group: 'error',
-        type: 'error',
-        title: 'Unexpected error',
-        text: err
-      });
-      return next('/author/pages');
-    }
-  },
-  methods: {
-    async checkValidation(submission) {
-      this.hasValidationErrors = await submission.hasValidationErrors();
-    },
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('author/pages/read', {
-          id: params.id
-        });
-        this.form.application = this.page.application.id;
-        this.form.enabled = this.page.enabled;
-        this.form.remark = this.page.remark;
-        this.form.title = this.page.content.title;
-        this.form.summary = this.page.content.summary;
-        this.form.content = this.page.content.content;
-      } else {
-        await this.$store.dispatch('author/pages/create');
-      }
-    },
-    readForm() {
-      this.page.enabled = this.form.enabled;
-      this.page.remark = this.form.remark;
-      this.page.application = new Application();
-      this.page.application.id = this.form.application;
-      if (!this.page.contents) {
-        this.page.contents = [Object.create(null)];
-      }
-      this.page.contents[0].locale = 'nl';
-      this.page.contents[0].format = 'md';
-      this.page.contents[0].title = this.form.title;
-      this.page.contents[0].summary = this.form.summary;
-      this.page.contents[0].content = this.form.content;
-    },
-    async submit() {
-      this.readForm();
-      try {
-        const page = await this.$store.dispatch(
-          'author/pages/save',
-          this.page
-        );
-        const route = {};
-        if (this.$route.meta.back?.name) {
-          route.name = this.$route.meta.back.name;
-          route.params = this.$route.meta.back.params;
-        } else {
-          route.name = 'pages.read';
-          route.params = {id: page.id};
-        }
-        await this.$router.push(route);
-      } catch (err) {
-        console.log(err);
-        this.$formulate.handle(err, 'page');
-        if (this.$refs.form) {
-          this.hasFormErrors = this.$refs.form.mergedFormErrors.length > 0;
-        }
-      }
     }
   }
 };
