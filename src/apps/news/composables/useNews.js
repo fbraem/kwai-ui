@@ -83,7 +83,7 @@ export default function createNewsService() {
     all: computed(() => all.value),
     archive: computed(() => archive.value),
     count: computed(() => all.value.length),
-    current: computed(() => current.value),
+    current,
     fullCount: computed(() => count.value),
     load,
     loadArchive,
