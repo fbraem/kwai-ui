@@ -74,9 +74,7 @@ export default [
         name: 'author.pages.update',
         path: 'pages/update/:id(\\d+)',
         component: PageForm,
-        props: {
-          creating: false
-        },
+        props: true,
         meta: {
           auth: {
             action: 'update',
