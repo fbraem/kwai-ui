@@ -35,6 +35,9 @@ export default function createNewsService() {
     if (user) {
       api = api.query({ 'filter[user]': user });
     }
+    if (application) {
+      api = api.query({ 'filter[application]': application });
+    }
     const json = await api
       .get()
       .json()
