@@ -15,7 +15,7 @@
         <div class="w-full md:w-1/2 p-4">
           <NewsListCard
             :stories="stories"
-            :category="category"
+            :category="application"
             class="h-full"
           />
         </div>
@@ -62,25 +62,24 @@
 <script>
 import moment from 'moment';
 
-import Application from '@/models/Application';
-import newsStore from '@/apps/news/store';
-import pageStore from '@/apps/pages/store';
-
 import NewsListCard from '@/apps/news/components/NewsListCard';
 import PageListCard from '@/apps/pages/components/PageListCard';
 import Calendar from '@/apps/trainings/Calendar';
 import CoachListCard from './components/CoachListCard';
 import HeaderLine from '@/components/HeaderLine';
 import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
-import {onMounted, reactive, ref, watch} from '@vue/composition-api';
+import {onMounted, reactive, ref, watch, computed} from '@vue/composition-api';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 import Training from '@/models/trainings/Training';
 import Team from '@/models/Team';
 import Coach from '@/models/trainings/Coach';
 import ImageHeader from '@/components/ImageHeader';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import useApplications from '@/site/composables/useApplications';
 
 export default {
-  setup() {
+  setup(props) {
     const trainings = useTrainingStore();
     const coaches = useCoachStore();
     const year = ref(moment().year());
@@ -90,6 +89,43 @@ export default {
       trainings.load.run();
       coaches.load.run();
     });
+
+    const newsStore = useNewsStore();
+    const stories = computed(() => newsStore.all.value);
+
+    const pageStore = usePageStore();
+    const pages = computed(() => pageStore.all.value);
+
+    const applicationStore = useApplications();
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.name === 'trainings');
+      }
+      return null;
+    });
+
+    if (application.value) {
+      onMounted(() => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        });
+        pageStore.load.run({application: application.value.id});
+      });
+    }
+
+    watch(
+      () => application.value,
+      () => {
+        if (application.value) {
+          newsStore.load.run({
+            promoted: true,
+            application: application.value.id
+          });
+          pageStore.load.run({application: application.value.id});
+        }
+      }
+    );
 
     watch(
       [ month, year],
@@ -105,8 +141,12 @@ export default {
     return {
       trainings: reactive(trainings),
       coaches: reactive(coaches),
+      // applications: reactive(applicationStore),
       year,
-      month
+      month,
+      application,
+      stories,
+      pages
     };
   },
   components: {
@@ -117,11 +157,6 @@ export default {
     Calendar,
     CoachListCard
   },
-  props: {
-    category: {
-      type: Application
-    }
-  },
   computed: {
     pictures() {
       return {
@@ -129,18 +164,6 @@ export default {
         '768w': require('custom/trainings/images/header_md.jpg'),
         '640w': require('custom/trainings/images/header_sm.jpg'),
       };
-    },
-    application() {
-      return this.$store.getters['applications/application']('trainings');
-    },
-    stories() {
-      return this.$store.state.training.news.cache[0] || [];
-    },
-    hasStories() {
-      return this.stories.length > 0;
-    },
-    pages() {
-      return this.$store.state.training.page.cache[0] || [];
     },
     calendarLink() {
       return {
@@ -186,43 +209,7 @@ export default {
       return buttons;
     }
   },
-  beforeCreate() {
-    this.$store.registerModule(['training', 'news'], newsStore);
-    this.$store.registerModule(['training', 'page'], pageStore);
-  },
-  destroyed() {
-    this.$store.unregisterModule(['training', 'news']);
-    this.$store.unregisterModule(['training', 'page']);
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      if (vm.application?.id) {
-        vm.fetchNews(vm.application.id);
-        vm.fetchPages(vm.application.id);
-      }
-      next();
-    });
-  },
-  watch: {
-    application(nv, ov) {
-      if (nv) {
-        this.fetchNews(nv.id);
-        this.fetchPages(nv.id);
-      }
-    }
-  },
   methods: {
-    fetchNews(applicationId) {
-      this.$store.dispatch('training/news/load', {
-        application: applicationId,
-        promoted: true
-      });
-    },
-    fetchPages(applicationId) {
-      this.$store.dispatch('training/page/load', {
-        application: applicationId
-      });
-    },
     prevYear() {
       this.year -= 1;
       this.trainings.load.run({
