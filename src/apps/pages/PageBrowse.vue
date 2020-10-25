@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <Spinner v-if="$wait.is('pages.browse')" />
+    <Spinner v-if="store.load.isRunning" />
     <div class="flex justify-center mb-4">
       <Paginator
         :count="paginator.count"
@@ -12,7 +12,7 @@
     <div class="flex flex-wrap justify-center">
       <div
         class="w-full md:w-1/2 lg:w-1/3 p-4"
-        v-for="page in pages"
+        v-for="page in store.all"
         :key="page.id"
       >
         <PageSummary :page="page" />
@@ -27,7 +27,7 @@
       />
     </div>
     <div
-        v-if="! $wait.is('pages.load') && pageCount === 0"
+        v-if="! store.load.isRunning && store.fullCount === 0"
     >
       <Alert type="danger">
         {{ $t('no_pages') }}
@@ -48,11 +48,47 @@ import Sidebar from './Sidebar';
 import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import {onMounted, reactive, watch} from '@vue/composition-api';
 
 /**
  * Page for browsing information
  */
 export default {
+  props: {
+    application: {
+      type: String
+    }
+  },
+  setup(props) {
+    const store = usePageStore();
+    const paginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 10
+    });
+
+    onMounted(() => {
+      readPage(0);
+    });
+    watch(props, () => {
+      readPage(0);
+    });
+
+    const readPage = async(offset) => {
+      await store.load.run({
+        application: props.application,
+        offset
+      }, true);
+      paginator.offset = offset;
+      paginator.count = store.fullCount;
+    };
+
+    return {
+      store: reactive(store),
+      readPage
+    };
+  },
   i18n: messages,
   components: {
     Page,
@@ -61,52 +97,6 @@ export default {
     Paginator,
     Spinner,
     Alert
-  },
-  data() {
-    return {
-      offset: 0,
-      applicationId: null
-    };
-  },
-  computed: {
-    pages() {
-      return this.$store.state.pages.cache[this.offset];
-    },
-    pageCount() {
-      return this.$store.state.pages.count;
-    },
-    paginator() {
-      return {
-        offset: this.offset,
-        count: this.$store.state.pages.count,
-        limit: 10
-      };
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchData(params) {
-      if (params.application) {
-        this.applicationId = params.application;
-      }
-      await this.$store.dispatch('pages/load', params);
-    },
-    async readPage(offset) {
-      this.offset = offset;
-      await this.fetchData({
-        offset,
-        application: this.applicationId,
-      });
-    }
   }
 };
 </script>

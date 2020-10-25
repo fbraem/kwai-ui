@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div v-if="error">
-      {{ error }}
-    </div>
-    <Spinner v-if="$wait.is('pages.read')" />
+    <Spinner v-if="store.read.isRunning" />
     <article
       v-if="page"
       class="page-content container overflow-x-auto mx-auto p-4"
@@ -106,53 +103,32 @@ blockquote {
 import messages from './lang';
 
 import Spinner from '@/components/Spinner';
+import {onMounted, reactive, computed} from '@vue/composition-api';
+import {usePageStore} from '@/apps/pages/composables/usePages';
 
 /**
  * Page for an information page
  */
 export default {
+  props: {
+    id: {
+      type: String
+    }
+  },
+  setup(props) {
+    const store = usePageStore();
+
+    onMounted(() => store.read.run(props.id));
+    const page = computed(() => store.current);
+
+    return {
+      store: reactive(store),
+      page
+    };
+  },
   components: {
     Spinner,
   },
-  i18n: messages,
-  computed: {
-    page() {
-      return this.$store.state.pages.current;
-    },
-    categoryLink() {
-      return {
-        name: 'pages.category',
-        params: {
-          category:
-          this.page.category.id
-        }
-      };
-    },
-    categories() {
-      return this.$store.state.applications.all;
-    },
-    error() {
-      return this.$store.state.pages.error;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData(params) {
-      try {
-        this.$store.dispatch('pages/read', { id: params.id });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
+  i18n: messages
 };
 </script>
