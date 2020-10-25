@@ -1,12 +1,12 @@
 <template>
   <Header
-    v-if="category"
+    v-if="application"
     :title="$t('news')"
-    :subtitle="category.name"
+    :subtitle="application.name"
     :picture="picture"
     :toolbar="toolbar"
   >
-    <div v-html="category.description"></div>
+    <div v-html="application.description"></div>
   </Header>
 </template>
 
@@ -23,17 +23,17 @@ export default {
   },
   i18n: messages,
   computed: {
-    category() {
+    application() {
       /* eslint-disable max-len */
-      if (this.$route.params.category) {
-        return this.$store.getters['applications/application'](this.$route.params.category);
+      if (this.$route.params.application) {
+        return this.$store.getters['applications/application'](this.$route.params.application);
       }
       return null;
       /* eslint-enable max-len */
     },
     picture() {
-      if (this.category && this.category.images) {
-        return this.category.images.normal;
+      if (this.application && this.application.images) {
+        return this.application.images.normal;
       }
       return null;
     },

@@ -35,12 +35,13 @@ export default [
         name: 'pages.read',
       },
       {
-        path: 'category/:category(\\d+)',
+        path: 'application/:application(\\d+)',
         components: {
           hero: PageCategoryHeader,
           default: PageBrowse
         },
-        name: 'pages.category',
+        props: true,
+        name: 'pages.application',
       },
       {
         path: '',

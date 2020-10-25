@@ -43,7 +43,7 @@ export default [
         name: 'news.story',
       },
       {
-        path: 'category/:category(\\d+)',
+        path: 'application/:application(\\d+)',
         components: {
           hero: NewsCategoryHeader,
           default: NewsBrowse
@@ -52,7 +52,7 @@ export default [
           hero: true,
           default: true
         },
-        name: 'news.category',
+        name: 'news.application',
       },
       {
         path: 'archive/:year(\\d+)/:month(\\d+)',
