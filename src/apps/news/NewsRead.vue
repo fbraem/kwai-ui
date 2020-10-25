@@ -64,7 +64,7 @@ import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import Spinner from '@/components/Spinner';
 import {useNewsStore} from '@/apps/news/composables/useNews';
-import {reactive, computed, watch, onMounted} from '@vue/composition-api';
+import {reactive, computed, watch, onMounted, getCurrentInstance} from '@vue/composition-api';
 
 export default {
   props: {
@@ -88,9 +88,12 @@ export default {
     });
 
     const facebookUrl = computed(() => {
-      return config.site + '/facebook/news/' + this.story.id;
+      if (story.value) {
+        return config.site + '/facebook/news/' + story.value.id;
+      }
     });
 
+    const vm = getCurrentInstance();
     const copyText = (text) => {
       const cb = document.getElementById('cb');
       cb.value = text;
@@ -98,7 +101,7 @@ export default {
       cb.select();
       document.execCommand('copy');
       cb.style.display = 'none';
-      this.$notify({
+      vm.$notify({
         title: 'Link Gekopieerd!',
         text: 'De link om te delen op Facebook is in de clipboard geplaatst!',
         duration: 10000
