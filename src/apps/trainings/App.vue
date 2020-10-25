@@ -1,5 +1,5 @@
 <template>
-  <router-view :category="application"></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -9,7 +9,8 @@ import {provideTeamStore} from '@/apps/teams/composables/useTeams';
 import {provideTrainingStore} from '@/apps/trainings/composables/useTrainings';
 // eslint-disable-next-line max-len
 import {provideDefinitionStore} from '@/apps/trainings/composables/useDefinitions';
-import trainingStore from './store/training';
+import {provideNewsStore} from '@/apps/news/composables/useNews';
+import {providePageStore} from '@/apps/pages/composables/usePages';
 
 export default {
   setup() {
@@ -18,17 +19,8 @@ export default {
     provideSeasonStore();
     provideTeamStore();
     provideDefinitionStore();
-  },
-  computed: {
-    application() {
-      return this.$store.getters['applications/application']('trainings');
-    }
-  },
-  beforeCreate() {
-    this.$store.registerModule('training', trainingStore);
-  },
-  destroyed() {
-    this.$store.unregisterModule(['training']);
+    provideNewsStore();
+    providePageStore();
   }
 };
 </script>

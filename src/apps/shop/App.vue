@@ -60,7 +60,7 @@ import Spinner from '@/components/Spinner';
 import useApplications from '@/site/composables/useApplications';
 // eslint-disable-next-line max-len
 import {providePageStore, usePageStore} from '@/apps/pages/composables/usePages';
-import {watch, reactive, computed} from '@vue/composition-api';
+import {watch, reactive, computed, onMounted} from '@vue/composition-api';
 import {provideNewsStore, useNewsStore} from '@/apps/news/composables/useNews';
 
 export default {
@@ -78,6 +78,16 @@ export default {
     const newsStore = useNewsStore();
     providePageStore();
     const pageStore = usePageStore();
+
+    if (application.value) {
+      onMounted(() => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        });
+        pageStore.load.run({application: application.value.id});
+      });
+    }
 
     watch(
       () => application.value,
