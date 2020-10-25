@@ -58,6 +58,7 @@ import PageSummary from '@/apps/pages/components/PageSummary';
 import ImageHeader from '@/components/ImageHeader';
 import Spinner from '@/components/Spinner';
 import useApplications from '@/site/composables/useApplications';
+// eslint-disable-next-line max-len
 import {providePageStore, usePageStore} from '@/apps/pages/composables/usePages';
 import {watch, reactive, computed} from '@vue/composition-api';
 import {provideNewsStore, useNewsStore} from '@/apps/news/composables/useNews';
