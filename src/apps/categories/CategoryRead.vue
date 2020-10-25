@@ -76,7 +76,7 @@ export default {
     },
     moreNewsLink() {
       return {
-        name: 'news.category',
+        name: 'news.application',
         params: {
           category: this.category.id
         }

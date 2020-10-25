@@ -58,9 +58,9 @@ export default {
     oldNewsLink() {
       if (this.category) {
         return {
-          name: 'news.category',
+          name: 'news.application',
           params: {
-            category: this.category.id
+            application: this.category.id
           }
         };
       }
