@@ -11,7 +11,7 @@ const http_applications_api = http_api.url('portal/applications');
 let all = null;
 
 export default function createApplicationService() {
-  all = ref([]);
+  if (!all) all = ref([]);
   const current = ref(null);
 
   const load = useAPI(async() => {
@@ -29,7 +29,7 @@ export default function createApplicationService() {
   };
 
   return {
-    all: computed(() => all.value),
+    all,
     current: computed(() => current.value),
     load,
     get
