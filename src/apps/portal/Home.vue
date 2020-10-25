@@ -2,7 +2,10 @@
   <!-- eslint-disable max-len -->
   <div class="p-4">
     <div class="hidden sm:block container mx-auto bg-gray-100 mb-4">
-      <div class="flex flex-row flex-wrap justify-center p-4">
+      <div
+        v-if="applications"
+        class="flex flex-row flex-wrap justify-center p-4"
+      >
         <div
           v-for="application in applications"
           :key="application.id"
@@ -15,7 +18,10 @@
         </div>
       </div>
     </div>
-    <div class="block sm:hidden mb-4">
+    <div
+      v-if="applications"
+      class="block sm:hidden mb-4"
+    >
       <ApplicationList
         :applications="applications"
         :icons="$route.meta.icons"
@@ -31,11 +37,11 @@
           @page="loadStories"
         />
       </div>
-      <Spinner v-if="$wait.is('portal.news.load')">
+      <Spinner v-if="newsStore.load.isRunning">
       </Spinner>
       <div class="flex flex-wrap justify-center mb-4">
         <div
-          v-for="story in stories"
+          v-for="story in newsStore.all"
           :key="story.id"
           class="p-2 md:p-4 w-full xl:w-1/2"
         >
@@ -76,8 +82,42 @@ import ApplicationList from '@/apps/portal/components/ApplicationList';
 
 import messages from '../../site/lang';
 import HeaderLine from '@/components/HeaderLine';
+import {useApplicationStore} from '@/site/composables/useApplications';
+import {computed, onMounted, reactive} from '@vue/composition-api';
+import {useNewsStore} from '@/apps/news/composables/useNews';
 
 export default {
+  setup() {
+    const newsStore = useNewsStore();
+
+    const storiesPaginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 10
+    });
+    async function loadStories(offset) {
+      await newsStore.load.run({
+        offset,
+        promoted: true
+      });
+      storiesPaginator.offset = offset;
+    }
+
+    onMounted(async() => {
+      await loadStories(0);
+      storiesPaginator.count = newsStore.fullCount;
+    });
+
+    const applicationStore = useApplicationStore();
+    const applications = computed(() => applicationStore.all);
+
+    return {
+      applications,
+      newsStore: reactive(newsStore),
+      loadStories,
+      storiesPaginator
+    };
+  },
   i18n: messages,
   components: {
     HeaderLine,
@@ -89,49 +129,8 @@ export default {
   },
   data() {
     return {
-      aboutHtml: this.$route.meta.html['./about.html'],
-      offset: 0
+      aboutHtml: this.$route.meta.html['./about.html']
     };
-  },
-  computed: {
-    storiesPaginator() {
-      return {
-        offset: this.offset,
-        count: this.$store.state.portal.news.count,
-        limit: 10
-      };
-    },
-    stories() {
-      return this.$store.state.portal.news.cache[this.offset];
-    },
-    applications() {
-      return this.$store.state.applications.all;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchData() {
-      await this.loadStories(0);
-    },
-    async loadStories(offset) {
-      try {
-        await this.$store.dispatch('portal/news/load', {
-          offset
-        });
-        this.offset = offset;
-      } catch (error) {
-        console.log(error);
-      }
-    }
   }
 };
 </script>

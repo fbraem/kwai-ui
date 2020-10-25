@@ -13,6 +13,10 @@
 
 <script>
 import Toolbar from '@/site/Toolbar';
+// eslint-disable-next-line max-len
+import {provideApplicationStore, useApplicationStore} from '@/site/composables/useApplications';
+import {onMounted, reactive} from '@vue/composition-api';
+
 let html = {};
 const importAllHtml
   = requireContext => requireContext.keys().forEach(
@@ -22,6 +26,18 @@ const importAllHtml
 importAllHtml(require.context('custom', false, /.html$/));
 
 export default {
+  setup() {
+    provideApplicationStore();
+
+    const applicationStore = useApplicationStore();
+    onMounted(async() => {
+      await applicationStore.load.run();
+    });
+
+    return {
+      store: reactive(applicationStore)
+    };
+  },
   components: {
     Toolbar
   },
@@ -29,11 +45,6 @@ export default {
     return {
       footer: html['./footer.html']
     };
-  },
-  beforeCreate() {
-    this.$store.dispatch('applications/load');
-  },
-  beforeDestroy() {
   }
 };
 </script>

@@ -13,20 +13,26 @@
 <script>
 import CategoryCards from '@/apps/categories/components/CategoryCards';
 import {provideNewsStore} from '@/apps/news/composables/useNews';
+import {useApplicationStore} from '@/site/composables/useApplications';
+import {computed} from '@vue/composition-api';
 
 export default {
   setup() {
     provideNewsStore();
+    const applicationStore = useApplicationStore();
+
+    const applications = computed(() => {
+      return applicationStore.all.filter(
+        app => app.news
+      );
+    });
+
+    return {
+      applications
+    };
   },
   components: {
     CategoryCards
-  },
-  computed: {
-    applications() {
-      return this.$store.state.applications.all.filter(
-        app => app.news
-      );
-    }
   }
 };
 </script>
