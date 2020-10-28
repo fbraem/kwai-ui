@@ -7,6 +7,7 @@ export function useAPI(callback = () => {}) {
 
   const run = async(...params) => {
     try {
+      error.value = null;
       isRunning.value = true;
       data = await callback(...params);
     } catch (e) {
