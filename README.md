@@ -56,7 +56,26 @@ To create a development version run:
     npm run dev
 
 The result is a build directory. Copy this directory with all its contents to
-your host.
+your webserver.
+
+vagrant
+=======
+
+Vagrant can be used to set up a test environment. Before start, use 
+`kwai.development.yaml` to configure the location of the folder of the 
+custom HTML and images. For example:
+
+```yaml
+---
+custom: '/development/code/kwai-custom'
+```
+
+This vagrant box contains only the client code. Make sure kwai-api is also
+available (and configure CORS).
+
+When the box is up and running, use `vagrant ssh KWAI_UI` to enter the server.
+Change the current folder to `/vagrant` and run `npm run dev` to build the
+client application.
 
 Customize
 =========
