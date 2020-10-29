@@ -12,8 +12,8 @@ export default function createAuthorPageService() {
 
   const save = useAPI(async(page) => {
     const transformer = new Transformer();
-    let api = http_author_api;
-    if (page.id) api = api.url(`/pages/${page.id}`);
+    let api = http_author_api.url('/pages');
+    if (page.id) api = api.url(`/${page.id}`);
     api = api.json(transformer.serialize(page));
 
     const res = await (page.id ? api.patch() : api.post());

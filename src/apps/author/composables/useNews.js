@@ -12,8 +12,8 @@ export default function createAuthorNewsService() {
 
   const save = useAPI(async(story) => {
     const transformer = new Transformer();
-    let api = http_author_api;
-    if (story.id) api = api.url(`/stories/${story.id}`);
+    let api = http_author_api.url('/stories');
+    if (story.id) api = api.url(`/${story.id}`);
     api = api.json(transformer.serialize(story));
 
     const res = await (story.id ? api.patch() : api.post());
