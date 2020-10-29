@@ -66,7 +66,7 @@ export default function createPageService() {
   return {
     all: computed(() => all.value),
     count: computed(() => all.value.length),
-    current,
+    current: computed(() => current.value),
     fullCount: computed(() => count.value),
     load,
     read,
