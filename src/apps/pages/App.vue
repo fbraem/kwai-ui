@@ -10,39 +10,28 @@
 </template>
 
 <script>
-import store from './store';
 import CategoryCards from '@/apps/categories/components/CategoryCards';
+import {computed} from '@vue/composition-api';
+import {useApplicationStore} from '@/site/composables/useApplications';
+import {providePageStore} from '@/apps/pages/composables/usePages';
 
 export default {
-  components: {
-    CategoryCards
-  },
-  computed: {
-    applications() {
-      return this.$store.state.applications.all.filter(
+  setup() {
+    providePageStore();
+    const applicationStore = useApplicationStore();
+
+    const applications = computed(() => {
+      return applicationStore.all.filter(
         app => app.pages
       );
-    }
-  },
-  beforeCreate() {
-    this.$store.registerModule('pages', store);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('pages/reset');
-    this.$store.unregisterModule('pages');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('pages/setCurrent', to.meta.active);
-      }
     });
+
+    return {
+      applications
+    };
   },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'author.page.update') {
-      to.meta.active = this.$store.state.page.current;
-    }
-    next();
+  components: {
+    CategoryCards
   }
 };
 </script>

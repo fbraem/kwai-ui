@@ -112,7 +112,8 @@ import {usePageStore} from '@/apps/pages/composables/usePages';
 export default {
   props: {
     id: {
-      type: String
+      type: String,
+      required: true
     }
   },
   setup(props) {

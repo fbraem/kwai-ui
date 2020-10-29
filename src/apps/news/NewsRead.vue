@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <Spinner v-if="$wait.is('news.read')" />
+    <Spinner v-if="news.read.isRunning" />
     <article
       v-if="story"
       class="markdown container mx-auto"

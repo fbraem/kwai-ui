@@ -36,11 +36,15 @@
         <span v-if="application">
           Gepubliceerd in
           <router-link
+            v-if="applicationLink"
             :to="applicationLink"
             class="font-bold"
           >
             {{ application.title }}
           </router-link>
+          <span v-else>
+            {{ application.title }}
+          </span>
           &nbsp;|&nbsp;
         </span>
         {{
@@ -104,12 +108,15 @@ export default {
       };
     },
     applicationLink() {
-      return {
-        name: 'categories.read',
-        params: {
-          id: this.application.id
-        }
-      };
+      const route = this.$router.resolve({ name: this.application.name });
+      if (route.resolved.matched.length > 0) {
+        return {
+          name: this.application.name
+        };
+      } else {
+        console.log('No route found for application', this.application.name);
+      }
+      return null;
     },
   }
 };

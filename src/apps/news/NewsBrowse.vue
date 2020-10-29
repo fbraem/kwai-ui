@@ -55,7 +55,7 @@ import {reactive, onMounted, watch} from '@vue/composition-api';
 
 export default {
   props: {
-    application: {
+    app: {
       type: String
     },
     year: {
@@ -75,7 +75,7 @@ export default {
 
     onMounted(() => {
       news.load.run({
-        application: props.application,
+        application: props.app,
         year: props.year,
         month: props.month
       });

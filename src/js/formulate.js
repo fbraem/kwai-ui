@@ -29,6 +29,7 @@ function kwaiPlugin(instance) {
 export default function init() {
   Vue.use(VueFormulate, {
     errorHandler(err) {
+      console.log(err);
       return {
         inputErrors: {},
         formErrors: [

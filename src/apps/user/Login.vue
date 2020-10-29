@@ -8,7 +8,6 @@
       <FormulateForm
         name="login"
         v-model="form"
-        ref="form"
         @submit="login"
       >
         <FormulateInput
@@ -65,16 +64,53 @@
 import lang from './lang';
 import Alert from '@/components/Alert';
 import Dialog from '@/components/Dialog';
+import {getCurrentInstance, ref} from '@vue/composition-api';
+import createAuthenticationService from '@/site/composables/useAuthentication';
 
 export default {
-  data() {
+  setup() {
+    const authService = createAuthenticationService();
+
+    const form = ref({
+      email: '',
+      password: ''
+    });
+    const hasFormErrors = ref(false);
+    const invalidCredentials = ref(false);
+
+    const vm = getCurrentInstance();
+
+    const login = async() => {
+      invalidCredentials.value = false;
+      hasFormErrors.value = false;
+
+      await authService.login.run({
+        email: form.value.email,
+        password: form.value.password
+      });
+      if (authService.login.error.value) {
+        form.value.password = '';
+        if (authService.login.error.value.response?.status === 401) {
+          // Not Authorized
+          invalidCredentials.value = true;
+        } else {
+          vm.$formulate.handle(authService.login.error.value, 'login');
+        }
+      } else {
+        if (vm.$route.meta.back
+          && vm.$route.meta.back.name !== vm.$route.name) {
+          await vm.$router.push(vm.$route.meta.back);
+        } else {
+          await vm.$router.push({ name: 'home' });
+        }
+      }
+    };
+
     return {
-      form: {
-        email: '',
-        password: ''
-      },
-      hasFormErrors: false,
-      invalidCredentials: false
+      form,
+      hasFormErrors,
+      invalidCredentials,
+      login
     };
   },
   components: {
@@ -82,33 +118,5 @@ export default {
     Dialog
   },
   i18n: lang,
-  methods: {
-    async login() {
-      this.invalidCredentials = false;
-      this.hasFormErrors = false;
-
-      try {
-        await this.$store.dispatch('authentication/login', {
-          email: this.form.email,
-          password: this.form.password
-        });
-        if (this.$route.meta.back) {
-          await this.$router.push({
-            name: this.$route.meta.back.name,
-            params: this.$route.meta.back.params
-          });
-        } else {
-          await this.$router.push({ name: 'home' });
-        }
-      } catch (error) {
-        this.form.password = '';
-        if (error.response?.status === 401) { // Not Authorized
-          this.invalidCredentials = true;
-        } else {
-          this.$formulate.handle(error, 'login');
-        }
-      }
-    }
-  }
 };
 </script>

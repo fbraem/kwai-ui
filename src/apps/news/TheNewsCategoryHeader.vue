@@ -14,23 +14,37 @@
 import Story from '@/models/Story';
 import messages from './lang';
 import Header from '@/components/Header';
+import useApplications from '@/site/composables/useApplications';
+import {computed} from '@vue/composition-api';
 /**
  * Component for header of category page
  */
 export default {
+  props: {
+    app: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const applicationStore = useApplications();
+
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.id === props.app);
+      }
+      return null;
+    });
+
+    return {
+      application
+    };
+  },
   components: {
     Header
   },
   i18n: messages,
   computed: {
-    application() {
-      /* eslint-disable max-len */
-      if (this.$route.params.application) {
-        return this.$store.getters['applications/application'](this.$route.params.application);
-      }
-      return null;
-      /* eslint-enable max-len */
-    },
     picture() {
       if (this.application && this.application.images) {
         return this.application.images.normal;

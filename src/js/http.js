@@ -2,7 +2,7 @@ import wretch from 'wretch';
 
 import config from 'config';
 
-import store from '@/site/store';
+import createAuthenticationService from '@/site/composables/useAuthentication';
 
 export const http = wretch(config.api, {
   options: {
@@ -12,7 +12,8 @@ export const http = wretch(config.api, {
 });
 
 export const http_auth = http.defer(w => {
-  const token = store.state.authentication.access_token;
+  const authService = createAuthenticationService();
+  const token = authService.access_token?.value;
   if (token) {
     return w.auth(`Bearer ${token}`);
   }
@@ -23,10 +24,11 @@ export const http_api = http_auth
   .accept('application/vnd.api+json')
   .content('application/vnd.api+json')
   .catcher(401, async(err, request) => {
-    await store.dispatch('authentication/refresh');
-    if (!store.state.authentication.access_token) throw err;
+    const authService = createAuthenticationService();
+    await authService.refresh.run();
+    if (!authService.access_token?.value) throw err;
 
-    const token = store.state.authentication.access_token;
+    const token = authService.access_token?.value;
     return request
       .auth(token)
       .replay()

@@ -32,6 +32,9 @@ export default [
           hero: PageHeader,
           default: PageRead
         },
+        props: {
+          default: true
+        },
         name: 'pages.read',
       },
       {
@@ -40,7 +43,9 @@ export default [
           hero: PageCategoryHeader,
           default: PageBrowse
         },
-        props: true,
+        props: {
+          default: true
+        },
         name: 'pages.application',
       },
       {

@@ -15,15 +15,6 @@ export default {
     provideTeamStore();
     provideTeamCategoryStore();
     provideSeasonStore();
-  },
-/*
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('team/set', to.meta.active);
-      }
-    });
   }
-*/
 };
 </script>

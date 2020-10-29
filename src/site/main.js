@@ -8,6 +8,9 @@ import Vue from 'vue';
 import VueCompositionApi from '@vue/composition-api';
 Vue.use(VueCompositionApi);
 
+import createAuthenticationService from '@/site/composables/useAuthentication';
+createAuthenticationService().init();
+
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
@@ -19,22 +22,11 @@ import moment from 'moment';
 moment.locale('nl');
 
 /**
- * Initialize vuex
- */
-import store from '@/site/store';
-
-/**
  * Initialise casl
  */
 import { abilitiesPlugin } from '@casl/vue';
 import { ability } from '@/js/ability';
 Vue.use(abilitiesPlugin, ability);
-
-/**
- * Initialise vue-wait
- */
-import VueWait from 'vue-wait';
-Vue.use(VueWait);
 
 /**
  * Initialise vue-formulate
@@ -94,9 +86,5 @@ Vue.customElement('message-card', MessageCard);
  */
 new Vue({
   router,
-  store,
-  wait: new VueWait({
-    useVuex: true,
-  }),
   i18n,
 }).$mount('#kwai');

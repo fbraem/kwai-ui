@@ -112,7 +112,7 @@ export default {
       return {
         name: 'news.application',
         params: {
-          application: application.value.id
+          app: application.value.id
         }
       };
     });

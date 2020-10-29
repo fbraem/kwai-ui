@@ -43,7 +43,7 @@ export default [
         name: 'news.story',
       },
       {
-        path: 'application/:application(\\d+)',
+        path: 'application/:app(\\d+)',
         components: {
           hero: NewsCategoryHeader,
           default: NewsBrowse

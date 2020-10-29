@@ -1,9 +1,9 @@
 <template>
   <component
-    :is="header"
     v-if="page"
+    :is="header"
     :title="page.content.title"
-    :picture="picture"
+    :picture="page.picture"
     :pictures="pictures"
   >
     <p class="text-xs sm:text-base text-gray-600">
@@ -39,23 +39,31 @@ import messages from './lang';
 
 import Header from '@/components/Header.vue';
 import ImageHeader from '@/components/ImageHeader.vue';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import {computed, reactive} from '@vue/composition-api';
 
 /**
  * Component for a page header
  */
 export default {
+  setup() {
+    const pageStore = usePageStore();
+
+    const page = computed(() => {
+      return pageStore.current;
+    });
+
+    return {
+      store: reactive(pageStore),
+      page
+    };
+  },
   i18n: messages,
   components: {
     Header,
     ImageHeader
   },
   computed: {
-    page() {
-      return this.$store.state.pages.current;
-    },
-    picture() {
-      return this.page.picture;
-    },
     pictures() {
       const pictures = {};
       if (this.page.images?.crop_lg) {
@@ -74,9 +82,8 @@ export default {
       return 'Header';
     },
     applicationLink() {
-      let application = this.$store.getters['applications/applicationWithId'](this.page.application.id);
       return {
-        name: application.name
+        name: this.page.application.name
       };
     },
   }

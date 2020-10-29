@@ -161,6 +161,7 @@ import Story from '@/models/Story';
 import {useAuthorNewsStore} from '@/apps/author/composables/useNews';
 // eslint-disable-next-line max-len
 import {getCurrentInstance, reactive, ref, computed, onMounted} from '@vue/composition-api';
+import {useApplicationStore} from '@/site/composables/useApplications';
 
 export default {
   setup() {
@@ -203,6 +204,9 @@ export default {
       () => Math.min(paginator.offset + paginator.limit, paginator.count)
     );
 
+    const applicationStore = useApplicationStore();
+    const applications = computed(() => applicationStore.asOptions());
+
     return {
       store: reactive(store),
       paginator,
@@ -211,7 +215,8 @@ export default {
       resetFilter,
       submitFilter,
       action,
-      to
+      to,
+      applications
     };
   },
   components: {
@@ -224,11 +229,6 @@ export default {
   },
   i18n: lang,
   computed: {
-    applications() {
-      return this.$store.getters['applications/asOptions'](
-        (application) => application.news
-      );
-    },
     canCreate() {
       return this.$can('create', Story);
     },

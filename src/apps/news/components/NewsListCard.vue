@@ -60,7 +60,7 @@ export default {
         return {
           name: 'news.application',
           params: {
-            application: this.category.id
+            app: this.category.id
           }
         };
       }

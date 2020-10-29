@@ -237,6 +237,7 @@ import {useAuthorNewsStore} from '@/apps/author/composables/useNews';
 // eslint-disable-next-line max-len
 import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';
 import Story from '@/models/Story';
+import {useApplicationStore} from '@/site/composables/useApplications';
 
 const createDatetime = (date, time) => {
   if (time == null || time.length === 0) {
@@ -387,6 +388,9 @@ export default {
       }
     }
 
+    const applicationStore = useApplicationStore();
+    const applications = computed(() => applicationStore.asOptions());
+
     return {
       store: reactive(store),
       form,
@@ -397,7 +401,8 @@ export default {
       dateFormat,
       endTimeValidation,
       promotionTimeValidation,
-      submit
+      submit,
+      applications
     };
   },
   i18n: lang,
@@ -406,13 +411,6 @@ export default {
     KwaiFieldset,
     Alert,
     PageSection
-  },
-  computed: {
-    applications() {
-      return this.$store.getters['applications/asOptions'](
-        (application) => application.news
-      );
-    },
   },
   methods: {
     isAfterPublishTimestamp({ value, getFormValues, name }, dateField) {

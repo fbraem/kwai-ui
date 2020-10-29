@@ -129,6 +129,7 @@ import {useAuthorPageStore} from '@/apps/author/composables/usePages';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
 import Page from '@/components/Page';
+import {useApplicationStore} from '@/site/composables/useApplications';
 
 export default {
   props: {
@@ -201,6 +202,9 @@ export default {
       props.id ? vm.$t('pages.create') : vm.$t('pages.update')
     );
 
+    const applicationStore = useApplicationStore();
+    const applications = computed(() => applicationStore.asOptions());
+
     return {
       store: reactive(store),
       form,
@@ -208,7 +212,8 @@ export default {
       hasValidationErrors,
       checkValidation,
       title,
-      submit
+      submit,
+      applications
     };
   },
   components: {
@@ -217,13 +222,6 @@ export default {
     KwaiFieldset,
     Alert
   },
-  i18n: lang,
-  computed: {
-    applications() {
-      return this.$store.getters['applications/asOptions'](
-        (application) => application.pages
-      );
-    }
-  }
+  i18n: lang
 };
 </script>

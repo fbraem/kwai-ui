@@ -159,6 +159,7 @@ import lang from './lang';
 import {useAuthorPageStore} from '@/apps/author/composables/usePages';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
+import {useApplicationStore} from '@/site/composables/useApplications';
 
 export default {
   setup() {
@@ -208,6 +209,9 @@ export default {
       2: vm.$t('pages.filter.sort.options.creation_date'),
     };
 
+    const applicationStore = useApplicationStore();
+    const applications = computed(() => applicationStore.asOptions());
+
     return {
       store: reactive(store),
       paginator,
@@ -217,7 +221,8 @@ export default {
       resetFilter,
       submitFilter,
       action,
-      to
+      to,
+      applications
     };
   },
   components: {
@@ -230,11 +235,6 @@ export default {
   },
   i18n: lang,
   computed: {
-    applications() {
-      return this.$store.getters['applications/asOptions'](
-        (application) => application.pages
-      );
-    },
     canCreate() {
       return this.$can('create', Page);
     },

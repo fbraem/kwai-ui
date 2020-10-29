@@ -18,10 +18,10 @@
                 :link="facebook"
               />
               <IconLink
-                v-if="isLoggedIn && activeUser"
+                v-if="isLoggedIn && user"
                 icon="fas fa-user"
                 class="text-primary_light hover:bg-primary_dark"
-                :route="{ name: 'users.read', params: { id: activeUser.id } }"
+                :route="{ name: 'users.read', params: { id: user.id } }"
               />
               <IconLink
                 v-if="isLoggedIn"
@@ -45,35 +45,42 @@
 
 <script>
 import IconLink from '@/components/IconLink';
+import config from 'config';
+import createAuthenticationService from '@/site/composables/useAuthentication';
+import {computed, getCurrentInstance} from '@vue/composition-api';
+
 export default {
+  setup() {
+    const authService = createAuthenticationService();
+
+    const isLoggedIn = computed(() => authService.isLoggedIn.value);
+    const user = computed(() => authService.user.value);
+
+    const vm = getCurrentInstance();
+    const logout = async() => {
+      await authService.logout.run();
+      await vm.$router.push('/', () => {});
+    };
+
+    return {
+      isLoggedIn,
+      user,
+      logout
+    };
+  },
   components: {
     IconLink
   },
   computed: {
     title() {
-      return this.$store.state.kwai.page.title;
+      return config.title;
     },
     subTitle() {
-      return this.$store.state.kwai.page.subTitle;
+      return config.subTitle ?? '';
     },
     facebook() {
-      return this.$store.state.kwai.facebook;
+      return config.facebook;
     },
-    isLoggedIn() {
-      return this.$store.getters['authentication/isLoggedIn'];
-    },
-    activeUser() {
-      return this.$store.state.authentication.user;
-    }
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('authentication/logout')
-        .then(() => {
-          this.$router.push('/', () => {});
-        })
-      ;
-    }
   }
 };
 </script>
