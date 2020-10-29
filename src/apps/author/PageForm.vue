@@ -128,8 +128,8 @@ import lang from './lang';
 import {useAuthorPageStore} from '@/apps/author/composables/usePages';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
-import Page from '@/components/Page';
 import {useApplicationStore} from '@/site/composables/useApplications';
+import Page from '@/models/Page';
 
 export default {
   props: {
