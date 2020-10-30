@@ -10,7 +10,7 @@
         <div v-html="story.content.html_summary"></div>
       </blockquote>
       <div
-        class="news-content"
+        class="news-content mb-2"
         v-html="story.content.html_content"
       >
       </div>
