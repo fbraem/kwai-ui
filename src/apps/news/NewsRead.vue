@@ -28,6 +28,10 @@
 </template>
 
 <style>
+.news-content ul, .news-content ul > * {
+  @apply list-disc;
+}
+
 .news-content .gallery {
     background: #eee;
     column-count: 1;

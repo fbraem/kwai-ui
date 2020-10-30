@@ -16,6 +16,10 @@
 </template>
 
 <style>
+.page-content ul, .page-content ul > * {
+  @apply list-disc;
+}
+
 blockquote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
