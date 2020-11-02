@@ -53,6 +53,12 @@ const routes = [
           default: true
         },
         name: 'users.invitation',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
         path: 'invitation/:token',
@@ -78,6 +84,12 @@ const routes = [
           default: true
         },
         name: 'users.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
         path: '',
@@ -86,6 +98,12 @@ const routes = [
           default: UserBrowse
         },
         name: 'users.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
     ]
   },
