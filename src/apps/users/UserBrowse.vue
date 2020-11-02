@@ -1,6 +1,6 @@
 <template>
   <div class="mt-6">
-    <Spinner v-if="$wait.is('users.browse')">
+    <Spinner v-if="users.load.isRunning">
     </Spinner>
     <div v-else
       class="flex flex-wrap"
