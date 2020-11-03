@@ -53,7 +53,7 @@ export default [
             path: 'trainings',
             name: 'trainings.coaches.trainings.default',
             component: CoachTrainings,
-            props: (route) => {
+            props: () => {
               return {
                 year: moment().year(),
                 month: moment().month() + 1
