@@ -129,7 +129,7 @@ export default {
   setup() {
     const news = useNewsStore();
 
-    const story = computed(() => news.current );
+    const story = computed(() => news.current);
     return {
       news: reactive(news),
       story
@@ -147,12 +147,18 @@ export default {
       return null;
     },
     applicationLink() {
-      return {
-        name: 'categories.read',
-        params: {
-          id: this.story.application.id
-        }
-      };
+      const route = this.$router.resolve({ name: this.story.application.name });
+      if (route.resolved.matched.length > 0) {
+        return {
+          name: this.story.application.name
+        };
+      } else {
+        console.log(
+          'No route found for application',
+          this.story.application.name
+        );
+      }
+      return null;
     },
     toolbar() {
       const buttons = [];
