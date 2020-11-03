@@ -50,6 +50,12 @@ let routes = [
         component: Presences,
         props: true,
         name: 'trainings.presences',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'presences'
+          }
+        },
       },
       {
         path: ':year(\\d+)/:month(\\d+)',
@@ -72,12 +78,24 @@ let routes = [
         path: 'create',
         component: TrainingForm,
         name: 'trainings.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'trainings'
+          }
+        },
       },
       {
         path: 'update/:id(\\d+)',
         component: TrainingForm,
         props: true,
         name: 'trainings.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'trainings'
+          }
+        },
       },
       {
         path: '',

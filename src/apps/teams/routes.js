@@ -61,21 +61,39 @@ export default [
             components: {
               team_information: TeamMembers
             },
-            name: 'team.members'
+            name: 'team.members',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: 'season',
             components: {
               team_information: TeamTournaments
             },
-            name: 'team.tournaments'
+            name: 'team.tournaments',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: 'trainings',
             components: {
               team_information: TeamTrainings
             },
-            name: 'team.trainings'
+            name: 'team.trainings',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: 'add_members',
@@ -85,7 +103,13 @@ export default [
             props: {
               team_information: true
             },
-            name: 'team.add_members'
+            name: 'team.add_members',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: '',
@@ -100,39 +124,81 @@ export default [
         path: 'create',
         component: TeamForm,
         name: 'teams.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'update/:id(\\d+)',
         component: TeamForm,
         props: true,
         name: 'teams.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'categories/:id(\\d+)',
         props: true,
         component: TeamCategoryRead,
         name: 'team_categories.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'categories/create',
         component: TeamCategoryForm,
         name: 'team_categories.create',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'categories/update/:id(\\d+)',
         component: TeamCategoryForm,
         props: true,
         name: 'team_categories.update',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'categories',
         component: TeamCategoryBrowse,
         name: 'team_categories.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: '',
         component: TeamBrowse,
         name: 'teams.browse',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'teams'
+          }
+        },
       },
     ]
   },

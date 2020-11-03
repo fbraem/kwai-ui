@@ -40,7 +40,13 @@ export default [
             components: {
               member_information: MemberTeams
             },
-            name: 'members.teams'
+            name: 'members.teams',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'members'
+              }
+            },
           },
           {
             path: 'trainings',
@@ -48,6 +54,12 @@ export default [
               member_information: NotImplemented,
             },
             name: 'members.trainings',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'members'
+              }
+            },
           },
           {
             path: 'tournaments',
@@ -55,6 +67,12 @@ export default [
               member_information: NotImplemented,
             },
             name: 'members.tournaments',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'members'
+              }
+            },
           },
           {
             path: '',
@@ -62,6 +80,12 @@ export default [
               member_information: MemberDetail,
             },
             name: 'members.read',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'members'
+              }
+            },
           },
         ]
       },

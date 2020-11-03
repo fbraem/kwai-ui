@@ -43,21 +43,39 @@ export default [
             components: {
               season_information: SeasonTeams
             },
-            name: 'seasons.teams'
+            name: 'seasons.teams',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: 'definitions',
             components: {
               season_information: SeasonDefinitions
             },
-            name: 'seasons.definitions'
+            name: 'seasons.definitions',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: 'trainings',
             components: {
               season_information: SeasonTrainings
             },
-            name: 'seasons.trainings'
+            name: 'seasons.trainings',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: '',
@@ -65,6 +83,12 @@ export default [
               season_information: SeasonDetail
             },
             name: 'seasons.read',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
         ]
       },
@@ -72,16 +96,34 @@ export default [
         path: 'create',
         component: SeasonForm,
         name: 'seasons.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'seasons'
+          }
+        },
       },
       {
         path: 'update/:id(\\d+)',
         component: SeasonForm,
         name: 'seasons.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'seasons'
+          }
+        },
       },
       {
         path: '',
         component: SeasonBrowse,
         name: 'seasons.browse',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'seasons'
+          }
+        },
       },
     ]
   },

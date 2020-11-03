@@ -43,7 +43,13 @@ export default [
           hero: true,
           default: true
         },
-        name: 'users.abilities.read'
+        name: 'users.abilities.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'rules'
+          }
+        }
       },
       {
         path: 'create',
@@ -55,7 +61,13 @@ export default [
           hero: true,
           default: true
         },
-        name: 'users.abilities.create'
+        name: 'users.abilities.create',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'rules'
+          }
+        }
       },
       {
         path: 'update/:id(\\d+)',
@@ -67,7 +79,13 @@ export default [
           hero: true,
           default: true
         },
-        name: 'users.abilities.update'
+        name: 'users.abilities.update',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
         path: '',
@@ -76,6 +94,12 @@ export default [
           default: AbilityBrowse
         },
         name: 'users.abilities.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
     ]
   },
@@ -94,6 +118,12 @@ export default [
           default: true
         },
         name: 'users.abilities',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
     ]
   },

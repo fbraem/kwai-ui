@@ -22,23 +22,47 @@ export default [
         component: DefinitionRead,
         props: true,
         name: 'trainings.definitions.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'trainings'
+          }
+        },
       },
       {
         path: 'create',
         component: DefinitionForm,
         props: true,
         name: 'trainings.definitions.create',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'trainings'
+          }
+        },
       },
       {
         path: 'update/:id(\\d+)',
         component: DefinitionForm,
         props: true,
         name: 'trainings.definitions.update',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'trainings'
+          }
+        },
       },
       {
         path: '',
         component: DefinitionBrowse,
         name: 'trainings.definitions.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'trainings'
+          }
+        },
       },
     ]
   },

@@ -41,7 +41,13 @@ export default [
                 year: Number(route.params.year),
                 month: Number(route.params.month)
               };
-            }
+            },
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'coaches'
+              }
+            },
           },
           {
             path: 'trainings',
@@ -52,14 +58,26 @@ export default [
                 year: moment().year(),
                 month: moment().month() + 1
               };
-            }
+            },
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'coaches'
+              }
+            },
           },
           {
             path: '',
             redirect: {
               name: 'trainings.coaches.trainings.default'
             },
-            name: 'trainings.coaches.read'
+            name: 'trainings.coaches.read',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'coaches'
+              }
+            },
           },
         ]
       },
@@ -67,17 +85,35 @@ export default [
         path: 'create',
         component: CoachForm,
         name: 'trainings.coaches.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'coaches'
+          }
+        },
       },
       {
         path: 'update/:id(\\d+)',
         component: CoachForm,
         props: true,
         name: 'trainings.coaches.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'coaches'
+          }
+        },
       },
       {
         path: '',
         name: 'trainings.coaches',
-        component: CoachBrowse
+        component: CoachBrowse,
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'coaches'
+          }
+        },
       },
     ]
   },

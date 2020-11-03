@@ -44,6 +44,12 @@ export default [
           }
         },
         name: 'categories.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'application'
+          }
+        }
       },
       {
         path: 'update/:id(\\d+)',
@@ -57,6 +63,12 @@ export default [
           }
         },
         name: 'categories.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'application'
+          }
+        }
       },
       {
         path: '',
