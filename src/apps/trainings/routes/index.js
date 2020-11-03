@@ -5,10 +5,6 @@ import moment from 'moment';
 import definitionsRouter from './definitions';
 import coachesRouter from './coaches';
 
-const TrainingHeader = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
-    '@/apps/trainings/TheTrainingHeader.vue'
-  );
 const TrainingRead = () =>
   import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingRead.vue'
