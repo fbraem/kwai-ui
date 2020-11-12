@@ -2,6 +2,7 @@ const { colors } = require('tailwindcss/defaultTheme');
 
 module.exports = {
   purge: [
+    '/vagrant_custom/**/*.html',
     './src/**/*.html',
     './src/**/*.vue',
     './src/**/*.jsx',
