@@ -1,7 +1,7 @@
 <template>
   <CategoryList
-    v-if="categories"
-    :categories="categories"
+    v-if="applications"
+    :categories="applications"
   />
 </template>
 
@@ -16,8 +16,8 @@ export default {
     CategoryList
   },
   computed: {
-    categories() {
-      return this.$store.state.category.all;
+    applications() {
+      return this.$store.state.applications.all;
     }
   }
 };

@@ -3,18 +3,22 @@
   "add": "Add",
   "add_members": "Add Members",
   "add_members_info": "Members are automatically selected based on the team type.",
-  "age": "years",
+  "age": "Age",
   "age_remark": "Age is determined on the end date of the season {season} ({start} &ndash; {end})",
   "cancel": "Cancel",
+  "category": "Category",
   "clear": "Clear",
   "competition": "Competition?",
   "count": "Member count",
-  "create": "Create new team",
+  "create": "Create team",
+  "create_category": "Create Category",
+  "update_category": "Update Category",
   "created": "Created on",
   "delete": "Delete",
   "details": "Team Details",
   "female": "Female",
   "filter": "Filter",
+  "create_season": "Create Season",
   "form": {
     "team": {
       "name": {
@@ -28,14 +32,36 @@
       },
       "season": {
         "empty": "<No Season>",
-        "hint": "A team that is not related to a season can be used to group members (to register the presence on a training for example). A team that is related to a season can be used for tournaments/games.",
-        "label": "Season"
+        "label": "Season",
+        "placeholder": "Select a season"
       },
+      "no_season": "There are no seasons defined yet.",
       "category": {
         "empty": "<No Category>",
-        "hint": "A category can be used to add more checks when a member is added to the team (Age for example).",
-        "label": "Category"
-      }
+        "label": "Category",
+        "placeholder": "Select a category"
+      },
+      "no_category": "There are no categories defined yet.",
+      "fieldset": {
+        "team": {
+          "title": "Team",
+          "description": "Give the team a unique name"
+        },
+        "season": {
+          "description": "Associate the team with a season when it is seasonable.",
+          "title": "Season"
+        },
+        "category": {
+          "title": "Category",
+          "description": ""
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "A remark for this team. A remark is private and will not be shown publicly."
+        }
+      },
+      "submit": "Save",
+      "required": "This field is required"
     },
     "team_category": {
       "active": {
@@ -66,7 +92,31 @@
         "label": "Min. Age",
         "numeric": "Min. age must be numeric",
         "placeholder": "Enter the minimum age of a member to be part of a team with this type."
-      }
+      },
+      "fieldset" : {
+        "name": {
+          "title": "Name of the category",
+          "description": "Give a name to the category"
+        } ,
+        "requirements": {
+          "title": "Requirements for members",
+          "description": "Use the minimum and maximum age to limit this team to members of a certain age. Select a gender to restrict members on gender."
+        },
+        "competition": {
+          "title": "Competition",
+          "description": "Will teams of this category participate in competitions?"
+        },
+        "active": {
+          "title": "Active",
+          "description": "Is this category active?"
+        },
+        "remark": {
+          "title": "Remark",
+          "description": "A remark for this category. A remark is private and will not be shown publicly."
+        }
+      },
+      "submit": "Save",
+      "required": "This field is required"
     }
   },
   "gender": "Gender",

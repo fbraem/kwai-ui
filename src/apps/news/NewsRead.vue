@@ -1,16 +1,16 @@
 <template>
   <Page>
-    <Spinner v-if="$wait.is('news.read')" />
+    <Spinner v-if="news.read.isRunning" />
     <article
       v-if="story"
-      class="container mx-auto"
+      class="markdown container mx-auto"
     >
       <h1 class="hidden lg:block">{{ story.content.title }}</h1>
       <blockquote>
         <div v-html="story.content.html_summary"></div>
       </blockquote>
       <div
-        class="news-content"
+        class="news-content mb-2"
         v-html="story.content.html_content"
       >
       </div>
@@ -28,18 +28,8 @@
 </template>
 
 <style>
-blockquote {
-  @apply bg-gray-200 border-l-8 border-solid border-gray-600 ml-2 mb-4 p-2;
-}
-
-.news-content ul {
-    list-style-position: inside;
-    margin-bottom: 20px;
-}
-
-.news-content blockquote {
-  @apply bg-gray-200 border-l-8 border-solid border-gray-600 ml-2 mb-4 p-2;
-  quotes: "\201C""\201D""\2018""\2019";
+.news-content ul, .news-content ul > * {
+  @apply list-disc;
 }
 
 .news-content .gallery {
@@ -73,63 +63,67 @@ blockquote {
 
 <script>
 import messages from './lang';
-
+import config from 'config';
 import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import Spinner from '@/components/Spinner';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, computed, watch, onMounted, getCurrentInstance} from '@vue/composition-api';
 
 export default {
-  components: {
-    Page,
-    Sidebar,
-    Spinner
-  },
-  i18n: messages,
-  computed: {
-    story() {
-      return this.$store.state.news.active;
-    },
-    facebookUrl() {
-      // TODO: remove the host
-      return 'https://www.judokwaikemzeke.be/facebook/news/' + this.story.id;
-    },
-    error() {
-      return this.$store.state.news.error;
+  props: {
+    id: {
+      type: String,
+      required: true
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
+  setup(props) {
+    const news = useNewsStore();
+
+    onMounted(() => {
+      news.read.run(props.id);
     });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData(params) {
-      try {
-        this.$store.dispatch('news/read', {
-          id: params.id
-        });
-      } catch (error) {
-        console.log(error);
+    watch(() => props.id, (newValue) => {
+      news.read.run(newValue);
+    });
+
+    const story = computed(() => {
+      return news.current;
+    });
+
+    const facebookUrl = computed(() => {
+      if (story.value) {
+        return config.site + '/facebook/news/' + story.value.id;
       }
-    },
-    copyText(text) {
-      var cb = document.getElementById('cb');
+    });
+
+    const vm = getCurrentInstance();
+    const copyText = (text) => {
+      const cb = document.getElementById('cb');
       cb.value = text;
       cb.style.display = 'block';
       cb.select();
       document.execCommand('copy');
       cb.style.display = 'none';
-      this.$notify({
+      vm.$notify({
         title: 'Link Gekopieerd!',
         text: 'De link om te delen op Facebook is in de clipboard geplaatst!',
         duration: 10000
       });
-    }
-  }
+    };
+
+    return {
+      news: reactive(news),
+      story,
+      facebookUrl,
+      copyText
+    };
+  },
+  components: {
+    Page,
+    Sidebar,
+    Spinner
+  },
+  i18n: messages
 };
 </script>

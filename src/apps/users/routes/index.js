@@ -3,24 +3,23 @@ import App from '@/apps/users/App.vue';
 import abilitiesRouter from './abilities';
 
 const UserRead = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/UserRead.vue'
 );
 const UserHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUserHeader.vue'
 );
 const UsersHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUsersHeader.vue'
 );
 const UserBrowse = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/UserBrowse.vue'
 );
 
 const UserInviteHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
   '@/apps/users/TheUserInviteHeader.vue'
 );
 
@@ -30,7 +29,7 @@ const UserInvite = () => import(
 );
 
 const UserRegisterWithInviteHeader = () => import(
-  /* webpackChunkName: "user_chunck" */
+  /* webpackChunkName: "user_chunk" */
   '@/apps/users/TheUserRegisterWithInviteHeader.vue'
 );
 const UserRegisterWithInvite = () => import(
@@ -38,34 +37,59 @@ const UserRegisterWithInvite = () => import(
   '@/apps/users/UserRegisterWithInvite.vue'
 );
 
-var routes = [
+const routes = [
   {
     path: '/users',
     component: App,
     children: [
       {
-        path: 'invite',
+        path: 'invitation',
         components: {
           hero: UserInviteHeader,
           default: UserInvite
         },
-        name: 'users.invite',
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.invitation',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
-        path: 'invite/:token',
+        path: 'invitation/:token',
         components: {
           hero: UserRegisterWithInviteHeader,
           default: UserRegisterWithInvite
         },
-        name: 'users.register.invite',
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.invitation.confirm',
       },
+      ...abilitiesRouter,
       {
-        path: ':id(\\d+)',
+        path: ':id',
         components: {
           hero: UserHeader,
           default: UserRead
         },
+        props: {
+          hero: true,
+          default: true
+        },
         name: 'users.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
         path: '',
@@ -74,11 +98,15 @@ var routes = [
           default: UserBrowse
         },
         name: 'users.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
     ]
   },
 ];
-
-routes = routes.concat(abilitiesRouter);
 
 export default routes;

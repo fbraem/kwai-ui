@@ -1,16 +1,8 @@
 import App from './App.vue';
 
-const SeasonHeader = () => import(
-  /* webpackChunkName: "seasons_chunck" */
-  '@/apps/seasons/TheSeasonHeader.vue'
-);
 const SeasonRead = () => import(
-  /* webpackChunkName: "seasons_chunck" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonRead.vue'
-);
-const SeasonFormHeader = () => import(
-  /* webpackChunkName: "seasons_admin" */
-  '@/apps/seasons/TheSeasonFormHeader.vue'
 );
 const SeasonForm = () => import(
   /* webpackChunkName: "seasons_admin" */
@@ -32,12 +24,8 @@ const SeasonDetail = () => import(
   /* webpackChunkName: "seasons_admin" */
   '@/apps/seasons/SeasonDetail.vue'
 );
-const SeasonsHeader = () => import(
-  /* webpackChunkName: "seasons_chunck" */
-  '@/apps/seasons/TheSeasonsHeader.vue'
-);
 const SeasonBrowse = () => import(
-  /* webpackChunkName: "seasons_chunck" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonBrowse.vue'
 );
 
@@ -48,31 +36,46 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: SeasonHeader,
-          default: SeasonRead
-        },
+        component: SeasonRead,
         children: [
           {
             path: 'teams',
             components: {
               season_information: SeasonTeams
             },
-            name: 'seasons.teams'
+            name: 'seasons.teams',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: 'definitions',
             components: {
               season_information: SeasonDefinitions
             },
-            name: 'seasons.definitions'
+            name: 'seasons.definitions',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: 'trainings',
             components: {
               season_information: SeasonTrainings
             },
-            name: 'seasons.trainings'
+            name: 'seasons.trainings',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
           {
             path: '',
@@ -80,42 +83,47 @@ export default [
               season_information: SeasonDetail
             },
             name: 'seasons.read',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'seasons'
+              }
+            },
           },
         ]
       },
       {
         path: 'create',
-        components: {
-          hero: SeasonFormHeader,
-          default: SeasonForm
-        },
-        props: {
-          hero: {
-            creating: true
+        component: SeasonForm,
+        name: 'seasons.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'seasons'
           }
         },
-        name: 'seasons.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: SeasonFormHeader,
-          default: SeasonForm
-        },
-        props: {
-          hero: {
-            creating: false
+        component: SeasonForm,
+        name: 'seasons.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'seasons'
           }
         },
-        name: 'seasons.update',
       },
       {
         path: '',
-        components: {
-          hero: SeasonsHeader,
-          default: SeasonBrowse
-        },
+        component: SeasonBrowse,
         name: 'seasons.browse',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'seasons'
+          }
+        },
       },
     ]
   },

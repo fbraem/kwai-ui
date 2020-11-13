@@ -8,27 +8,35 @@
     "season": {
       "end_date": {
         "after": "Eind datum moet na de begin datum liggen",
-        "invalid": "Ongeldige datum. Formaat is {format}",
         "label": "Eind Datum",
-        "placeholder": "Geef een datum in",
-        "required": "Eind datum is is verplicht in te vullen."
+        "placeholder": "Geef een datum in ({format})."
       },
       "name": {
         "label": "Naam",
-        "placeholder": "Geef een naam in",
-        "required": "Naam is is verplicht in te vullen."
+        "placeholder": "Geef een naam in"
       },
       "remark": {
         "label": "Opmerking",
         "placeholder": "Geef een opmerking in"
       },
+      "submit": "Bewaar",
       "start_date": {
-        "invalid": "Ongeldige datum. Formaat is {format}",
         "label": "Begin Datum",
-        "placeholder": "Geef een datum in",
-        "required": "Begin datum is is verplicht in te vullen."
+        "placeholder": "Geef een datum in ({format})."
+      },
+      "fieldset": {
+        "season": {
+          "title": "Seizoen",
+          "description": "Geef een unieke naam aan het seizoen, een start en eindedatum."
+        },
+        "remark": {
+          "title": "Opmerking",
+          "description": "Geef een opmerking in"
+        }
       }
-    }
+    },
+    "required": "Dit veld is verplicht in te vullen",
+    "invalid_date": "Dit is geen geldige datum. Formaat ({format})."
   },
   "no_seasons": "Er zijn nog geen seizoenen gedefiniëerd",
   "no_teams": "Er zijn nog geen teams gedefiniëerd voor dit seizoen",

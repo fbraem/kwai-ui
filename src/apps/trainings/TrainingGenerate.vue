@@ -12,65 +12,63 @@
         {{ $t('training.generator.help') }}
       </Alert>
       <div class="mt-6">
-        <table class="table table-striped">
-          <thead>
+        <Table>
+          <template slot="header">
             <tr>
-              <th>
+              <TableHeader>
                 <input
                   type="checkbox"
                   v-model="selectAll"
                 />
-              </th>
-              <th scope="col">
+              </TableHeader>
+              <TableHeader>
                 {{ $t('training.events.day') }}
-              </th>
-              <th scope="col">
+              </TableHeader>
+              <TableHeader>
                 {{ $t('training.events.date') }}
-              </th>
-              <th scope="col">
+              </TableHeader>
+              <TableHeader>
                 {{ $t('training.events.time') }}
-              </th>
-              <th scope="col">
+              </TableHeader>
+              <TableHeader>
                 {{ $t('training.events.coaches') }}
-              </th>
+              </TableHeader>
             </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(training, index) in trainings"
-              :key="index"
-            >
-              <td>
-                <input
-                  type="checkbox"
-                  v-model="selectedTrainings"
-                  :value="index"
-                />
-              </td>
-              <td>
-                {{ training.event.start_date.format('dddd') }}
-              </td>
-              <td>
-                {{ training.event.start_date.format('L') }}
-              </td>
-              <td>
-                {{ training.event.start_date.format('HH:mm') }} -
-                {{ training.event.end_date.format('HH:mm') }}
-              </td>
-              <td class="text-sm">
-                <template v-for="(coach, index) in training.coaches">
-                  <div :key="coach.id">
-                    <span>{{ coach.name }}</span>
-                    <span
-                      v-if="index != Object.keys(training.coaches).length - 1">
-                      ,&nbsp;
-                    </span>
-                  </div>
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          </template>
+          <tr
+            v-for="(training, index) in trainings"
+            :key="index"
+          >
+            <TableCell>
+              <input
+                type="checkbox"
+                v-model="selectedTrainings"
+                :value="index"
+              />
+            </TableCell>
+            <TableCell>
+              {{ training.event.start_date.format('dddd') }}
+            </TableCell>
+            <TableCell>
+              {{ training.event.start_date.format('L') }}
+            </TableCell>
+            <TableCell>
+              {{ training.event.start_date.format('HH:mm') }} -
+              {{ training.event.end_date.format('HH:mm') }}
+            </TableCell>
+            <TableCell class="text-sm">
+              <template v-for="(coach, index) in training.coaches">
+                <div :key="coach.id">
+                  <span>{{ coach.name }}</span>
+                  <span
+                    v-if="index !== Object.keys(training.coaches).length - 1">
+                    ,&nbsp;
+                  </span>
+                </div>
+              </template>
+            </TableCell>
+          </tr>
+        </Table>
       </div>
       <div class="flex justify-end mt-6">
         <button
@@ -88,10 +86,13 @@
 import messages from './lang';
 
 import Alert from '@/components/Alert';
+import Table from '@/components/table/Table';
+import TableHeader from '@/components/table/TableHeader';
+import TableCell from '@/components/table/TableCell';
 
 export default {
   components: {
-    Alert
+    Alert, Table, TableHeader, TableCell
   },
   props: {
     trainings: {

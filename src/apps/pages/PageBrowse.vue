@@ -1,36 +1,37 @@
 <template>
   <Page>
-    <Spinner v-if="$wait.is('pages.browse')" />
-    <div
-      v-if="pagesMeta"
-      class="flex justify-center"
-    >
+    <Spinner v-if="store.load.isRunning" />
+    <div class="flex justify-center mb-4">
       <Paginator
-        :count="pagesMeta.count"
-        :limit="pagesMeta.limit"
-        :offset="pagesMeta.offset"
+        :count="paginator.count"
+        :limit="paginator.limit"
+        :offset="paginator.offset"
         @page="readPage"
       />
     </div>
     <div class="flex flex-wrap justify-center">
       <div
         class="w-full md:w-1/2 lg:w-1/3 p-4"
-        v-for="page in pages"
+        v-for="page in store.all"
         :key="page.id"
       >
         <PageSummary :page="page" />
       </div>
     </div>
-    <div
-      v-if="pagesMeta"
-      class="flex justify-center"
-    >
+    <div class="flex justify-center mb-4">
       <Paginator
-        :count="pagesMeta.count"
-        :limit="pagesMeta.limit"
-        :offset="pagesMeta.offset"
+        :count="paginator.count"
+        :limit="paginator.limit"
+        :offset="paginator.offset"
         @page="readPage"
       />
+    </div>
+    <div
+        v-if="! store.load.isRunning && store.fullCount === 0"
+    >
+      <Alert type="danger">
+        {{ $t('no_pages') }}
+      </Alert>
     </div>
     <template slot="sidebar">
       <Sidebar />
@@ -44,52 +45,58 @@ import PageSummary from './components/PageSummary';
 import Paginator from '@/components/Paginator';
 import Spinner from '@/components/Spinner';
 import Sidebar from './Sidebar';
+import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import {onMounted, reactive, watch} from '@vue/composition-api';
 
 /**
  * Page for browsing information
  */
 export default {
+  props: {
+    application: {
+      type: String
+    }
+  },
+  setup(props) {
+    const store = usePageStore();
+    const paginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 10
+    });
+
+    onMounted(() => {
+      readPage(0);
+    });
+    watch(props, () => {
+      readPage(0);
+    });
+
+    const readPage = async(offset) => {
+      await store.load.run({
+        application: props.application,
+        offset
+      }, true);
+      paginator.offset = offset;
+      paginator.count = store.fullCount;
+    };
+
+    return {
+      store: reactive(store),
+      readPage
+    };
+  },
   i18n: messages,
   components: {
     Page,
     Sidebar,
     PageSummary,
     Paginator,
-    Spinner
-  },
-  computed: {
-    pages() {
-      return this.$store.state.page.all;
-    },
-    pageCount() {
-      if (this.pages) return this.pages.length;
-      return -1;
-    },
-    pagesMeta() {
-      return null;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData(params) {
-      this.$store.dispatch('page/browse', {
-        category: params.category
-      });
-    },
-    readPage(offset) {
-      console.log(offset);
-    }
+    Spinner,
+    Alert
   }
 };
 </script>

@@ -1,9 +1,5 @@
 import App from './App.vue';
 
-const CategoryHeader = () => import(
-  /* webpackChunkName: "category_chunck" */
-  '@/apps/categories/TheCategoryHeader.vue'
-);
 const CategoryRead = () => import(
   /* webpackChunkName: "category_chunck" */
   '@/apps/categories/CategoryRead.vue'
@@ -32,10 +28,8 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: CategoryHeader,
-          default: CategoryRead
-        },
+        component: CategoryRead,
+        props: true,
         name: 'categories.read',
       },
       {
@@ -50,6 +44,12 @@ export default [
           }
         },
         name: 'categories.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'application'
+          }
+        }
       },
       {
         path: 'update/:id(\\d+)',
@@ -63,6 +63,12 @@ export default [
           }
         },
         name: 'categories.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'application'
+          }
+        }
       },
       {
         path: '',

@@ -1,30 +1,19 @@
 <template>
-  <div class="container mt-4 mx-auto">
+  <div>
+    <PageHeader>
+      <ApplicationHeader :content="$t('training.coaches.title')" />
+    </PageHeader>
     <Spinner
-      class="align-middle"
-      v-if="$wait.is('training.coaches.read')"
+      class="w-full text-center"
+      v-if="coaches.read.isRunning"
     />
-    <div class="w-full lg:w-2/3 mx-auto p-4">
+    <PageSection>
       <CoachCard
         v-if="coach"
         :coach="coach"
       />
-    </div>
-    <Alert
-      v-if="notAllowed"
-      type="danger"
-    >
-        {{ $t('not_allowed') }}
-    </Alert>
-    <Alert
-      v-if="notFound"
-      type="danger"
-    >
-        {{ $t('training.coaches.not_found') }}
-    </Alert>
-    <div class="mt-4">
-      <router-view name="coach_information" />
-    </div>
+    </PageSection>
+    <router-view :id="id" />
   </div>
 </template>
 
@@ -32,47 +21,43 @@
 import messages from './lang';
 
 import CoachCard from './components/CoachCard';
-
+import PageHeader from '@/components/PageHeader';
+import PageSection from '@/components/PageSection';
 import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import {onMounted, reactive, watch, computed} from '@vue/composition-api';
+import ApplicationHeader from '@/components/ApplicationHeader';
 
 export default {
-  components: {
-    Spinner, CoachCard, Alert
-  },
-  i18n: messages,
-  computed: {
-    coach() {
-      return this.$store.state.training.coach.active;
-    },
-    error() {
-      return this.$store.state.training.coach.error;
-    },
-    notAllowed() {
-      return this.error && this.error.response.status === 401;
-    },
-    notFound() {
-      return this.error && this.error.response.status === 404;
+  props: {
+    id: {
+      type: String,
+      required: true
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params.id);
-      next();
+  setup(props) {
+    const coaches = useCoachStore();
+
+    onMounted(() => {
+      coaches.read.run(props.id);
     });
+    watch(() => props.id, (newValue) => {
+      coaches.read.run(newValue);
+    });
+    const coach = computed(() => coaches.current);
+
+    return {
+      coaches: reactive(coaches),
+      coach
+    };
   },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params.id);
-    next();
+  components: {
+    ApplicationHeader,
+    Spinner,
+    CoachCard,
+    PageHeader,
+    PageSection
   },
-  methods: {
-    fetchData(id) {
-      this.$store.dispatch('training/coach/read', {
-        id: id
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
-  }
+  i18n: messages
 };
 </script>

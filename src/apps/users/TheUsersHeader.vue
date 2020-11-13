@@ -24,7 +24,7 @@ export default {
         buttons.push({
           icon: 'fas fa-plus',
           route: {
-            name: 'users.invite'
+            name: 'users.invitation'
           }
         });
       }

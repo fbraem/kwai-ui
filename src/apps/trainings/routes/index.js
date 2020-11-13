@@ -5,63 +5,53 @@ import moment from 'moment';
 import definitionsRouter from './definitions';
 import coachesRouter from './coaches';
 
-const TrainingHeader = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
-    '@/apps/trainings/TheTrainingHeader.vue'
-  );
 const TrainingRead = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
+  import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingRead.vue'
   );
 const TrainingsHeader = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
+  import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TheTrainingsHeader.vue'
   );
 const TrainingBrowse = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
+  import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingBrowse.vue'
   );
 const TrainingIndex = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
+  import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/Index.vue'
   );
 const TrainingForm = () =>
-  import(/* webpackChunkName: "trainings_admin_chunck" */
+  import(/* webpackChunkName: "trainings_admin_chunk" */
     '@/apps/trainings/TrainingForm.vue'
   );
-const TrainingFormHeader = () =>
-  import(/* webpackChunkName: "trainings_admin_chunck" */
-    '@/apps/trainings/TheTrainingFormHeader.vue'
-  );
 const Presences = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
+  import(/* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/Presences.vue'
   );
-const ThePresencesHeader = () =>
-  import(/* webpackChunkName: "trainings_chunck" */
-    '@/apps/trainings/ThePresencesHeader.vue'
-  );
 
-var routes = [
+let routes = [
   {
     path: '/trainings',
     component: App,
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: TrainingHeader,
-          default: TrainingRead
-        },
+        component: TrainingRead,
+        props: true,
         name: 'trainings.read',
       },
       {
         path: ':id(\\d+)/presences',
-        components: {
-          hero: ThePresencesHeader,
-          default: Presences
-        },
+        component: Presences,
+        props: true,
         name: 'trainings.presences',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'presences'
+          }
+        },
       },
       {
         path: ':year(\\d+)/:month(\\d+)',
@@ -82,29 +72,26 @@ var routes = [
       },
       {
         path: 'create',
-        components: {
-          hero: TrainingFormHeader,
-          default: TrainingForm
-        },
-        props: {
-          hero: {
-            creating: true
+        component: TrainingForm,
+        name: 'trainings.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'trainings'
           }
         },
-        name: 'trainings.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: TrainingFormHeader,
-          default: TrainingForm
-        },
-        props: {
-          hero: {
-            creating: false
+        component: TrainingForm,
+        props: true,
+        name: 'trainings.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'trainings'
           }
         },
-        name: 'trainings.update',
       },
       {
         path: '',
@@ -112,7 +99,7 @@ var routes = [
           hero: TrainingsHeader,
           default: TrainingIndex
         },
-        name: 'trainings.index'
+        name: 'trainings'
       },
     ]
   },

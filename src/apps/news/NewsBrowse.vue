@@ -1,58 +1,40 @@
 <template>
   <Page>
     <div>
-      <div
-        v-if="storiesMeta"
-        class="flex justify-center mb-4"
-      >
+      <div class="flex justify-center mb-4">
         <Paginator
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="paginator.count"
+          :limit="paginator.limit"
+          :offset="paginator.offset"
           @page="readPage"
         />
       </div>
       <div class="flex flex-wrap justify-center mb-4">
-        <Spinner v-if="$wait.is('news.browse')" />
+        <Spinner v-if="news.load.isRunning" />
         <div
-          v-for="story in stories"
+          v-for="story in news.all"
           :key="story.id"
           class="p-2 w-full"
         >
-          <NewsCard
-            :story="story"
-            @deleteStory="deleteStory"
-          />
+          <NewsCard :story="story" :application="story.application" />
         </div>
       </div>
-      <div
-        v-if="storiesMeta"
-        class="flex justify-center mb-4"
-      >
+      <div class="flex justify-center mb-4">
         <Paginator
-          :count="storiesMeta.count"
-          :limit="storiesMeta.limit"
-          :offset="storiesMeta.offset"
+          :count="paginator.count"
+          :limit="paginator.limit"
+          :offset="paginator.offset"
           @page="readPage"
         />
       </div>
     </div>
     <div
-      v-if="! $wait.is('news.browse') && newsCount == 0"
+      v-if="!news.load.isRunning && news.fullCount === 0"
     >
       <Alert type="danger">
         {{ $t('no_news') }}
       </Alert>
     </div>
-    <AreYouSure
-      :show="showAreYouSure"
-      @close="showAreYouSure = false;"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="doDeleteStory"
-    >
-      {{ $t('are_you_sure') }}
-    </AreYouSure>
     <template slot="sidebar">
       <Sidebar />
     </template>
@@ -64,82 +46,70 @@ import Page from '@/components/Page';
 import Sidebar from './Sidebar';
 import NewsCard from './components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
-import AreYouSure from '@/components/AreYouSure.vue';
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
 
 import messages from './lang';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, onMounted, watch} from '@vue/composition-api';
 
 export default {
+  props: {
+    app: {
+      type: String
+    },
+    year: {
+      type: [Number, String]
+    },
+    month: {
+      type: [Number, String]
+    }
+  },
+  setup(props) {
+    const news = useNewsStore();
+    const paginator = reactive({
+      offset: 0,
+      count: 0,
+      limit: 10
+    });
+
+    onMounted(() => {
+      news.load.run({
+        application: props.app,
+        year: props.year,
+        month: props.month
+      });
+      paginator.count = news.fullCount;
+    });
+
+    watch(props, () => {
+      readPage(0);
+    });
+
+    const readPage = async(offset) => {
+      news.load.run({
+        offset: offset,
+        year: props.year,
+        month: props.month,
+        application: props.application,
+      }, true);
+      paginator.offset = offset;
+    };
+
+    return {
+      news: reactive(news),
+      paginator,
+      readPage
+    };
+  },
   i18n: messages,
   components: {
     Page,
     NewsCard,
     Paginator,
-    AreYouSure,
     Spinner,
     Alert,
     Sidebar
-  },
-  data() {
-    return {
-      showAreYouSure: false,
-      storyToDelete: null,
-      categoryId: null
-    };
-  },
-  computed: {
-    stories() {
-      return this.$store.state.news.all;
-    },
-    storiesMeta() {
-      return this.$store.state.news.meta;
-    },
-    newsCount() {
-      if (this.stories) return this.stories.length;
-      return -1;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchData(params) {
-      if (params.category) {
-        this.categoryId = params.category;
-      }
-      await this.$store.dispatch('news/browse', {
-        year: params.year,
-        month: params.month,
-        category: params.category,
-        featured: params.featured
-      });
-    },
-    deleteStory(story) {
-      this.storyToDelete = story;
-      this.showAreYouSure = true;
-    },
-    doDeleteStory() {
-      this.$store.dispatch('news/remove', {
-        story: this.storyToDelete
-      });
-    },
-    async readPage(offset) {
-      await this.$store.dispatch('news/browse', {
-        offset: offset,
-        year: this.year,
-        month: this.month,
-        category: this.categoryId,
-        featured: this.featured
-      });
-    }
   }
 };
 </script>

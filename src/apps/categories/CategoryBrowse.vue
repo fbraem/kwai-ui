@@ -1,10 +1,10 @@
 <template>
   <div class="container mx-auto">
     <div
-      v-for="category in categories"
-      :key="category.id"
+      v-for="application in applications"
+      :key="application.id"
     >
-      <CategoryCard :category="category" />
+      <CategoryCard :category="application" />
     </div>
   </div>
 </template>
@@ -13,37 +13,24 @@
 import CategoryCard from './components/CategoryCard.vue';
 
 import messages from './lang';
-
+import useApplications from '@/site/composables/useApplications';
+import {computed} from '@vue/composition-api';
 /**
  * Page for showing all categories
  */
 export default {
+  setup() {
+    const applicationStore = useApplications();
+
+    const applications = computed(() => applicationStore.all.value);
+
+    return {
+      applications
+    };
+  },
   components: {
     CategoryCard
   },
-  i18n: messages,
-  computed: {
-    categories() {
-      return this.$store.state.category.all;
-    },
-    noData() {
-      return this.categories && this.categories.length === 0;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData();
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData();
-    next();
-  },
-  methods: {
-    fetchData() {
-      this.$store.dispatch('category/browse');
-    }
-  }
+  i18n: messages
 };
 </script>

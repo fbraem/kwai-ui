@@ -1,7 +1,7 @@
 <template>
   <ImageHeader
     v-if="category"
-    :title="category.name"
+    :title="category.title"
     :toolbar="toolbar"
     :picture="picture"
     :pictures="pictures"
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
 import ImageHeader from '@/components/ImageHeader';
 
 import messages from './lang';
@@ -26,7 +27,12 @@ export default {
   i18n: messages,
   computed: {
     category() {
-      return this.$store.getters['category/category'](this.$route.params.id);
+      if (this.$route.params.id) {
+        // eslint-disable-next-line max-len
+        return this.$store.getters['applications/applicationWithId'](this.$route.params.id);
+      }
+      // eslint-disable-next-line max-len
+      return this.$store.getters['applications/application'](this.$route.params.app);
     },
     picture() {
       return this.category?.header_picture;

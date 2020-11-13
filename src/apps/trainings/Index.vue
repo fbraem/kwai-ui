@@ -1,100 +1,169 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="container mx-auto flex flex-col">
-    <div class="flex flex-wrap">
-      <div class="w-full md:w-1/2 p-4">
-        <NewsListCard
-          :stories="stories"
-          :category="category"
-          class="h-full"
-        />
+  <div>
+    <ImageHeader
+      v-if="application"
+      :title="application.title"
+      :pictures="pictures"
+      :toolbar="toolbar"
+    >
+      <div v-html="application.description">
       </div>
-      <div class="w-full md:w-1/2 p-4">
-        <PageListCard
-          :pages="pages"
-          class="h-full"
-        />
-      </div>
-    </div>
-    <div class="w-full mb-4 p-3">
-      <CoachListCard
-        :coaches="coaches"
-      />
-    </div>
-    <div class="w-full p-3">
-      <div class="flex flex-row">
-        <div class="flex-grow">
-          <h3 class="header-line mb-4">
-            Kalender
-          </h3>
+    </ImageHeader>
+    <div class="container mx-auto flex flex-col">
+      <div class="flex flex-wrap">
+        <div class="w-full md:w-1/2 p-4">
+          <NewsListCard
+            :stories="stories"
+            :category="application"
+            class="h-full"
+          />
         </div>
-        <div>
-          <router-link
-            class="icon-button text-gray-700 hover:bg-gray-300"
-            :to="calendarLink"
-          >
-            <i class="fas fa-angle-up"></i>
-          </router-link>
+        <div class="w-full md:w-1/2 p-4">
+          <PageListCard
+            :pages="pages"
+            class="h-full"
+          />
         </div>
       </div>
-      <Calendar
-        :year="year"
-        :month="month"
-        :trainings="trainings"
-        @prevMonth="prevMonth"
-        @prevYear="prevYear"
-        @nextMonth="nextMonth"
-        @nextYear="nextYear"
-      />
-    </div>
+      <div class="w-full mb-4 p-3">
+        <CoachListCard
+          :coaches="coaches.all"
+        />
+      </div>
+      <div class="w-full p-3">
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            <HeaderLine tag="h3" content="Kalender" />
+          </div>
+          <div>
+            <router-link
+              class="icon-button text-gray-700 hover:bg-gray-300"
+              :to="calendarLink"
+            >
+              <i class="fas fa-angle-up"></i>
+            </router-link>
+          </div>
+        </div>
+        <Calendar
+          :year="year"
+          :month="month"
+          :trainings="trainings.all"
+          @prevMonth="prevMonth"
+          @prevYear="prevYear"
+          @nextMonth="nextMonth"
+          @nextYear="nextYear"
+        />
+      </div>
+  </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 
-import Category from '@/models/Category';
-import newsStore from '@/apps/news/store';
-import pageStore from '@/apps/pages/store';
-
 import NewsListCard from '@/apps/news/components/NewsListCard';
 import PageListCard from '@/apps/pages/components/PageListCard';
 import Calendar from '@/apps/trainings/Calendar';
 import CoachListCard from './components/CoachListCard';
+import HeaderLine from '@/components/HeaderLine';
+import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
+import {onMounted, reactive, ref, watch, computed} from '@vue/composition-api';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import Training from '@/models/trainings/Training';
+import Team from '@/models/Team';
+import Coach from '@/models/trainings/Coach';
+import ImageHeader from '@/components/ImageHeader';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import useApplications from '@/site/composables/useApplications';
 
 export default {
+  setup(props) {
+    const trainings = useTrainingStore();
+    const coaches = useCoachStore();
+    const year = ref(moment().year());
+    const month = ref(moment().month() + 1);
+
+    onMounted(() => {
+      trainings.load.run();
+      coaches.load.run();
+    });
+
+    const newsStore = useNewsStore();
+    const stories = computed(() => newsStore.all.value);
+
+    const pageStore = usePageStore();
+    const pages = computed(() => pageStore.all.value);
+
+    const applicationStore = useApplications();
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.name === 'trainings');
+      }
+      return null;
+    });
+
+    if (application.value) {
+      onMounted(() => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        });
+        pageStore.load.run({application: application.value.id});
+      });
+    }
+
+    watch(
+      () => application.value,
+      () => {
+        if (application.value) {
+          newsStore.load.run({
+            promoted: true,
+            application: application.value.id
+          });
+          pageStore.load.run({application: application.value.id});
+        }
+      }
+    );
+
+    watch(
+      [ month, year],
+      (newValue) => {
+        const [ newMonth, newYear ] = newValue;
+        trainings.load.run({
+          year: newYear,
+          month: newMonth
+        }, true);
+      }
+    );
+
+    return {
+      trainings: reactive(trainings),
+      coaches: reactive(coaches),
+      // applications: reactive(applicationStore),
+      year,
+      month,
+      application,
+      stories,
+      pages
+    };
+  },
   components: {
+    ImageHeader,
+    HeaderLine,
     NewsListCard,
     PageListCard,
     Calendar,
     CoachListCard
   },
-  props: {
-    category: {
-      type: Category
-    }
-  },
-  data() {
-    return {
-      year: moment().year(),
-      month: moment().month() + 1,
-    };
-  },
   computed: {
-    stories() {
-      return this.$store.state.training.news.all || [];
-    },
-    hasStories() {
-      return this.stories.length > 0;
-    },
-    pages() {
-      return this.$store.state.training.page.all || [];
-    },
-    coaches() {
-      return this.$store.state.training.coach.all || [];
-    },
-    trainings() {
-      return this.$store.state.training.all || [];
+    pictures() {
+      return {
+        '1024w': require('custom/trainings/images/header_lg.jpg'),
+        '768w': require('custom/trainings/images/header_md.jpg'),
+        '640w': require('custom/trainings/images/header_sm.jpg'),
+      };
     },
     calendarLink() {
       return {
@@ -104,72 +173,52 @@ export default {
           month: this.month
         }
       };
-    }
-  },
-  beforeCreate() {
-    this.$store.registerModule(['training', 'news'], newsStore);
-    this.$store.registerModule(['training', 'page'], pageStore);
-  },
-  destroyed() {
-    this.$store.unregisterModule(['training', 'news']);
-    this.$store.unregisterModule(['training', 'page']);
-  },
-  beforeRouteEnter(to, from, next) {
-    console.log('bre - trainings');
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      if (vm.category?.id) {
-        vm.fetchNews(vm.category.id);
-        vm.fetchPages(vm.category.id);
+    },
+    toolbar() {
+      const buttons = [];
+      if (this.$can('create', Training)) {
+        buttons.push({
+          icon: 'fas fa-calendar-plus',
+          route: {
+            name: 'trainings.definitions.browse'
+          }
+        });
+        buttons.push({
+          icon: 'fas fa-plus',
+          route: {
+            name: 'trainings.create'
+          }
+        });
       }
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    console.log('bru - trainings');
-    await this.fetchData(to.params);
-    next();
-  },
-  watch: {
-    category(nv, ov) {
-      if (nv) {
-        this.fetchNews(nv.id);
-        this.fetchPages(nv.id);
+      if (this.$can('manage', Team)) {
+        buttons.push({
+          icon: 'fas fa-users',
+          route: {
+            name: 'teams.browse'
+          }
+        });
       }
+      if (this.$can('manage', Coach)) {
+        buttons.push({
+          icon: 'fas fa-user-tie',
+          route: {
+            name: 'trainings.coaches'
+          }
+        });
+      }
+      return buttons;
     }
   },
   methods: {
-    async fetchData(params) {
-      this.$store.dispatch('training/browse', {
-        year: this.year,
-        month: this.month
-      });
-      this.$store.dispatch('training/coach/browse');
-    },
-    fetchNews(categoryId) {
-      this.$store.dispatch('training/news/browse', {
-        category: categoryId,
-        featured: true
-      });
-    },
-    fetchPages(categoryId) {
-      this.$store.dispatch('training/page/browse', {
-        category: categoryId
-      });
-    },
     prevYear() {
       this.year -= 1;
-      this.$store.dispatch('training/browse', {
+      this.trainings.load.run({
         year: this.year,
         month: this.month
-      });
+      }, true);
     },
     nextYear() {
       this.year += 1;
-      this.$store.dispatch('training/browse', {
-        year: this.year,
-        month: this.month
-      });
     },
     prevMonth() {
       this.month = this.month - 1;
@@ -177,10 +226,6 @@ export default {
         this.year = this.year - 1;
         this.month = 12;
       }
-      this.$store.dispatch('training/browse', {
-        year: this.year,
-        month: this.month
-      });
     },
     nextMonth() {
       this.month = this.month + 1;
@@ -188,10 +233,6 @@ export default {
         this.year = this.year + 1;
         this.month = 1;
       }
-      this.$store.dispatch('training/browse', {
-        year: this.year,
-        month: this.month
-      });
     }
   }
 };

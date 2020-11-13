@@ -1,32 +1,28 @@
 import App from './App.vue';
 
 const NewsHeader = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/TheNewsHeader.vue'
 );
 const NewsStoryHeader = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/TheNewsStoryHeader.vue'
 );
 const NewsCategoryHeader = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/TheNewsCategoryHeader.vue'
 );
 const NewsArchiveHeader = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/TheNewsArchiveHeader.vue'
 );
 const NewsRead = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/NewsRead.vue'
 );
 const NewsBrowse = () => import(
-  /* webpackChunkName: "news_chunck" */
+  /* webpackChunkName: "news_chunk" */
   '@/apps/news/NewsBrowse.vue'
-);
-const NewsForm = () => import(
-  /* webpackChunkName: "news_admin" */
-  '@/apps/news/NewsForm.vue'
 );
 
 export default [
@@ -40,15 +36,23 @@ export default [
           hero: NewsStoryHeader,
           default: NewsRead
         },
+        props: {
+          hero: true,
+          default: true
+        },
         name: 'news.story',
       },
       {
-        path: 'category/:category(\\d+)',
+        path: 'application/:app(\\d+)',
         components: {
           hero: NewsCategoryHeader,
           default: NewsBrowse
         },
-        name: 'news.category',
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'news.application',
       },
       {
         path: 'archive/:year(\\d+)/:month(\\d+)',
@@ -56,23 +60,11 @@ export default [
           hero: NewsArchiveHeader,
           default: NewsBrowse
         },
+        props: {
+          hero: true,
+          default: true
+        },
         name: 'news.archive',
-      },
-      {
-        path: 'create',
-        component: NewsForm,
-        props: {
-          creating: true
-        },
-        name: 'news.create',
-      },
-      {
-        path: 'update/:id(\\d+)',
-        component: NewsForm,
-        props: {
-          creating: false
-        },
-        name: 'news.update',
       },
       {
         path: '',
@@ -80,7 +72,7 @@ export default [
           hero: NewsHeader,
           default: NewsBrowse
         },
-        name: 'news.browse',
+        name: 'news',
       },
     ]
   },

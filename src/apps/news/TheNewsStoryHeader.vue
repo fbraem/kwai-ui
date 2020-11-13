@@ -30,10 +30,10 @@
               <br />
               Gepubliceerd in
               <router-link
-                :to="categoryLink"
+                :to="applicationLink"
                 class="font-bold"
               >
-                {{ story.category.name }}
+                {{ story.application.title }}
               </router-link>
             </p>
             <IconButtons
@@ -68,10 +68,10 @@
           <br />
           Gepubliceerd in
           <router-link
-            :to="categoryLink"
+            :to="applicationLink"
             class="font-bold"
           >
-            {{ story.category.name }}
+            {{ story.application.title }}
           </router-link>
         </p>
         <IconButtons
@@ -83,15 +83,6 @@
         />
       </div>
     </div>
-    <AreYouSure
-      :show="showAreYouSure"
-      @close="showAreYouSure = false;"
-      :yes="$t('delete')"
-      :no="$t('cancel')"
-      @sure="deleteStory"
-    >
-    {{ $t('are_you_sure') }}
-    </AreYouSure>
   </div>
 </template>
 
@@ -130,37 +121,44 @@
 <script>
 import messages from './lang';
 
-import AreYouSure from '@/components/AreYouSure';
 import IconButtons from '@/components/IconButtons';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {reactive, computed} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const news = useNewsStore();
+
+    const story = computed(() => news.current);
+    return {
+      news: reactive(news),
+      story
+    };
+  },
   components: {
-    AreYouSure,
     IconButtons
   },
   i18n: messages,
-  data() {
-    return {
-      showAreYouSure: false
-    };
-  },
   computed: {
-    story() {
-      return this.$store.state.news.active;
-    },
     picture() {
       if (this.story) {
         return this.story.overview_picture;
       }
       return null;
     },
-    categoryLink() {
-      return {
-        name: 'categories.read',
-        params: {
-          id: this.story.category.id
-        }
-      };
+    applicationLink() {
+      const route = this.$router.resolve({ name: this.story.application.name });
+      if (route.resolved.matched.length > 0) {
+        return {
+          name: this.story.application.name
+        };
+      } else {
+        console.log(
+          'No route found for application',
+          this.story.application.name
+        );
+      }
+      return null;
     },
     toolbar() {
       const buttons = [];
@@ -168,33 +166,14 @@ export default {
         buttons.push({
           icon: 'fas fa-edit',
           route: {
-            name: 'news.update',
+            name: 'author.news.update',
             params: {
               id: this.story.id
             }
           }
         });
       }
-      if (this.$can('delete', this.story)) {
-        buttons.push({
-          icon: 'fas fa-trash',
-          method: this.showModal
-        });
-      }
       return buttons;
-    }
-  },
-  methods: {
-    deleteStory() {
-      this.showAreYouSure = false;
-      this.$store.dispatch('news/remove', {
-        story: this.story
-      }).then(() => {
-        this.$router.push({ name: 'news.browse' });
-      });
-    },
-    showModal() {
-      this.showAreYouSure = true;
     }
   }
 };

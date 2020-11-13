@@ -1,7 +1,6 @@
-import Model from '@/models/Model';
-import { Attribute, DateAttribute } from '@/models/Attribute';
-import RuleAction from './RuleAction';
-import RuleSubject from './RuleSubject';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
 
 /**
  * Rule model
@@ -20,15 +19,10 @@ export default class Rule extends Model {
       name: new Attribute(),
       remark: new Attribute(),
       owner: new Attribute(),
+      subject: new Attribute(),
+      action: new Attribute(),
       created_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true),
       updated_at: new DateAttribute('YYYY-MM-DD HH:mm:ss', true)
-    };
-  }
-
-  static relationships() {
-    return {
-      action: RuleAction,
-      subject: RuleSubject,
     };
   }
 }

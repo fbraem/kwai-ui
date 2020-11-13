@@ -1,53 +1,51 @@
 <template>
-  <div class="flex flex-col">
+  <div
+    :rules="rules"
+    :name="name || label"
+    :vid="vid || id"
+  >
     <label
-      v-if="hasLabel"
+      v-if="label"
       class="block font-bold mb-2"
-      :class="{ 'text-red-600' : hasErrors }"
-      :for="name"
+      :class="{ 'text-red-600': errors.length > 0 }"
+      :for="id"
     >
-      {{ label }}
-      <i
-        v-if="field.required"
-        class="fas fa-asterisk text-red-700 text-xs align-top">
-      </i>
+      <span>{{ label }}</span>
+      <span class="text-sm align-top">{{ required ? ' *': '' }}</span>
     </label>
-    <slot></slot>
+    <slot :valid="valid || !validated"></slot>
     <div
-      v-for="(error, index) in fieldErrors"
+      v-if="errors[0]"
       class="text-red-600 text-sm italic"
-      :key="index"
     >
-      {{ error }}
+      {{ errors[0] }}
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
-  props: [ 'name', 'label' ],
-  inject: {
-    fields: 'fields'
-  },
-  computed: {
-    field() {
-      return this.fields[this.name];
+  props: {
+    rules: {
+      type: [Object, String],
+      default: ''
     },
-    hasLabel() {
-      return this.label && this.label.length > 0;
+    label: {
+      type: String,
+      default: ''
     },
-    fieldErrors() {
-      return this.field.errors || [];
+    id: {
+      type: String,
+      required: true
     },
-    hasErrors() {
-      return this.fieldErrors.length > 0;
+    name: {
+      type: String
+    },
+    vid: {
+      type: String,
+      default: undefined
     }
   },
-  provide() {
-    return {
-      field: this.field,
-      id: this.name
-    };
-  }
 };
 </script>

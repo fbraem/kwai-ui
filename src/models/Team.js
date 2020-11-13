@@ -1,5 +1,6 @@
-import Model from './Model';
-import { Attribute, DateAttribute } from './Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
 
 import TeamCategory from './TeamCategory';
 import Member from './Member';
@@ -32,50 +33,20 @@ export default class Team extends Model {
     };
   }
 
-/*
-  async available(id) {
-    var segments = this._uri.segment();
-    segments.push(id);
-    segments.push('available_members');
-    this._uri.segment(segments);
-    const config = {
-      method: 'GET',
-      url: this._uri.href(),
-    };
-    this.reset();
-    var member = new Member();
-    let response = await member.request(config);
-    return member.respond(response);
-  }
-
-  async attach(id, members) {
-    const requestConfig = {
-      method: 'POST',
-      url: `${this.resourceUrl()}/${id}/members`,
-      data: {
-        data: members.map((member) => {
-          return member.serialize().data;
-        }),
+  static computed() {
+    return {
+      formatted_created_at(team) {
+        if (team.created_at) {
+          return team.created_at.format('L');
+        }
+        return '';
+      },
+      formatted_updated_at(team) {
+        if (team.updated_at) {
+          return team.updated_at.format('L');
+        }
+        return '';
       },
     };
-    let response = await this.request(requestConfig);
-    var member = new Member();
-    return member.respond(response);
   }
-
-  async detach(id, members) {
-    const requestConfig = {
-      method: 'DELETE',
-      url: `${this.resourceUrl()}/${id}/members`,
-      data: {
-        data: members.map((member) => {
-          return member.serialize().data;
-        }),
-      },
-    };
-    let response = await this.request(requestConfig);
-    var member = new Member();
-    return member.respond(response);
-  }
-*/
 }

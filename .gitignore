@@ -1,2 +1,6 @@
 /node_modules/
 /build/
+/kwai.development.js
+/kwai.production.js
+/.vagrant
+/kwai.development.yaml

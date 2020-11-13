@@ -1,145 +1,134 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="m-4">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
+  <PageSection>
+    <HeaderLine :content="title" />
+    <FormulateForm
+      name="season"
+      v-model="form"
+      ref="form"
       @submit="submit"
+      @submit-raw="checkValidation"
+      class="w-full"
     >
-      <KwaiField
-        name="name"
-        :label="$t('form.season.name.label')"
-      >
-        <KwaiInputText :placeholder="$t('form.season.name.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="start_date"
-        :label="$t('form.season.start_date.label')"
-      >
-        <KwaiInputText :placeholder="$t('form.season.start_date.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="end_date"
-        :label="$t('form.season.end_date.label')"
-      >
-        <KwaiInputText :placeholder="$t('form.season.end_date.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="remark"
-        :label="$t('form.season.remark.label')"
-      >
-        <KwaiTextarea :placeholder="$t('form.season.remark.placeholder')" />
-      </KwaiField>
-    </KwaiForm>
-  </div>
+      <KwaiFieldset title="Season">
+        <template slot="description">
+          {{ $t('form.season.fieldset.season.description') }}
+        </template>
+        <div class="w-full">
+          <FormulateInput
+            name="name"
+            :label="$t('form.season.name.label')"
+            :required="true"
+            :placeholder="$t('form.season.name.placeholder')"
+            validation="required"
+            :validation-messages="{
+              required: $t('form.required')
+            }"
+          >
+          </FormulateInput>
+        </div>
+        <div class="flex flex-wrap justify-between">
+          <div class="md:pr-6 w-full md:w-1/2 mb-4">
+            <FormulateInput
+              name="start_date"
+              :label="$t('form.season.start_date.label')"
+              :required="true"
+              :placeholder="$t('form.season.start_date.placeholder', { format: dateFormat })"
+              validation="required|kwaidate"
+              :validation-messages="{
+                required: $t('form.required'),
+                kwaidate: $t('form.invalid_date', { format: dateFormat })
+              }"
+            >
+            </FormulateInput>
+          </div>
+          <div class="w-full md:w-1/2 mb-4">
+            <FormulateInput
+                name="end_date"
+                :label="$t('form.season.end_date.label')"
+                :required="true"
+                :placeholder="$t('form.season.end_date.placeholder', { format: dateFormat })"
+                validation="required|kwaidate"
+                :validation-messages="{
+                required: $t('form.required'),
+                kwaidate: $t('form.invalid_date', { format: dateFormat })
+              }"
+            >
+            </FormulateInput>
+          </div>
+        </div>
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('form.season.fieldset.remark.title')">
+        <template slot="description">
+          {{ $t('form.season.fieldset.remark.description')}}
+        </template>
+        <FormulateInput
+            type="textarea"
+            name="remark"
+            :label="$t('form.season.remark.label')"
+            :placeholder="$t('form.season.remark.placeholder')"
+            :rows="5"
+        />
+      </KwaiFieldset>
+      <div class="flex justify-end mt-3">
+        <FormulateInput
+            type="submit"
+            :input-class="['bg-primary', 'hover:bg-primary_dark', 'text-primary_light']"
+        >
+          <i
+              v-if="seasons.save.isRunning"
+              class="fas fa-spinner fa-spin mr-2"
+          ></i>
+          <i v-else class="fas fa-save mr-2"></i>
+          {{ $t('form.season.submit') }}
+        </FormulateInput>
+      </div>
+    </FormulateForm>
+  </PageSection>
 </template>
 
 <script>
 import moment from 'moment';
 
-import makeForm, { makeField, notEmpty, isDate } from '@/js/Form.js';
-const makeSeasonForm = (fields, validations) => {
-  const writeForm = (season) => {
-    fields.name.value = season.name;
-    fields.start_date.value = season.formatted_start_date;
-    fields.end_date.value = season.formatted_end_date;
-    fields.remark.value = season.remark;
-  };
-  const readForm = (season) => {
-    season.name = fields.name.value;
-    season.start_date = moment(fields.start_date.value, 'L');
-    season.end_date = moment(fields.end_date.value, 'L');
-    season.remark = fields.remark.value;
-  };
-  return { ...makeForm(fields, validations), writeForm, readForm };
-};
-
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText';
-import KwaiTextarea from '@/components/forms/KwaiTextarea';
-
 import messages from './lang';
+import PageSection from '@/components/PageSection';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import Season from '@/models/Season';
+import HeaderLine from '@/components/HeaderLine';
+import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {reactive} from '@vue/composition-api';
 
 export default {
+  setup() {
+    return {
+      seasons: reactive(useSeasonStore())
+    };
+  },
   i18n: messages,
   components: {
-    KwaiForm,
-    KwaiField,
-    KwaiInputText,
-    KwaiTextarea
+    HeaderLine,
+    KwaiFieldset,
+    PageSection,
   },
   data() {
     return {
-      form: makeSeasonForm({
-        name: makeField({
-          required: true,
-          value: '',
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('form.season.name.required'),
-            },
-          ]
-        }),
-        start_date: makeField({
-          required: true,
-          value: moment().format('L'),
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('form.season.start_date.required'),
-            },
-            {
-              v: isDate,
-              error: this.$t('form.season.start_date.invalid', {
-                format: moment.localeData().longDateFormat('L')
-              }),
-            },
-          ]
-        }),
-        end_date: makeField({
-          required: true,
-          value: '',
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('form.season.end_date.required'),
-            },
-            {
-              v: isDate,
-              error: this.$t('form.season.end_date.invalid', {
-                format: moment.localeData().longDateFormat('L')
-              }),
-            },
-          ]
-        }),
-        remark: makeField({
-          value: ''
-        })
-      },
-      [
-        ({start_date, end_date}) => {
-          var start = moment(start_date.value, 'L', true);
-          var end = moment(end_date.value, 'L', true);
-          if (end.isAfter(start)) {
-            end_date.errors.splice(0, end_date.errors.length);
-            return true;
-          }
-          end_date.errors.push(this.$t('form.season.end_date.after'));
-          return false;
-        },
-      ]),
+      hasValidationErrors: false,
+      hasFormErrors: false,
+      form: {
+        name: '',
+        start_date: moment().format('L'),
+        end_date: '',
+        remark: ''
+      }
     };
   },
   computed: {
-    season() {
-      return this.$store.state.season.active;
+    dateFormat() {
+      return moment.localeData().longDateFormat('L');
     },
-    error() {
-      return this.$store.state.season.error;
-    },
+    title() {
+      return this.$route.params.id ? this.$t('update') : this.$t('create');
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(async(vm) => {
@@ -154,28 +143,34 @@ export default {
   methods: {
     async setupForm(params) {
       if (params.id) {
-        await this.$store.dispatch('season/read', {
-          id: params.id
-        });
-        this.form.writeForm(this.season);
-      } else {
-        this.$store.dispatch('season/create');
+        await this.seasons.read.run(params.id);
+        this.form.name = this.seasons.current.name;
+        this.form.start_date = this.seasons.current.formatted_start_date;
+        this.form.end_date = this.seasons.current.formatted_end_date;
+        this.form.remark = this.seasons.current.remark;
       }
     },
     async submit() {
-      this.form.clearErrors();
-      this.form.readForm(this.season);
-      try {
-        await this.$store.dispatch('season/save', this.season);
-        this.$router.push({
+      // eslint-disable-next-line max-len
+      const season = this.$route.params.id ? this.seasons.current : new Season();
+      season.name = this.form.name;
+      season.start_date = moment(this.form.start_date, 'L');
+      season.end_date = moment(this.form.end_date, 'L');
+      season.remark = this.form.remark;
+      await this.seasons.save.run(season);
+      if (!this.seasons.save.error) {
+        await this.$router.push({
           name: 'seasons.read',
           params: {
-            id: this.season.id
+            id: this.seasons.current.id
           }
         });
-      } catch (error) {
-        console.log(error);
-      };
+      } else {
+        console.log(this.seasons.save.error);
+      }
+    },
+    async checkValidation(submission) {
+      this.hasValidationErrors = await submission.hasValidationErrors();
     }
   }
 };

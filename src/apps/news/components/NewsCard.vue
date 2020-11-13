@@ -16,12 +16,11 @@
       </router-link>
     </div>
     <div class="w-full p-2 md:px-4 flex flex-col md:h-48 bg-gray-100 relative">
-      <span
+      <Badge
         v-if="story.isNew"
-        class="ml-2 mt-2 mr-4 mb-1 badge right-0 top-0 absolute red-badge"
-      >
-        Nieuw
-      </span>
+        class="bg-red-700 text-red-300 right-0 top-0 absolute"
+        content="Nieuw"
+      />
       <h2
         class="font-bold text-lg font-bold mb-0"
         :class="{ 'w-3/4': story.isNew, 'sm:w-4/5': story.isNew }"
@@ -34,14 +33,18 @@
         </router-link>
       </h2>
       <p class="text-xs text-gray-600">
-        <span v-if="showCategory">
+        <span v-if="application">
           Gepubliceerd in
           <router-link
-            :to="categoryLink"
+            v-if="applicationLink"
+            :to="applicationLink"
             class="font-bold"
           >
-            {{ story.category.name }}
+            {{ application.title }}
           </router-link>
+          <span v-else>
+            {{ application.title }}
+          </span>
           &nbsp;|&nbsp;
         </span>
         {{
@@ -68,20 +71,17 @@
   </div>
 </template>
 
-<style scoped>
-.red-badge {
-  @apply bg-red-700 text-red-300;
-}
-</style>
-
 <script>
 import Story from '@/models/Story';
+import Application from '@/models/Application';
 import messages from '../lang';
+import Badge from '@/components/Badge';
 
 /**
  * Component for a news story card
  */
 export default {
+  components: {Badge},
   i18n: messages,
   props: {
     /**
@@ -92,11 +92,10 @@ export default {
       required: true
     },
     /**
-     * Show the category label?
+     * The application.
      */
-    showCategory: {
-      type: Boolean,
-      default: true
+    application: {
+      type: [Application, null]
     }
   },
   computed: {
@@ -108,23 +107,17 @@ export default {
         }
       };
     },
-    category() {
-      /* eslint-disable max-len */
-      return this.$store.getters['categoryModule/category'](this.story.category.id);
+    applicationLink() {
+      const route = this.$router.resolve({ name: this.application.name });
+      if (route.resolved.matched.length > 0) {
+        return {
+          name: this.application.name
+        };
+      } else {
+        console.log('No route found for application', this.application.name);
+      }
+      return null;
     },
-    categoryLink() {
-      return {
-        name: 'categories.read',
-        params: {
-          id: this.story.category.id
-        }
-      };
-    },
-  },
-  methods: {
-    deleteStory() {
-      this.$emit('deleteStory', this.story);
-    }
   }
 };
 </script>

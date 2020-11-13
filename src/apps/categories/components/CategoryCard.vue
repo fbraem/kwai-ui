@@ -1,5 +1,5 @@
 <template>
-  <IconCard :to="linkToCategory" :title="category.name">
+  <IconCard :to="linkToCategory" :title="category.title">
     <template v-if="category.icon_picture" slot="icon">
         <div class="text-red-700 inline-block">
           <inline-svg

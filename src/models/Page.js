@@ -1,9 +1,9 @@
-import Model from './Model';
-import {
-  Attribute, DateAttribute, ArrayAttribute, ObjectAttribute
-} from './Attribute';
-
-import Category from './Category';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
+import ObjectAttribute from '@/js/jsonapi/ObjectAttribute';
+import ArrayAttribute from '@/js/jsonapi/ArrayAttribute';
+import Application from '@/models/Application';
 
 /**
  * Page model
@@ -42,7 +42,7 @@ export default class Page extends Model {
     return {
       content(page) {
         if (page.contents) {
-          let content = page.contents.find((o) => {
+          const content = page.contents.find((o) => {
             return o.locale === 'nl';
           });
           return content || page.contents[0];
@@ -51,22 +51,20 @@ export default class Page extends Model {
       },
       authorName(page) {
         if (page.contents) {
-          var content = page.contents.find((o) => {
+          const content = page.contents.find((o) => {
             return o.locale === 'nl';
           });
-          if (content) {
-            var author = content.user;
-            if (author) {
-              return [
-                author.first_name,
-                author.last_name].filter(n => n != null).join(' ');
-            }
+          if (content?.user) {
+            const author = content.user;
+            return [
+              author.first_name,
+              author.last_name].filter(n => n != null).join(' ');
           }
         }
         return '';
       },
       localPublishDate(page) {
-        var utc = page.updated_at.clone();
+        let utc = page.created_at.clone();
         utc.utcOffset('+00:00', true);
         return utc.local().format('L');
       },
@@ -81,7 +79,7 @@ export default class Page extends Model {
 
   static relationships() {
     return {
-      category: Category
+      application: Application
     };
   }
 }

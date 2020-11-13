@@ -13,20 +13,31 @@ function resolve(dir) {
 
 module.exports = (env, argv) => {
 
-  const isDev = (argv.mode === 'development');
+  let mode = 'development';
+  if (argv && argv.mode) {
+    mode = argv.mode;
+  }
+
+  const isDev = (mode === 'development');
   process.env.NODE_ENV = isDev ? 'development' : 'production';
 
-  var config = {
+  let config = require('./kwai.' + mode);
+
+  return {
     watch: isDev,
-    mode: argv.mode,
+    watchOptions: {
+      poll: true
+    },
+    devtool: isDev ? 'eval-cheap-source-map' : false,
+    mode,
     entry: {
-      site: resolve('src/site/main.js'),
+      site: resolve('src/site/main.js')
     },
     output: {
-      path: path.join(__dirname, 'build', 'build'),
+      path: path.join(__dirname, 'build/ui'),
       filename: '[name].[chunkhash].js',
       chunkFilename: '[name].[chunkhash].js',
-      publicPath: '/build/'
+      publicPath: '/ui/'
     },
     optimization: {
       runtimeChunk: 'single',
@@ -45,6 +56,7 @@ module.exports = (env, argv) => {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name(module) {
+              // eslint-disable-next-line max-len
               const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
               return `npm.${packageName.replace('@', '')}`;
             },
@@ -69,22 +81,50 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.ya?ml$/,
+          type: 'json', // Needed for Webpack v4
+          use: 'yaml-loader'
+        },
+        {
+          test: /\.html$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                attributes: {
+                  list: [
+                    {
+                      tag: 'message-card',
+                      attribute: 'image',
+                      type: 'src'
+                    },
+                    {
+                      tag: 'img',
+                      attribute: 'src',
+                      type: 'src'
+                    },
+                    {
+                      tag: 'img',
+                      attribute: 'srcset',
+                      type: 'srcset'
+                    },
+                  ]
+                }
+              }
+            },
+          ]
+        },
+        {
           test: /\.vue$/,
-          loader: 'vue-loader',
+          use: [
+            'vue-loader',
+          ]
         },
         {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader'
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            'vue-style-loader',
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
-          ]
         },
         {
           test: /\.css$/,
@@ -104,11 +144,11 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpe?g|gif)$/i,
-          loaders: [
-            'file-loader?name=assets/[name]_[hash].[ext]',
+          use: [
+            'file-loader?name=assets/[name]_[hash].[ext]&esModule=false',
             {
               loader: 'image-webpack-loader',
-              query: {
+              options: {
                 bypassOnDebug: true,
                 gifsicle: {
                   interlaced: false
@@ -131,12 +171,15 @@ module.exports = (env, argv) => {
       alias: {
         vue$: isDev ? 'vue/dist/vue.common.js' : 'vue/dist/vue.common.prod.js',
         '@': resolve('src'),
-        config: path.join(__dirname, 'src', 'site', 'config', argv.mode),
+        config: resolve('kwai.' + mode + '.js'),
+        custom: config.custom
       },
       mainFiles: [ 'index' ],
     },
     plugins: [
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({
+        cleanStaleWebpackAssets: false
+      }),
       new VueLoaderPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css'
@@ -149,12 +192,9 @@ module.exports = (env, argv) => {
       }),
       new HtmlPlugin({
         filename: '../index.html',
-        template: './src/index.template.html',
-        chunksSortMode: 'dependency'
+        template: './src/index.template.html'
       }),
       new MinifyPlugin(),
     ]
   };
-
-  return config;
 };

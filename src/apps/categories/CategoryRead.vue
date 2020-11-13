@@ -1,43 +1,51 @@
 <template>
-  <div class="container mx-auto flex flex-col p-3">
-    <div class="block">
-      <h4 class="header-line">
-        {{ $t('featured_news') }}
-      </h4>
-      <Spinner v-if="$wait.is('news.browse')" />
-      <div v-if="storyCount == 0">
-        {{ $t('no_featured_news') }}
-      </div>
-      <div v-if="stories && stories.length > 0">
-        <NewsSlider :stories="stories" />
-      </div>
-    </div>
-    <div
-      v-if="category"
-      class="block mx-auto my-2"
+  <div>
+    <ImageHeader
+      v-if="application"
+      :title="application.title"
+      :toolbar="toolbar"
+      :picture="picture"
+      :pictures="pictures"
     >
-      <router-link
-        :to="moreNewsLink"
-        class="red-button"
+      <div v-html="application.description">
+      </div>
+    </ImageHeader>
+    <div class="container mx-auto flex flex-col p-3">
+      <div class="block">
+        <HeaderLine tag="h4" :content="$t('featured_news')" />
+        <Spinner v-if="newsStore.load.isRunning" />
+        <div v-if="newsStore.count == 0">
+          {{ $t('no_featured_news') }}
+        </div>
+        <div v-else>
+          <NewsSlider :stories="newsStore.all" />
+        </div>
+      </div>
+      <div
+        v-if="application"
+        class="block mx-auto my-2"
       >
-        {{ $t('more_news') }}
-      </router-link>
-    </div>
-    <Spinner v-if="$wait.is('pages.browse')" />
-    <div
-      class="block"
-      v-if="pageCount > 0"
-    >
-      <h4 class="header-line">
-        Informatie
-      </h4>
-      <div class="flex flex-wrap">
-        <div
-          v-for="page in pages"
-          :key="page.id"
-          class="p-3 w-full sm:w-1/2 lg:w-1/3"
+        <router-link
+          :to="moreNewsLink"
+          class="red-button"
         >
-          <PageSummary :page="page" />
+          {{ $t('more_news') }}
+        </router-link>
+      </div>
+      <Spinner v-if="pageStore.load.isRunning" />
+      <div
+        class="block"
+        v-if="pageStore.count > 0"
+      >
+        <HeaderLine tag="h4" content="Informatie" />
+        <div class="flex flex-wrap">
+          <div
+            v-for="page in pageStore.all"
+            :key="page.id"
+            class="p-3 w-full sm:w-1/2 lg:w-1/3"
+          >
+            <PageSummary :page="page" />
+          </div>
         </div>
       </div>
     </div>
@@ -56,81 +64,109 @@ import messages from './lang';
 import NewsSlider from '@/apps/news/components/NewsSlider';
 import PageSummary from '@/apps/pages/components/PageSummary';
 import Spinner from '@/components/Spinner';
+import HeaderLine from '@/components/HeaderLine';
+import useApplications from '@/site/composables/useApplications';
+import {onMounted, computed, reactive, watch} from '@vue/composition-api';
+import {useNewsStore} from '@/apps/news/composables/useNews';
+import {usePageStore} from '@/apps/pages/composables/usePages';
+import ImageHeader from '@/components/ImageHeader';
 
 /**
  * Page for showing category news and information
  */
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const applicationStore = useApplications();
+
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.id === props.id);
+      }
+      return null;
+    });
+
+    const newsStore = useNewsStore();
+    const pageStore = usePageStore();
+    if (application.value) {
+      onMounted(() => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        }, true);
+        pageStore.load.run({application: application.value.id}, true);
+      });
+    }
+
+    watch(
+      () => application.value,
+      () => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        }, true);
+        pageStore.load.run({
+          application: application.value.id,
+        }, true);
+      }
+    );
+
+    return {
+      newsStore: reactive(newsStore),
+      pageStore: reactive(pageStore),
+      application
+    };
+  },
   i18n: messages,
   components: {
+    ImageHeader,
+    HeaderLine,
     NewsSlider,
     PageSummary,
     Spinner
   },
   computed: {
-    category() {
-      return this.$store.getters['category/category'](this.$route.params.id);
-    },
     moreNewsLink() {
       return {
-        name: 'news.category',
+        name: 'news.application',
         params: {
-          category: this.category.id
+          app: this.application.id
         }
       };
     },
-    stories() {
-      return this.$store.state.category.news.all;
+    picture() {
+      return this.application?.header_picture;
     },
-    storyCount() {
-      if (this.stories) return this.stories.length;
-      return 0;
-    },
-    pages() {
-      return this.$store.state.category.page.all;
-    },
-    pageCount() {
-      if (this.pages) return this.pages.length;
-      return 0;
-    },
-    pageLink() {
-      return {
-        name: 'pages.read',
-        params: {
-          id: this.page.id
-        }
-      };
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchCategory(to.params);
-      if (vm.category.app) {
-        vm.$router.replace({ path: '/' + vm.category.app });
-      } else {
-        vm.fetchData(to.params);
+    pictures() {
+      if (this.application?.header_images
+        && Object.keys(this.application.header_images).length > 0) {
+        return {
+          '1024w': this.application.header_images.lg,
+          '768w': this.application.header_images.md,
+          '640w': this.application.header_images.sm,
+        };
       }
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    this.fetchCategory(to.params);
-    this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    async fetchCategory(params) {
-      await this.$store.dispatch('category/read', {
-        id: params.id
-      });
+      return null;
     },
-    async fetchData(params) {
-      this.$store.dispatch('category/news/browse', {
-        category: params.id,
-        featured: true
-      });
-      this.$store.dispatch('category/page/browse', {
-        category: params.id
-      });
+    toolbar() {
+      const buttons = [];
+      if (this.$can('update', this.application)) {
+        buttons.push({
+          icon: 'fas fa-edit',
+          route: {
+            name: 'categories.update',
+            params: {
+              id: this.application.id
+            }
+          }
+        });
+      }
+      return buttons;
     }
   }
 };

@@ -1,5 +1,6 @@
-import Model from '../Model';
-import { Attribute, DateAttribute } from '../Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
 
 import Season from '../Season';
 import User from '@/models/users/User';
@@ -54,7 +55,19 @@ export default class TrainingDefinition extends Model {
       },
       formattedEndTime(definition) {
         return definition.end_time.format('HH:mm');
-      }
+      },
+      formatted_created_at(definition) {
+        if (definition.created_at) {
+          return definition.created_at.format('L');
+        }
+        return '';
+      },
+      formatted_updated_at(definition) {
+        if (definition.updated_at) {
+          return definition.updated_at.format('L');
+        }
+        return '';
+      },
     };
   }
 }

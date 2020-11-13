@@ -18,18 +18,7 @@
       v-if="to"
       class="relative flex align-baseline items-center py-3 hover:text-blue-300"
     >
-      <a
-        v-if="isLink"
-        :href="to"
-        class="text-white bold hover:text-blue-300 cover"
-      >
-      </a>
-      <router-link
-        v-else
-        class="text-white bold hover:text-blue-300 cover"
-        :to="to"
-      >
-      </router-link>
+      <CoverLink :to="to" />
       <i class="far fa-arrow-alt-circle-right fa-lg mr-3 fill-current">
       </i>
       <slot name="link">
@@ -42,7 +31,9 @@
 </template>
 
 <script>
+import CoverLink from '@/components/CoverLink';
 export default {
+  components: {CoverLink},
   props: {
     title: {
       type: String

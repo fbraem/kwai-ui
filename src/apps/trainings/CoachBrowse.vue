@@ -1,52 +1,68 @@
 <template>
-  <AdminPage>
-    <Spinner
-      v-if="$wait.is('training.coaches.browse')"
-      class="text-center"
-    />
-    <div v-else>
-      <Alert
-        v-if="noData"
-        type="warning"
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('coaches')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconButton v-if="canCreate"
+            class="bg-primary text-primary_light"
+            icon="fas fa-plus"
+            :content="$t('training.coaches.create')"
+            :route="{ name: 'trainings.coaches.create' }"
+          />
+        </div>
+      </div>
+    </PageHeader>
+    <PageSection>
+      <Spinner
+        v-if="coaches.load.isRunning"
+        class="w-full text-center"
       >
-        {{ $t('training.coaches.no_data') }}
-      </Alert>
-      <table
+      </Spinner>
+      <div
         v-else
-        class="table table-striped"
+        class="w-full"
       >
-        <thead>
-          <tr>
-            <th scope="col">
-              {{ $t('name') }}
-            </th>
-            <th scope="col">
-              {{ $t('training.coaches.form.diploma.label') }}
-            </th>
-            <th scope="col">
-              {{ $t('training.coaches.form.active.label') }}
-            </th>
-            <th scope="col">
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+        <Alert
+          v-if="coaches.all.length === 0"
+          type="warning"
+        >
+          {{ $t('training.coaches.no_data') }}
+        </Alert>
+        <Table v-else>
+          <template slot="header">
+            <tr>
+              <TableHeader>
+                {{ $t('name') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('training.coaches.form.diploma.label') }}
+              </TableHeader>
+              <TableHeader>
+                {{ $t('training.coaches.form.active.label') }}
+              </TableHeader>
+              <TableHeader>
+              </TableHeader>
+            </tr>
+          </template>
           <tr
-            v-for="coach in coaches"
+            v-for="coach in coaches.all"
             :key="coach.id"
           >
-            <th scope="row">
+            <TableCell>
               <router-link :to="{
                   name: 'trainings.coaches.read',
                   params: { id : coach.id}
                 }">
                 {{ coach.member.person.name }}
               </router-link>
-            </th>
-            <td>
+            </TableCell>
+            <TableCell>
               {{ coach.diploma }}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               <i
                 v-if="coach.active"
                 class="fas fa-check"
@@ -57,61 +73,75 @@
                 class="fas fa-times text-red-500"
               >
               </i>
-            </td>
-            <td>
-              <router-link
+            </TableCell>
+            <TableCell>
+              <IconLink
                 v-if="$can('update', coach)"
-                class="icon-button text-gray-700 hover:bg-gray-300"
-                :to="{
+                class="hover:bg-body_dark text-body"
+                icon="fas fa-edit"
+                :route="{
                   name: 'trainings.coaches.update',
                   params: {
                     id: coach.id
                   }
-                }">
-                  <i class="fas fa-edit"></i>
-              </router-link>
-            </td>
+                }"
+              />
+            </TableCell>
           </tr>
-        </tbody>
-      </table>
-    </div>
-  </AdminPage>
+        </Table>
+      </div>
+    </PageSection>
+  </div>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
-import AdminPage from '@/components/AdminPage';
+import PageHeader from '@/components/PageHeader';
+import PageSection from '@/components/PageSection';
 
 import messages from './lang';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+// eslint-disable-next-line max-len
+import {getCurrentInstance, onMounted, reactive, computed} from '@vue/composition-api';
+import Coach from '@/models/trainings/Coach';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import IconButton from '@/components/IconButton';
+import IconLink from '@/components/IconLink';
+import Table from '@/components/table/Table';
+import TableCell from '@/components/table/TableCell';
+import TableHeader from '@/components/table/TableHeader';
 
 export default {
+  setup() {
+    const vm = getCurrentInstance();
+    const coaches = useCoachStore();
+
+    onMounted(async() => {
+      await coaches.load.run();
+    });
+
+    const canCreate = computed(() => {
+      return vm.$can('create', Coach);
+    });
+
+    return {
+      coaches: reactive(coaches),
+      canCreate
+    };
+  },
   components: {
-    Spinner, Alert, AdminPage
+    IconLink,
+    IconButton,
+    ApplicationHeader,
+    Table,
+    TableCell,
+    TableHeader,
+    Spinner,
+    Alert,
+    PageHeader,
+    PageSection
   },
   i18n: messages,
-  computed: {
-    coaches() {
-      return this.$store.state.training.coach.all;
-    },
-    noData() {
-      return this.coaches && this.coaches.length === 0;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData();
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData();
-    next();
-  },
-  methods: {
-    fetchData() {
-      this.$store.dispatch('training/coach/browse');
-    }
-  }
 };
 </script>

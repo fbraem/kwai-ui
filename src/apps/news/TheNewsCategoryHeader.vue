@@ -1,12 +1,12 @@
 <template>
   <Header
-    v-if="category"
+    v-if="application"
     :title="$t('news')"
-    :subtitle="category.name"
+    :subtitle="application.name"
     :picture="picture"
     :toolbar="toolbar"
   >
-    <div v-html="category.description"></div>
+    <div v-html="application.description"></div>
   </Header>
 </template>
 
@@ -14,26 +14,40 @@
 import Story from '@/models/Story';
 import messages from './lang';
 import Header from '@/components/Header';
+import useApplications from '@/site/composables/useApplications';
+import {computed} from '@vue/composition-api';
 /**
  * Component for header of category page
  */
 export default {
+  props: {
+    app: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const applicationStore = useApplications();
+
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.id === props.app);
+      }
+      return null;
+    });
+
+    return {
+      application
+    };
+  },
   components: {
     Header
   },
   i18n: messages,
   computed: {
-    category() {
-      /* eslint-disable max-len */
-      if (this.$route.params.category) {
-        return this.$store.getters['category/category'](this.$route.params.category);
-      }
-      return null;
-      /* eslint-enable max-len */
-    },
     picture() {
-      if (this.category && this.category.images) {
-        return this.category.images.normal;
+      if (this.application && this.application.images) {
+        return this.application.images.normal;
       }
       return null;
     },
@@ -43,7 +57,7 @@ export default {
         buttons.push({
           icon: 'fas fa-plus',
           route: {
-            name: 'news.create'
+            name: 'author.news.create'
           }
         });
       }

@@ -8,33 +8,21 @@
 </template>
 
 <script>
-import userStore from './store/user';
-import abilityStore from './store/ability';
-import ruleStore from './store/rule';
-import newsStore from '@/apps/news/store';
-import pageStore from '@/apps/pages/store';
+import {provideUserStore} from '@/apps/users/composables/useUsers';
+import {provideNewsStore} from '@/apps/users/composables/useNews';
+import {providePageStore} from '@/apps/users/composables/usePages';
+import {provideAbilityStore} from '@/apps/users/composables/useAbilities';
+import {provideRuleStore} from '@/apps/users/composables/useRules';
+import {provideInvitationStore} from '@/apps/users/composables/useInvitations';
 
 export default {
-  beforeCreate() {
-    this.$store.registerModule('user', userStore);
-    this.$store.registerModule(['user', 'ability'], abilityStore);
-    this.$store.registerModule(['user', 'rule'], ruleStore);
-    this.$store.registerModule(['user', 'news'], newsStore);
-    this.$store.registerModule(['user', 'page'], pageStore);
+  setup() {
+    provideUserStore();
+    provideNewsStore();
+    providePageStore();
+    provideAbilityStore();
+    provideRuleStore();
+    provideInvitationStore();
   },
-  beforeDestroy() {
-    this.$store.unregisterModule(['user', 'page']);
-    this.$store.unregisterModule(['user', 'news']);
-    this.$store.unregisterModule(['user', 'rule']);
-    this.$store.unregisterModule(['user', 'ability']);
-    this.$store.unregisterModule('user');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('user/set', to.meta.active);
-      }
-    });
-  }
 };
 </script>

@@ -23,9 +23,9 @@ export default {
   data() {
     return {
       pictures: {
-        '1024w': require('./images/exclamation_lg.jpg'),
-        '768w': require('./images/exclamation_md.jpg'),
-        '640w': require('./images/exclamation_sm.jpg')
+        '1024w': require('custom/news/images/exclamation_lg.jpg'),
+        '768w': require('custom/news/images/exclamation_md.jpg'),
+        '640w': require('custom/news/images/exclamation_sm.jpg')
       }
     };
   },
@@ -36,7 +36,7 @@ export default {
         buttons.push({
           icon: 'fas fa-plus',
           route: {
-            name: 'news.create'
+            name: 'author.news.create'
           }
         });
       }

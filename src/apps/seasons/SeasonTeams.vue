@@ -19,15 +19,16 @@
 
 <script>
 import Alert from '@/components/Alert';
+import Season from '@/models/Season';
 
 export default {
+  props: {
+    season: {
+      type: [ Season, null ]
+    }
+  },
   components: {
     Alert
-  },
-  computed: {
-    season() {
-      return this.$store.state.season.active;
-    },
   }
 };
 </script>

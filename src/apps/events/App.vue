@@ -1,27 +1,147 @@
 <template>
-  <div class="news">
-    <router-view name="hero"></router-view>
-    <router-view></router-view>
+  <div>
+    <ImageHeader
+      v-if="application"
+      :title="application.title"
+      :pictures="pictures"
+    >
+      <div v-html="application.description">
+      </div>
+    </ImageHeader>
+    <!-- HEADER -->
+    <div
+      class="container mx-auto p-6"
+      v-html="headerHtml"
+    >
+    </div>
+    <!-- CONTENT -->
+    <div class="container mx-auto flex flex-col p-3">
+    <!--
+            <div class="block">
+              <HeaderLine tag="h4" content="Nieuws in de kijker" />
+              <Spinner v-if="newsStore.load.isRunning" />
+              <div v-if="newsStore.fullCount === 0">
+                Momenteel is er geen belangrijk nieuws
+              </div>
+              <div v-if="newsStore.all.length > 0">
+                <NewsSlider :stories="newsStore.all" />
+              </div>
+            </div>
+            <div
+              v-if="application"
+              class="block mx-auto my-2"
+            >
+              <router-link
+                :to="moreNewsLink"
+                class="red-button"
+              >
+                Meer nieuws
+              </router-link>
+            </div>
+      -->
+      <Spinner v-if="pageStore.load.isRunning" />
+      <div
+        class="block"
+        v-if="pageStore.fullCount > 0"
+      >
+        <HeaderLine tag="h4" content="Informatie" />
+        <div class="flex flex-wrap">
+          <div
+            v-for="page in pageStore.all"
+            :key="page.id"
+            class="p-3 w-full sm:w-1/2 lg:w-1/3"
+          >
+            <PageSummary :page="page" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import store from './store';
+import HeaderLine from '@/components/HeaderLine';
+import NewsSlider from '@/apps/news/components/NewsSlider';
+import PageSummary from '@/apps/pages/components/PageSummary';
+import ImageHeader from '@/components/ImageHeader';
+import Spinner from '@/components/Spinner';
+import useApplications from '@/site/composables/useApplications';
+// eslint-disable-next-line max-len
+import {providePageStore, usePageStore} from '@/apps/pages/composables/usePages';
+// eslint-disable-next-line max-len
+import {watch, reactive, computed, onMounted, getCurrentInstance} from '@vue/composition-api';
+import {provideNewsStore, useNewsStore} from '@/apps/news/composables/useNews';
 
 export default {
-  beforeCreate() {
-    this.$store.registerModule('event', store);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('event/reset');
-    this.$store.unregisterModule('event');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('event/set', to.meta.active);
+  setup() {
+    const applicationStore = useApplications();
+
+    const application = computed(() => {
+      if (applicationStore.all.value) {
+        return applicationStore.all.value.find(a => a.name === 'events');
       }
+      return null;
     });
+
+    provideNewsStore();
+    const newsStore = useNewsStore();
+    providePageStore();
+    const pageStore = usePageStore();
+
+    if (application.value) {
+      onMounted(() => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        });
+        pageStore.load.run({application: application.value.id});
+      });
+    }
+
+    watch(
+      () => application.value,
+      () => {
+        newsStore.load.run({
+          promoted: true,
+          application: application.value.id
+        });
+        pageStore.load.run({
+          application: application.value.id
+        });
+      }
+    );
+
+    const pictures = reactive({
+      '1024w': require('custom/events/images/header_lg.jpg'),
+      '768w': require('custom/events/images/header_md.jpg'),
+      '640w': require('custom/events/images/header_sm.jpg'),
+    });
+
+    const moreNewsLink = computed(() => {
+      return {
+        name: 'news.application',
+        params: {
+          app: application.value.id
+        }
+      };
+    });
+
+    const vm = getCurrentInstance();
+    return {
+      newsStore: reactive(newsStore),
+      pageStore: reactive(pageStore),
+      application,
+      pictures,
+      moreNewsLink,
+      headerHtml: vm.$route.meta.html['./header.html']
+    };
+  },
+  components: {
+    ImageHeader,
+    HeaderLine,
+    NewsSlider,
+    PageSummary,
+    Spinner
   }
 };
 </script>

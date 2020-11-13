@@ -1,28 +1,25 @@
-import Model from './Model';
-import {
-  Attribute, DateAttribute, ObjectAttribute, ArrayAttribute
-} from './Attribute';
+import Model from '@/js/jsonapi/Model';
+import Attribute from '@/js/jsonapi/Attribute';
+import DateAttribute from '@/js/jsonapi/DateAttribute';
+import ObjectAttribute from '@/js/jsonapi/ObjectAttribute';
+import ArrayAttribute from '@/js/jsonapi/ArrayAttribute';
 
-import Category from './Category';
+import Application from './Application';
 import moment from 'moment-timezone';
 
 /**
- * Story model
+ * News model
  */
-export default class Story extends Model {
+export default class NewsStory extends Model {
   static type() {
     return 'stories';
-  }
-
-  static namespace() {
-    return ['news'];
   }
 
   static fields() {
     return {
       enabled: new Attribute(),
-      featured: new Attribute(),
-      featured_end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
+      promotion: new Attribute(),
+      promotion_end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
       timezone: new Attribute(),
       publish_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
       end_date: new DateAttribute('YYYY-MM-DD HH:mm:ss'),
@@ -50,10 +47,7 @@ export default class Story extends Model {
     return {
       content(story) {
         if (story.contents) {
-          let content = story.contents.find((o) => {
-            return o.locale === 'nl';
-          });
-          return content || story.contents[0];
+          return story.contents.find((e) => e.locale === 'nl');
         }
         return null;
       },
@@ -89,15 +83,15 @@ export default class Story extends Model {
         utc.utcOffset('+00:00', true);
         return utc.local().format('HH:mm');
       },
-      localFeaturedEndDate(story) {
-        if (!story.featured_end_date) return null;
-        var utc = story.featured_end_date.clone();
+      localPromotionEndDate(story) {
+        if (!story.promotion_end_date) return null;
+        var utc = story.promotion_end_date.clone();
         utc.utcOffset('+00:00', true);
         return utc.local().format('L');
       },
-      localFeaturedEndTime(story) {
-        if (!story.featured_end_date) return null;
-        var utc = story.featured_end_date.clone();
+      localPromotionEndTime(story) {
+        if (!story.promotion_end_date) return null;
+        var utc = story.promotion_end_date.clone();
         utc.utcOffset('+00:00', true);
         return utc.local().format('HH:mm');
       },
@@ -127,7 +121,7 @@ export default class Story extends Model {
 
   static relationships() {
     return {
-      category: Category
+      application: Application
     };
   }
 }

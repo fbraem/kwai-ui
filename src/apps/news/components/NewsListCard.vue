@@ -9,7 +9,7 @@
       <NewsSummaryList
         v-if="hasStories"
         :stories="stories"
-      />
+      ></NewsSummaryList>
       <div
         v-else
       >
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Category from '@/models/Category';
+import Application from '@/models/Application';
 import messages from '../lang';
 import NewsSummaryList from './NewsSummaryList';
 
@@ -38,7 +38,7 @@ export default {
       required: true
     },
     category: {
-      type: Category,
+      type: Application,
       required: false
     }
   },
@@ -48,7 +48,7 @@ export default {
         'min-height': '150px',
         'background-image':
           'url('
-            + require('@/apps/news/images/exclamation-point-2620923_1920.jpg')
+            + require('custom/news/images/exclamation-point-2620923_1920.jpg')
             + ')'
       };
     },
@@ -58,14 +58,14 @@ export default {
     oldNewsLink() {
       if (this.category) {
         return {
-          name: 'news.category',
+          name: 'news.application',
           params: {
-            category: this.category.id
+            app: this.category.id
           }
         };
       }
       return {
-        name: 'news.browse'
+        name: 'news'
       };
     }
   },

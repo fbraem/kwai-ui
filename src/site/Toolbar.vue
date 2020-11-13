@@ -12,13 +12,29 @@
               </a>
             </div>
             <div class="flex mr-1">
-              <a
-                class="icon-button text-red-300 hover:bg-red-900 mr-1"
-                :href="facebook"
-              >
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <Login />
+              <IconLink
+                icon="fab fa-facebook-f"
+                class="text-primary_light hover:bg-primary_dark"
+                :link="facebook"
+              />
+              <IconLink
+                v-if="isLoggedIn && user"
+                icon="fas fa-user"
+                class="text-primary_light hover:bg-primary_dark"
+                :route="{ name: 'users.read', params: { id: user.id } }"
+              />
+              <IconLink
+                v-if="isLoggedIn"
+                icon="fas fa-sign-out-alt"
+                class="text-primary_light hover:bg-primary_dark"
+                :method="logout"
+              />
+              <IconLink
+                v-else
+                icon="fas fa-lock"
+                class="text-primary_light hover:bg-primary_dark"
+                :route="{ name: 'user.login'}"
+              />
             </div>
           </div>
         </div>
@@ -28,22 +44,43 @@
 </template>
 
 <script>
-import Login from '@/apps/auth/components/Login.vue';
+import IconLink from '@/components/IconLink';
+import config from 'config';
+import createAuthenticationService from '@/site/composables/useAuthentication';
+import {computed, getCurrentInstance} from '@vue/composition-api';
 
 export default {
+  setup() {
+    const authService = createAuthenticationService();
+
+    const isLoggedIn = computed(() => authService.isLoggedIn.value);
+    const user = computed(() => authService.user.value);
+
+    const vm = getCurrentInstance();
+    const logout = async() => {
+      await authService.logout.run();
+      await vm.$router.push('/', () => {});
+    };
+
+    return {
+      isLoggedIn,
+      user,
+      logout
+    };
+  },
   components: {
-    Login
+    IconLink
   },
   computed: {
     title() {
-      return this.$store.state.site?.page.title;
+      return config.title;
     },
     subTitle() {
-      return this.$store.state.site?.page.subTitle;
+      return config.subTitle ?? '';
     },
     facebook() {
-      return this.$store.state.site?.facebook;
-    }
-  },
+      return config.facebook;
+    },
+  }
 };
 </script>

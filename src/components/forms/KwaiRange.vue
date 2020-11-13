@@ -1,15 +1,21 @@
 <template>
   <!-- Based on https://codepen.io/seanstopnik/pen/CeLqA -->
-  <div class="w-full">
-    <input
-      v-model="field.value"
-      :id="id"
-      class="appearance-none range-slider__range"
-      :class="{ 'border-red-600' : field.errors.length > 0 }"
-      type="range"
-      v-bind="$attrs"
-    />
-    <span class="range-slider__value">{{ field.value }}</span>
+  <div
+    :class="`formulate-input-element formulate-input-element--${context.type}`"
+    :data-type="context.type">
+    <div class="w-full">
+      <input
+        type="range"
+        v-model="context.model"
+        class="appearance-none range-slider__range"
+        v-bind="context.attributes"
+      />
+      <div
+        class="range-slider__value"
+      >
+        {{ context.model }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -94,9 +100,11 @@ input::-moz-focus-outer {
 
 <script>
 export default {
-  inject: {
-    field: 'field',
-    id: 'id'
+  props: {
+    context: {
+      type: Object,
+      required: true
+    },
   }
 };
 </script>

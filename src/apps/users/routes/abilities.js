@@ -1,48 +1,34 @@
 import App from '@/apps/users/App.vue';
 
 const UserAbilitiesHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/TheUserAbilitiesHeader.vue');
 const UserAbilities = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/UserAbilities.vue');
 
 const AbilitiesHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/TheAbilitiesHeader.vue');
 const AbilityBrowse = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/AbilityBrowse.vue');
 
 const AbilityHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/TheAbilityHeader.vue');
 const AbilityRead = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/AbilityRead.vue');
 
 const AbilityFormHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/TheAbilityFormHeader.vue');
 const AbilityForm = () =>
-  import(/* webpackChunkName: "user_admin_chunck" */
+  import(/* webpackChunkName: "user_admin_chunk" */
     '@/apps/users/AbilityForm.vue');
 
 export default [
-  {
-    path: '/users/:id/abilities',
-    component: App,
-    children: [
-      {
-        path: '',
-        components: {
-          hero: UserAbilitiesHeader,
-          default: UserAbilities
-        },
-        name: 'users.abilities',
-      },
-    ]
-  },
   {
     path: '/users/abilities',
     component: App,
@@ -53,7 +39,17 @@ export default [
           hero: AbilityHeader,
           default: AbilityRead
         },
-        name: 'users.abilities.read'
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.abilities.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'rules'
+          }
+        }
       },
       {
         path: 'create',
@@ -62,11 +58,16 @@ export default [
           default: AbilityForm
         },
         props: {
-          hero: {
-            creating: true
-          }
+          hero: true,
+          default: true
         },
-        name: 'users.abilities.create'
+        name: 'users.abilities.create',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'rules'
+          }
+        }
       },
       {
         path: 'update/:id(\\d+)',
@@ -75,11 +76,16 @@ export default [
           default: AbilityForm
         },
         props: {
-          hero: {
-            creating: false
-          }
+          hero: true,
+          default: true
         },
-        name: 'users.abilities.update'
+        name: 'users.abilities.update',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
       {
         path: '',
@@ -88,6 +94,36 @@ export default [
           default: AbilityBrowse
         },
         name: 'users.abilities.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
+      },
+    ]
+  },
+  {
+    path: '/users/:id/abilities',
+    component: App,
+    children: [
+      {
+        path: '',
+        components: {
+          hero: UserAbilitiesHeader,
+          default: UserAbilities
+        },
+        props: {
+          hero: true,
+          default: true
+        },
+        name: 'users.abilities',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'users'
+          }
+        }
       },
     ]
   },

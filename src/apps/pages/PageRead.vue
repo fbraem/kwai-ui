@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div v-if="error">
-      {{ error.response.statusText }}
-    </div>
-    <Spinner v-if="$wait.is('pages.read')" />
+    <Spinner v-if="store.read.isRunning" />
     <article
       v-if="page"
       class="page-content container overflow-x-auto mx-auto p-4"
@@ -19,6 +16,10 @@
 </template>
 
 <style>
+.page-content ul, .page-content ul > * {
+  @apply list-disc;
+}
+
 blockquote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
@@ -106,66 +107,33 @@ blockquote {
 import messages from './lang';
 
 import Spinner from '@/components/Spinner';
+import {onMounted, reactive, computed} from '@vue/composition-api';
+import {usePageStore} from '@/apps/pages/composables/usePages';
 
 /**
  * Page for an information page
  */
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const store = usePageStore();
+
+    onMounted(() => store.read.run(props.id));
+    const page = computed(() => store.current);
+
+    return {
+      store: reactive(store),
+      page
+    };
+  },
   components: {
     Spinner,
   },
-  i18n: messages,
-  computed: {
-    page() {
-      return this.$store.state.page.active;
-    },
-    categoryLink() {
-      return {
-        name: 'pages.category',
-        params: {
-          category:
-          this.page.category.id
-        }
-      };
-    },
-    categories() {
-      return this.$store.state.category.all;
-    },
-    error() {
-      return this.$store.state.page.error;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData(params) {
-      try {
-        this.$store.dispatch('page/read', { id: params.id });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    deletePage() {
-      var category = this.page.category.id;
-      this.$store.dispatch('page/delete', {
-        page: this.page
-      }).then(() => {
-        this.$router.push({
-          name: 'pages.browse',
-          params: {
-            category: category
-          }
-        });
-      });
-    }
-  }
+  i18n: messages
 };
 </script>

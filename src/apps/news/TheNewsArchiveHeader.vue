@@ -30,9 +30,9 @@ export default {
   data() {
     return {
       pictures: {
-        '1024w': require('./images/archive_lg.jpg'),
-        '768w': require('./images/archive_md.jpg'),
-        '640w': require('./images/archive_sm.jpg')
+        '1024w': require('custom/news/images/archive_lg.jpg'),
+        '768w': require('custom/news/images/archive_md.jpg'),
+        '640w': require('custom/news/images/archive_sm.jpg')
       }
     };
   },
@@ -52,7 +52,7 @@ export default {
         buttons.push({
           icon: 'fas fa-plus',
           route: {
-            name: 'news.create'
+            name: 'author.news.create'
           }
         });
       }

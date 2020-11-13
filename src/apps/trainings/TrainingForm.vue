@@ -1,363 +1,370 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="m-6">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
-      @submit="submit"
-      style="grid-column: span 2;"
-    >
-      <div class="flex">
-        <div class="flex-grow">
-          <KwaiField
+  <div>
+    <PageHeader>
+      <ApplicationHeader :content="$t('training.events.title')" />
+    </PageHeader>
+    <PageSection>
+      <FormulateForm
+        name="training"
+        v-model="form"
+        @submit="submit"
+        @submit-raw="checkValidation"
+        class="w-full"
+      >
+        <KwaiFieldset title="Training">
+          <template slot="description">
+            Geef de training een titel en omschrijving.
+          </template>
+          <FormulateInput
             name="title"
             :label="$t('training.events.form.title.label')"
-          >
-            <KwaiInputText :placeholder="$t('training.events.form.title.placeholder')" />
-          </KwaiField>
-        </div>
-        <div class="ml-4 self-begin flex-none">
-          <KwaiField
+            :placeholder="$t('training.events.form.title.placeholder')"
+            :required="true"
+            validation="required"
+            :validation-messages="{
+              required: 'Dit veld is verplicht in te vullen'
+            }"
+          />
+          <FormulateInput
+            type="textarea"
+            name="summary"
+            :label="$t('training.events.form.summary.label')"
+            :placeholder="$t('training.events.form.summary.placeholder')"
+            :rows="5"
+          />
+        </KwaiFieldset>
+        <KwaiFieldset title="Actief">
+          <template slot="description">
+            Enkel wanneer de training actief is zal ze getoond worden
+            in de kalender.
+          </template>
+          <FormulateInput
+            type="checkbox"
             name="active"
             :label="$t('training.events.form.active.label')"
-          >
-            <KwaiSwitch />
-          </KwaiField>
-        </div>
-        <div class="ml-4 self-begin flex-none">
-          <KwaiField
+          />
+        </KwaiFieldset>
+        <KwaiFieldset title="Annulatie">
+          <template slot="description">
+            Een geannuleerde training wordt getoond met de
+            indicatie "geannuleerd".
+          </template>
+          <FormulateInput
+            type="checkbox"
             name="cancelled"
             :label="$t('training.events.form.cancelled.label')"
-          >
-            <KwaiSwitch />
-          </KwaiField>
-        </div>
-      </div>
-      <KwaiField
-        name="summary"
-        :label="$t('training.events.form.summary.label')"
-      >
-        <KwaiTextarea
-          :rows="5"
-          :placeholder="$t('training.events.form.summary.placeholder')"
-        />
-      </KwaiField>
-      <div class="flex flex-wrap">
-        <div class="md:pr-6 w-full md:w-1/3">
-          <KwaiField
+          />
+        </KwaiFieldset>
+        <KwaiFieldset title="Tijdstip">
+          <template slot="description">
+            Wanneer wordt deze training gehouden?
+          </template>
+          <FormulateInput
             name="start_date"
             :label="$t('training.events.form.start_date.label')"
+            :required="true"
+            validation="^required|kwaidate"
+            :validation-messages="{
+                    required: 'Dit veld is verplicht in te vullen.',
+                    kwaidate: $t('training.events.form.invalid_date', { format: dateFormat })
+                  }"
+            :placeholder="$t('training.events.form.start_date.placeholder', { format: dateFormat })"
+          />
+          <div class="mt-4 flex flex-row flex-wrap space-y-2 sm:space-y-0">
+            <div class="sm:pr-6 w-full sm:w-1/2">
+              <FormulateInput
+                name="start_time"
+                :label="$t('training.events.form.start_time.label')"
+                :required="true"
+                validation="^required|kwaitime"
+                :validation-messages="{
+                    required: 'Dit veld is verplicht in te vullen.',
+                    kwaitime: $t('training.events.form.invalid_time', { format: 'HH:MM' })
+                  }"
+                :placeholder="$t('training.events.form.start_time.placeholder', { format: 'HH:MM' })"
+              />
+            </div>
+            <div class="w-full sm:w-1/2">
+              <FormulateInput
+                name="end_time"
+                :label="$t('training.events.form.end_time.label')"
+                :required="true"
+                validation="^bail|required|kwaitime|after_start"
+                :validation-rules="{
+                  after_start: isAfterStartTime
+                }"
+                :validation-messages="{
+                      required: 'Dit veld is verplicht in te vullen.',
+                      kwaitime: $t('training.events.form.invalid_time', { format: 'HH:MM' }),
+                      after_start: 'Tijdstip moet na starttijd liggen'
+                    }"
+                :placeholder="$t('training.events.form.end_time.placeholder', { format: 'HH:MM' })"
+              />
+            </div>
+          </div>
+        </KwaiFieldset>
+        <KwaiFieldset title="Seizoen">
+          <template slot="description">
+            Is deze training seizoensgebonden?
+          </template>
+          <FormulateInput
+            v-if="Object.keys(seasonOptions).length > 1"
+            name="season"
+            type="select"
+            :placeholder="$t('training.events.form.season.placeholder')"
+            :options="seasonOptions"
+          ></FormulateInput>
+        </KwaiFieldset>
+        <KwaiFieldset title="Locatie">
+          <template slot="description">
+            Waar gaat de training door?
+          </template>
+          <FormulateInput
+            name="location"
+            :placeholder="$t('training.events.form.location.placeholder')"
           >
-            <KwaiInputText :placeholder="$t('training.events.form.start_date.placeholder')" />
-          </KwaiField>
-        </div>
-        <div class="md:pr-6 w-full md:w-1/3">
-          <KwaiField
-            name="start_time"
-            :label="$t('training.events.form.start_time.label')"
+          </FormulateInput>
+        </KwaiFieldset>
+        <KwaiFieldset title="Teams">
+          <template slot="description">
+            Welke teams kunnen deelnemen aan deze training?
+          </template>
+          <FormulateInput
+            name="teams"
+            type="checkbox"
+            :options="teamOptions"
+            element-class="flex flex-wrap"
+            input-class="w-1/2 sm:w-1/3"
+          />
+        </KwaiFieldset>
+        <KwaiFieldset title="Coaches">
+          <template slot="description">
+            Wie zijn de coaches voor deze training?
+          </template>
+          <FormulateInput
+            name="coaches"
+            type="checkbox"
+            :options="coachOptions"
+            element-class="flex flex-wrap"
+            input-class="w-1/2 sm:w-1/3"
+          />
+        </KwaiFieldset>
+        <KwaiFieldset title="Opmerking">
+          <template slot="description">
+            Een opmerking wordt niet publiekelijk getoond.
+          </template>
+          <FormulateInput
+            type="textarea"
+            name="remark"
+            :placeholder="$t('training.events.form.remark.placeholder')"
+            :rows="5"
+          />
+        </KwaiFieldset>
+        <div class="flex justify-end mt-3">
+          <FormulateErrors />
+          <FormulateInput
+            type="submit"
+            :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
           >
-            <KwaiInputText :placeholder="$t('training.events.form.start_time.placeholder')" />
-          </KwaiField>
+            <i
+              v-if="trainings.save.isRunning"
+              class="fas fa-spinner fa-spin mr-2"
+            ></i>
+            <i v-else class="fas fa-save mr-2"></i>
+            {{ $t('save') }}
+          </FormulateInput>
         </div>
-        <div class="w-full md:w-1/3">
-          <KwaiField
-            name="end_time"
-            :label="$t('training.events.form.end_time.label')"
-          >
-            <KwaiInputText :placeholder="$t('training.events.form.end_time.placeholder')" />
-          </KwaiField>
-        </div>
-      </div>
-      <KwaiField
-        name="season"
-        :label="$t('training.events.form.season.label')"
-      >
-        <KwaiSelect :items="seasons" />
-      </KwaiField>
-      <KwaiField
-        name="teams"
-        :label="$t('training.events.form.teams.label')"
-      >
-        <Multiselect
-          :options="teams"
-          label="name"
-          track-by="id"
-          :multiple="true"
-          :close-on-select="false"
-          :selectLabel="$t('training.events.form.teams.selectLabel')"
-          :deselectLabel="$t('training.events.form.teams.deselectLabel')"
-        />
-      </KwaiField>
-      <KwaiField
-        name="coaches"
-        :label="$t('training.events.form.coaches.label')"
-      >
-        <Multiselect
-          :options="coaches"
-          label="name"
-          track-by="id"
-          :multiple="true"
-          :close-on-select="false"
-          :selectLabel="$t('training.events.form.coaches.selectLabel')"
-          :deselectLabel="$t('training.events.form.coaches.deselectLabel')"
-        />
-      </KwaiField>
-      <KwaiField
-        name="remark"
-        :label="$t('training.events.form.remark.label')"
-      >
-        <KwaiTextarea
-          :rows="5"
-          :placeholder="$t('training.events.form.remark.placeholder')"
-        />
-      </KwaiField>
-    </KwaiForm>
+      </FormulateForm>
+    </PageSection>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 
-import Season from '@/models/Season';
-
-import makeForm, { makeField, notEmpty, isTime, isDate } from '@/js/Form';
-const makeTrainingForm = (fields, validations) => {
-  const writeForm = (training) => {
-    fields.title.value = training.content.title;
-    fields.summary.value = training.content.summary;
-    fields.active.value = training.event.active;
-    fields.cancelled.value = training.event.cancelled;
-    fields.location.value = training.event.location;
-    fields.start_date.value = training.formattedStartDate;
-    fields.start_time.value = training.formattedStartTime;
-    fields.end_time.value = training.formattedEndTime;
-    fields.coaches.value = training.coaches;
-    if (training.season) {
-      fields.season.value = training.season.id;
-    }
-    fields.teams.value = training.teams;
-    fields.remark.value = training.event.remark;
-  };
-
-  const readForm = (training) => {
-    if (!training.event) {
-      training.event = Object.create(null);
-      training.event.contents = [ Object.create(null) ];
-    }
-    training.event.contents[0].title = fields.title.value;
-    training.event.contents[0].summary = fields.summary.value;
-    training.event.active = fields.active.value;
-    training.event.cancelled = fields.cancelled.value;
-    training.event.location = fields.location.value;
-    training.event.time_zone = moment.tz.guess();
-    const date = moment(fields.start_date.value, 'L', true);
-    const startTime = moment(fields.start_time.value, 'HH:mm', true);
-    training.event.start_date = date.clone();
-    training.event.start_date.hours(startTime.hours());
-    training.event.start_date.minutes(startTime.minutes());
-    training.event.end_date = date.clone();
-    const endTime = moment(fields.end_time.value, 'HH:mm', true);
-    training.event.end_date.hours(endTime.hours());
-    training.event.end_date.minutes(endTime.minutes());
-    training.event.remark = fields.remark.value;
-    training.coaches = fields.coaches.value;
-    training.teams = fields.teams.value;
-    if (fields.season.value) {
-      if (fields.season.value === 0) {
-        training.season = null;
-      } else {
-        training.season = new Season();
-        training.season.id = fields.season.value;
-      }
-    }
-  };
-  return { ...makeForm(fields, validations), writeForm, readForm };
-};
-
-import KwaiForm from '@/components/forms/KwaiForm.vue';
-import KwaiField from '@/components/forms/KwaiField.vue';
-import KwaiInputText from '@/components/forms/KwaiInputText.vue';
-import KwaiTextarea from '@/components/forms/KwaiTextarea.vue';
-import KwaiSelect from '@/components/forms/KwaiSelect.vue';
-import KwaiSwitch from '@/components/forms/KwaiSwitch.vue';
-import Multiselect from '@/components/forms/MultiSelect.vue';
-
 import messages from './lang';
+import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
+// eslint-disable-next-line max-len
+import {computed, getCurrentInstance, reactive, ref, onMounted} from '@vue/composition-api';
+import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import {useTeamStore} from '@/apps/teams/composables/useTeams';
+import PageHeader from '@/components/PageHeader';
+import PageSection from '@/components/PageSection';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import Training from '@/models/trainings/Training';
+import Season from '@/models/Season';
+import Coach from '@/models/trainings/Coach';
+import Team from '@/models/Team';
+
+function useOptions(list, cb, extras = {}) {
+  const options = list.reduce(
+    (result, model) => {
+      result[model.id] = cb(model);
+      return result;
+    },
+    {}
+  );
+  return {
+    ...options, ...extras
+  };
+}
 
 export default {
-  components: {
-    KwaiForm,
-    KwaiField,
-    KwaiInputText,
-    KwaiSwitch,
-    KwaiSelect,
-    KwaiTextarea,
-    Multiselect
+  props: {
+    id: {
+      type: String,
+      required: false
+    }
   },
-  i18n: messages,
-  data() {
-    return {
-      form: makeTrainingForm({
-        title: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.events.form.title.required'),
-            },
-          ]
-        }),
-        summary: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.events.form.summary.required'),
-            },
-          ]
-        }),
-        season: makeField({
-          value: 0
-        }),
-        coaches: makeField({
-          value: []
-        }),
-        teams: makeField({
-          value: []
-        }),
-        start_date: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.events.form.start_date.required')
-            },
-            {
-              v: isDate,
-              error: this.$t('training.events.form.start_date.invalid')
-            },
-          ]
-        }),
-        start_time: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.events.form.start_time.required')
-            },
-            {
-              v: isTime,
-              error: this.$t('training.events.form.start_time.invalid')
-            },
-          ]
-        }),
-        end_time: makeField({
-          required: true,
-          validators: [
-            {
-              v: notEmpty,
-              error: this.$t('training.events.form.end_time.required')
-            },
-            {
-              v: isTime,
-              error: this.$t('training.events.form.end_time.invalid')
-            },
-          ]
-        }),
-        active: makeField({
-          value: true
-        }),
-        cancelled: makeField({
-          value: false
-        }),
-        location: makeField(),
-        remark: makeField()
-      },
-      [
-        ({start_time, end_time}) => {
-          var start = moment(start_time.value, 'HH:mm', true);
-          var end = moment(end_time.value, 'HH:mm', true);
-          if (end.isAfter(start)) {
-            return true;
-          }
-          end_time.errors = [
-            this.$t('training.events.form.end_time.after'),
-          ];
-          return false;
-        },
-      ])
-    };
-  },
-  computed: {
-    training() {
-      return this.$store.state.training.active;
-    },
-    error() {
-      return this.$store.state.training.error;
-    },
-    seasons() {
-      var seasons = this.$store.getters['training/season/seasonsAsOptions'];
-      seasons.unshift({
-        value: 0,
-        text: this.$t('training.events.form.season.no_season')
-      });
-      return seasons;
-    },
-    coaches() {
-      return this.$store.state.training.coach.all || [];
-    },
-    teams() {
-      return this.$store.state.training.team.all || [];
-    },
-  },
-  async created() {
-    await this.$store.dispatch('training/season/browse');
-    await this.$store.dispatch('training/coach/browse');
-    await this.$store.dispatch('training/team/browse');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      vm.setupForm(to.params);
-      next();
+  setup(props) {
+    const trainings = useTrainingStore();
+    const seasons = useSeasonStore();
+    const coaches = useCoachStore();
+    const teams = useTeamStore();
+
+    const dateFormat = ref(moment.localeData().longDateFormat('L'));
+
+    const form = ref({
+      title: '',
+      summary: '',
+      active: false,
+      cancelled: false,
+      location: null,
+      start_date: '',
+      start_time: '',
+      end_time: '',
+      coaches: [],
+      season: null,
+      teams: null,
+      remark: '',
     });
-  },
-  watch: {
-    error(nv) {
-      if (nv) {
-        if (nv.response.status === 422) {
-          this.handleErrors(nv.response.data.errors);
-        } else if (nv.response.status === 404){
-          // this.error = err.response.statusText;
-        } else {
-          // TODO: check if we can get here ...
-          console.log(nv);
+
+    const hasValidationErrors = ref(false);
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+    function isAfterStartTime({ value, getFormValues, name }) {
+      const startTimeField = getFormValues()['start_time'];
+      if (startTimeField) {
+        const startTime = moment(startTimeField, 'HH:mm', true);
+        if (startTime.isValid()) {
+          return moment(value, 'HH:mm', true).isAfter(startTime);
         }
       }
+      return true;
     }
-  },
-  methods: {
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('training/read', {
-          id: params.id
-        });
-        this.form.writeForm(this.training);
-      } else {
-        this.$store.dispatch('training/create');
+
+    onMounted(async() => {
+      await seasons.load.run();
+      await coaches.load.run();
+      await teams.load.run();
+    });
+
+    if (props.id) {
+      onMounted(async() => {
+        await trainings.read.run(props.id);
+        form.value.title = trainings.current.content.title;
+        form.value.summary = trainings.current.content.summary;
+        form.value.active = trainings.current.event.active;
+        form.value.cancelled = trainings.current.event.cancelled;
+        form.value.location = trainings.current.event.location;
+        form.value.start_date = trainings.current.formattedStartDate;
+        form.value.start_time = trainings.current.formattedStartTime;
+        form.value.end_time = trainings.current.formattedEndTime;
+        form.value.coaches = trainings.current.coaches.map(coach => coach.id);
+        form.value.season = trainings.current.season?.id ?? null;
+        form.value.teams = trainings.current.teams.map(team => team.id);
+      });
+    }
+    async function submit() {
+      const training = props.id ? trainings.current : new Training();
+      if (!training.event) {
+        training.event = {
+          contents: [{}]
+        };
       }
-    },
-    submit() {
-      this.form.clearErrors();
-      this.form.readForm(this.training);
-      this.$store.dispatch('training/save', this.training)
-        .then((newTraining) => {
-          this.$router.push({
-            name: 'trainings.read',
-            params: { id: newTraining.id }
-          });
+      training.event.contents[0].title = form.value.title;
+      training.event.contents[0].summary = form.value.summary;
+      training.event.active = form.value.active;
+      training.event.cancelled = form.value.cancelled;
+      training.event.location = form.value.location;
+      training.event.time_zone = moment.tz.guess();
+      const date = moment(form.value.start_date, 'L', true);
+      const startTime = moment(form.value.start_time, 'HH:mm', true);
+      training.event.start_date = date.clone();
+      training.event.start_date.hours(startTime.hours());
+      training.event.start_date.minutes(startTime.minutes());
+      training.event.end_date = date.clone();
+      const endTime = moment(form.value.end_time, 'HH:mm', true);
+      training.event.end_date.hours(endTime.hours());
+      training.event.end_date.minutes(endTime.minutes());
+      training.event.remark = form.value.remark;
+      training.coaches = form.value.coaches.map((id) => new Coach(id));
+      training.teams = form.value.teams.map((id) => new Team(id));
+      if (form.value.season) {
+        if (form.value.season === 0) {
+          training.season = null;
+        } else {
+          training.season = new Season(form.value.season);
+        }
+      }
+      await trainings.save.run(training);
+      if (trainings.save.error) {
+        console.log(trainings.save.error);
+      } else {
+        await vm.$router.push({
+          name: 'trainings.read',
+          params: {
+            id: trainings.current.id
+          }
         });
+      }
     }
-  }
+
+    const vm = getCurrentInstance();
+
+    const seasonOptions = computed(
+      () => useOptions(
+        seasons.all,
+        (season) => season.name, {
+          0: vm.$t('training.events.form.season.no_season')
+        }
+      )
+    );
+    const teamOptions = computed(
+      () => useOptions(teams.all, (team) => team.name)
+    );
+    const coachOptions = computed(
+      () => useOptions(coaches.all, (model) => model.name)
+    );
+
+    return {
+      trainings: reactive(trainings),
+      coaches: reactive(coaches),
+      seasons: reactive(seasons),
+      teams: reactive(teams),
+      dateFormat,
+      form,
+      submit,
+      hasValidationErrors,
+      checkValidation,
+      isAfterStartTime,
+      seasonOptions,
+      teamOptions,
+      coachOptions
+    };
+  },
+  components: {
+    KwaiFieldset,
+    PageHeader,
+    PageSection,
+    ApplicationHeader,
+  },
+  i18n: messages
 };
 </script>

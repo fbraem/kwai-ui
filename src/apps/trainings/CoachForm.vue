@@ -1,216 +1,210 @@
 <template>
   <!-- eslint-disable max-len -->
-  <div class="m-6">
-    <KwaiForm
-      :form="form"
-      :error="error"
-      :save="$t('save')"
+  <PageSection>
+    <HeaderLine :content="title" />
+    <FormulateForm
+      name="coach"
+      v-model="form"
       @submit="submit"
+      @submit-raw="checkValidation"
+      class="w-full"
     >
-      <KwaiField
-        v-if="creating"
-        name="member"
-        :label="$t('training.coaches.form.member.label')"
-      >
-        <KwaiAutoComplete :placeholder="$t('training.coaches.form.member.placeholder')"
-          :items="members"
-          :stringResult="(value) => { return value.person.name }">
-          <template slot-scope="row">
-            {{ row.result.license }} - {{ row.result.person.name }}
-          </template>
-          <span slot="empty">
-            {{ $t('training.coaches.form.member.not_found') }}
-          </span>
-        </KwaiAutoComplete>
-      </KwaiField>
-      <div v-else>
-        <div class="flex flex-col mb-5">
-          <div class="font-bold mb-2">
-            {{ $t('training.coaches.form.member.label') }}
-          </div>
-          <div>
-            {{ coach.name }}
-          </div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <KwaiField
-            name="diploma"
-            :label="$t('training.coaches.form.diploma.label')"
+      <KwaiFieldset :title="$t('training.coaches.form.fieldset.coach.title')">
+        <template slot="description">
+          {{ $t('training.coaches.form.fieldset.coach.description') }}
+        </template>
+        <div class="w-full">
+          <FormulateInput
+            v-if="!id"
+            type="kwaiautocomplete"
+            name="member"
+            :required="true"
+            :options="membersAsOptions"
+            :label="$t('training.coaches.form.member.label')"
+            validation="required"
+            :validation-messages="{
+                required: $t('required')
+              }"
           >
-            <KwaiInputText :placeholder="$t('training.coaches.form.diploma.placeholder')" />
-          </KwaiField>
-        </div>
-        <div>
-          <KwaiField
-            name="active"
-            :label="$t('training.coaches.form.active.label')"
+          </FormulateInput>
+          <div
+            v-else
+            class="font-bold text-xl"
           >
-            <KwaiSwitch />
-          </KwaiField>
+            {{ form.member }}
+          </div>
         </div>
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('training.coaches.form.fieldset.information.title')">
+        <template slot="description">
+          {{ $t('training.coaches.form.fieldset.information.description')}}
+        </template>
+        <FormulateInput
+          type="text"
+          name="diploma"
+          :label="$t('training.coaches.form.diploma.label')"
+          :placeholder="$t('training.coaches.form.diploma.placeholder')"
+          :rows="5"
+        />
+        <FormulateInput
+          type="textarea"
+          name="description"
+          :label="$t('training.coaches.form.description.label')"
+          :placeholder="$t('training.coaches.form.description.placeholder')"
+          :rows="5"
+        />
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('training.coaches.form.fieldset.active.title')">
+        <template slot="description">
+          {{ $t('training.coaches.form.fieldset.active.description') }}
+        </template>
+        <FormulateInput
+          name="active"
+          type="checkbox"
+          :label="$t('training.coaches.form.active.label')"
+        />
+      </KwaiFieldset>
+      <KwaiFieldset :title="$t('training.coaches.form.fieldset.remark.title')">
+        <template slot="description">
+          {{ $t('training.coaches.form.fieldset.remark.description')}}
+        </template>
+        <FormulateInput
+          type="textarea"
+          name="remark"
+          :label="$t('training.coaches.form.remark.label')"
+          :placeholder="$t('training.coaches.form.remark.placeholder')"
+          :rows="5"
+        />
+      </KwaiFieldset>
+      <Alert v-if="hasFormErrors">
+        <FormulateErrors />
+      </Alert>
+      <div class="flex justify-end mt-3">
+        <FormulateInput
+          type="submit"
+          :input-class="[
+              'bg-primary', 'hover:bg-primary_dark', 'text-primary_light'
+            ]"
+        >
+          <i
+            v-if="coaches.save.isRunning"
+            class="fas fa-spinner fa-spin mr-2"
+          ></i>
+          <i v-else class="fas fa-save mr-2"></i>
+          {{ $t('save') }}
+        </FormulateInput>
       </div>
-      <KwaiField
-        name="description"
-        :label="$t('training.coaches.form.description.label')"
-      >
-        <KwaiTextarea :rows="5" :placeholder="$t('training.coaches.form.description.placeholder')" />
-      </KwaiField>
-      <KwaiField
-        name="remark"
-        :label="$t('training.coaches.form.remark.label')"
-      >
-        <KwaiTextarea :rows="5" :placeholder="$t('training.coaches.form.remark.placeholder')" />
-      </KwaiField>
-    </KwaiForm>
-  </div>
+    </FormulateForm>
+  </PageSection>
 </template>
 
 <script>
-import Member from '@/models/Member';
 
-import makeForm, { makeField } from '@/js/Form';
-const makeCoachForm = (fields) => {
-  const writeForm = (coach) => {
-    fields.description.value = coach.description;
-    fields.active.value = coach.active;
-    fields.diploma.value = coach.diploma;
-    if (coach.member) {
-      fields.member.value = coach.member;
-    }
-    fields.remark.value = coach.remark;
-  };
-
-  const readForm = (coach) => {
-    coach.description = fields.description.value;
-    coach.diploma = fields.diploma.value;
-    coach.active = fields.active.value;
-    coach.remark = fields.remark.value;
-    if (fields.member.value) {
-      if (fields.member.value === null) {
-        coach.member = null;
-      } else {
-        coach.member = new Member();
-        coach.member.id = fields.member.value.id;
-      }
-    }
-  };
-
-  return { ...makeForm(fields), writeForm, readForm };
-};
-
-import KwaiForm from '@/components/forms/KwaiForm';
-import KwaiField from '@/components/forms/KwaiField';
-import KwaiInputText from '@/components/forms/KwaiInputText';
-import KwaiTextarea from '@/components/forms/KwaiTextarea';
-import KwaiSwitch from '@/components/forms/KwaiSwitch.vue';
-import KwaiAutoComplete from '@/components/forms/KwaiAutoComplete.vue';
+import PageSection from '@/components/PageSection';
+import HeaderLine from '@/components/HeaderLine';
 
 import messages from './lang';
+import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
+import createMemberService from '@/apps/members/composables/useMembers';
+// eslint-disable-next-line max-len
+import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';
+import Coach from '@/models/trainings/Coach';
+import Member from '@/models/Member';
 
 export default {
-  components: {
-    KwaiForm, KwaiField, KwaiInputText, KwaiTextarea,
-    KwaiSwitch, KwaiAutoComplete
+  props: {
+    id: {
+      type: String,
+      required: false
+    }
   },
-  i18n: messages,
-  data() {
+  setup(props) {
+    const vm = getCurrentInstance();
+
+    const coaches = useCoachStore();
+    const members = createMemberService();
+
+    const form = ref({
+      member: '',
+      description: '',
+      diploma: '',
+      active: true,
+      remark: ''
+    });
+    if (props.id) {
+      onMounted(async() => {
+        await coaches.read.run(props.id);
+        form.value.member = coaches.current.member.name;
+        form.value.description = coaches.current.description;
+        form.value.remark = coaches.current.remark;
+        form.value.active = coaches.current.active;
+        form.value.diploma = coaches.current.diploma;
+      });
+    }
+    let hasFormErrors = ref(false);
+    let hasValidationErrors = ref(false);
+
+    const title = computed(() =>
+      props.id ? vm.$t('training.coaches.update')
+        : vm.$t('training.coaches.create')
+    );
+
+    onMounted(() => {
+      members.load.run();
+    });
+    const membersAsOptions = computed(() => {
+      const options = {};
+      for (const m of members.all) {
+        options[m.id] = m.name;
+      }
+      return options;
+    });
+
+    async function checkValidation(submission) {
+      hasValidationErrors.value = await submission.hasValidationErrors();
+    }
+
+    async function submit() {
+      const coach = props.id ? coaches.current : new Coach();
+      if (!props.id) {
+        coach.member = new Member(form.value.member.value);
+      }
+      coach.description = form.value.description;
+      coach.diploma = form.value.diploma;
+      coach.active = form.value.active;
+      coach.remark = form.value.remark;
+
+      await coaches.save.run(coach);
+      if (!coaches.save.error) {
+        await vm.$router.push({
+          name: 'trainings.coaches.read',
+          params: {
+            id: coaches.current.id
+          }
+        });
+      } else {
+        console.log(coaches.save.error);
+      }
+    }
+
     return {
-      items: [],
-      form: makeCoachForm({
-        member: makeField({
-          required: true,
-          value: null,
-          validators: [
-            {
-              v: (value) => value !== null,
-              error: this.$t('training.coaches.form.member.required')
-            },
-          ],
-          label: this.$t('training.coaches.form.member.label')
-        }),
-        description: makeField({
-          value: '',
-          label: this.$t('training.coaches.form.description.label'),
-        }),
-        diploma: makeField({
-          value: null,
-          label: this.$t('training.coaches.form.diploma.label')
-        }),
-        active: makeField({
-          value: true,
-          label: this.$t('training.coaches.form.active.label')
-        }),
-        remark: makeField({
-          value: '',
-          label: this.$t('training.coaches.form.remark.label')
-        })
-      })
+      coaches: reactive(coaches),
+      form,
+      hasValidationErrors,
+      hasFormErrors,
+      checkValidation,
+      submit,
+      members: reactive(members),
+      membersAsOptions,
+      title
     };
   },
-  computed: {
-    coach() {
-      return this.$store.state.training.coach.active;
-    },
-    error() {
-      return this.$store.state.training.coach.error;
-    },
-    members() {
-      return this.$store.state.training.member.all;
-    },
-    creating() {
-      if (!this.coach) return true;
-      return !this.coach.id;
-    }
+  components: {
+    KwaiFieldset,
+    PageSection,
+    HeaderLine
   },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.setupForm(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.setupForm(to.params);
-    next();
-  },
-  watch: {
-    error(nv) {
-      if (nv) {
-        if (nv.response.status === 422) {
-          this.handleErrors(nv.response.data.errors);
-        } else if (nv.response.status === 404){
-          // this.error = err.response.statusText;
-        } else {
-          // TODO: check if we can get here ...
-          console.log(nv);
-        }
-      }
-    }
-  },
-  methods: {
-    async setupForm(params) {
-      if (params.id) {
-        await this.$store.dispatch('training/coach/read', {
-          id: params.id
-        });
-        this.form.writeForm(this.coach);
-      } else {
-        this.$store.dispatch('training/coach/create');
-      }
-      await this.$store.dispatch('training/member/browse');
-    },
-    submit() {
-      this.form.clearErrors();
-      this.form.readForm(this.coach);
-      this.$store.dispatch('training/coach/save', this.coach)
-        .then((newCoach) => {
-          this.$router.push({
-            name: 'trainings.coaches.read',
-            params: { id: newCoach.id }
-          });
-        });
-    }
-  }
+  i18n: messages
 };
 </script>

@@ -1,41 +1,62 @@
 <template>
-  <AdminPage :toolbar="toolbar">
-    <Spinner v-if="$wait.is('team_category.browse')" />
-    <Alert
-      v-else-if="noCategories"
-      type="warning"
-    >
-      {{ $t('no_categories') }}
-    </Alert>
-    <table
-      v-else
-      class="table table-striped"
-    >
-      <thead>
-        <th scope="col">{{ $t('name') }}</th>
-      </thead>
-      <tbody>
-        <tr
-          v-for="category in categories"
-          :key="category.id"
-          class="p-4 w-full md:w-1/2"
-        >
-          <td>
-            <router-link
-              :to="{
-                name: 'team_categories.read',
-                params: {
-                  id: category.id
-                }
-              }"
-            >
-              {{ category.name }}
-            </router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </AdminPage>
+  <div>
+    <PageHeader>
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <ApplicationHeader :content="$t('teams')" />
+        </div>
+        <div class="mt-5 flex sm:mt-0 sm:ml-4">
+          <IconButton
+            v-if="canCreate"
+            class="bg-primary text-primary_light"
+            icon="fas fa-plus"
+            :content="$t('create_category')"
+            :route="{ name: 'team_categories.create' }"
+          />
+        </div>
+      </div>
+    </PageHeader>
+    <PageSection>
+      <Spinner
+        v-if="categories.load.isRunning"
+        class="w-full text-center"
+      >
+      </Spinner>
+      <Alert
+        v-else-if="categories.all.length === 0"
+        type="warning"
+      >
+        {{ $t('no_categories') }}
+      </Alert>
+      <div
+        v-else
+        class="w-full">
+        <Table>
+          <template slot="header">
+            <TableHeader>{{ $t('name') }}</TableHeader>
+          </template>
+          <tr
+            v-for="category in categories.all"
+            :key="category.id"
+            class="p-4 w-full md:w-1/2"
+          >
+            <TableCell>
+              <router-link
+                :to="{
+                  name: 'team_categories.read',
+                  params: {
+                    id: category.id
+                  }
+                }"
+              >
+                {{ category.name }}
+              </router-link>
+            </TableCell>
+          </tr>
+        </Table>
+      </div>
+    </PageSection>
+  </div>
 </template>
 
 <script>
@@ -43,51 +64,49 @@ import messages from './lang';
 
 import Spinner from '@/components/Spinner';
 import Alert from '@/components/Alert';
-import AdminPage from '@/components/AdminPage';
+import Table from '@/components/table/Table';
+import TableHeader from '@/components/table/TableHeader';
+import TableCell from '@/components/table/TableCell';
+import PageHeader from '@/components/PageHeader';
+import PageSection from '@/components/PageSection';
 
 import TeamCategory from '@/models/TeamCategory';
+// eslint-disable-next-line max-len
+import {useTeamCategoryStore} from '@/apps/teams/composables/useTeamCategories';
+import {getCurrentInstance, reactive, computed, onMounted} from '@vue/composition-api';
+import ApplicationHeader from '@/components/ApplicationHeader';
+import IconButton from '@/components/IconButton';
 
 export default {
+  setup() {
+    const vm = getCurrentInstance();
+
+    const categories = useTeamCategoryStore();
+
+    const canCreate = computed(() => {
+      return vm.$can('create', TeamCategory);
+    });
+
+    onMounted(() => {
+      categories.load.run();
+    });
+
+    return {
+      categories: reactive(categories),
+      canCreate
+    };
+  },
   i18n: messages,
   components: {
+    IconButton,
+    ApplicationHeader,
     Spinner,
     Alert,
-    AdminPage
-  },
-  computed: {
-    categories() {
-      return this.$store.state.team.category.all;
-    },
-    noCategories() {
-      return this.categories && this.categories.length === 0;
-    },
-    toolbar() {
-      const buttons = [];
-      if (this.$can('create', TeamCategory.type())) {
-        buttons.push({
-          icon: 'fas fa-plus',
-          route: {
-            name: 'team_categories.create'
-          }
-        });
-      }
-      return buttons;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async(vm) => {
-      await vm.fetchData(to.params);
-      next();
-    });
-  },
-  async beforeRouteUpdate(to, from, next) {
-    await this.fetchData(to.params);
-    next();
-  },
-  methods: {
-    fetchData() {
-      this.$store.dispatch('team/category/browse');
-    }
+    Table,
+    TableHeader,
+    TableCell,
+    PageHeader,
+    PageSection
   }
 };
 </script>

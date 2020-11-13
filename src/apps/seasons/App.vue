@@ -1,27 +1,13 @@
 <template>
-  <div>
-    <router-view name="hero"></router-view>
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-import store from './store';
+import {provideSeasonStore} from '@/apps/seasons/composables/useSeasons';
 
 export default {
-  beforeCreate() {
-    this.$store.registerModule('season', store);
-  },
-  beforeDestroy() {
-    this.$store.dispatch('season/reset');
-    this.$store.unregisterModule('season');
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.meta.active) {
-        vm.$store.dispatch('season/set', to.meta.active);
-      }
-    });
+  setup() {
+    provideSeasonStore();
   }
 };
 </script>

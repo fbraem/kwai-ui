@@ -1,71 +1,49 @@
 import App from './App.vue';
 
 const TeamRead = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamRead.vue'
 );
-const TeamHeader = () => import(
-  /* webpackChunkName: "teams_chunck" */
-  './TheTeamHeader.vue'
-);
 const TeamDetails = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamDetails.vue'
 );
 const TeamTrainings = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './NotImplemented.vue'
 );
 const TeamMembers = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamMembers.vue'
 );
+const AddMembers = () => import(
+  /* webpackChunkName: "teams_admin_chunk" */
+  './AddMembers.vue'
+);
 const TeamTournaments = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './NotImplemented.vue'
 );
-
 const TeamBrowse = () => import(
-  /* webpackChunkName: "teams_chunck" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamBrowse.vue'
 );
-const TeamsHeader = () => import(
-  /* webpackChunkName: "teams_chunck" */
-  './TheTeamsHeader.vue'
-);
 const TeamForm = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamForm.vue'
-);
-const TeamFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
-  './TheTeamFormHeader.vue'
 );
 
 const TeamCategoryRead = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryRead.vue'
 );
-
-const TeamCategoryHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
-  './TheTeamCategoryHeader.vue'
-);
 const TeamCategoryBrowse = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryBrowse.vue'
 );
-const TeamCategoriesHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
-  './TheTeamCategoriesHeader.vue'
-);
 const TeamCategoryForm = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
+  /* webpackChunkName: "teams_admin_chunk" */
   './TeamCategoryForm.vue'
-);
-const TeamCategoryFormHeader = () => import(
-  /* webpackChunkName: "teams_admin_chunck" */
-  './TheTeamCategoryFormHeader.vue'
 );
 
 export default [
@@ -75,31 +53,63 @@ export default [
     children: [
       {
         path: ':id(\\d+)',
-        components: {
-          hero: TeamHeader,
-          default: TeamRead
-        },
+        component: TeamRead,
+        props: true,
         children: [
           {
             path: 'members',
             components: {
               team_information: TeamMembers
             },
-            name: 'team.members'
+            name: 'team.members',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: 'season',
             components: {
               team_information: TeamTournaments
             },
-            name: 'team.tournaments'
+            name: 'team.tournaments',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: 'trainings',
             components: {
               team_information: TeamTrainings
             },
-            name: 'team.trainings'
+            name: 'team.trainings',
+            meta: {
+              auth: {
+                action: 'read',
+                subject: 'teams'
+              }
+            },
+          },
+          {
+            path: 'add_members',
+            components: {
+              team_information: AddMembers
+            },
+            props: {
+              team_information: true
+            },
+            name: 'team.add_members',
+            meta: {
+              auth: {
+                action: 'manage',
+                subject: 'teams'
+              }
+            },
           },
           {
             path: '',
@@ -112,79 +122,83 @@ export default [
       },
       {
         path: 'create',
-        components: {
-          hero: TeamFormHeader,
-          default: TeamForm
-        },
-        props: {
-          hero: {
-            creating: true
+        component: TeamForm,
+        name: 'teams.create',
+        meta: {
+          auth: {
+            action: 'create',
+            subject: 'teams'
           }
         },
-        name: 'teams.create',
       },
       {
         path: 'update/:id(\\d+)',
-        components: {
-          hero: TeamFormHeader,
-          default: TeamForm
-        },
-        props: {
-          hero: {
-            creating: false
+        component: TeamForm,
+        props: true,
+        name: 'teams.update',
+        meta: {
+          auth: {
+            action: 'update',
+            subject: 'teams'
           }
         },
-        name: 'teams.update',
       },
       {
         path: 'categories/:id(\\d+)',
-        components: {
-          hero: TeamCategoryHeader,
-          default: TeamCategoryRead
-        },
+        props: true,
+        component: TeamCategoryRead,
         name: 'team_categories.read',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
+        },
       },
       {
         path: 'categories/create',
-        components: {
-          hero: TeamCategoryFormHeader,
-          default: TeamCategoryForm
-        },
-        props: {
-          hero: {
-            creating: true
+        component: TeamCategoryForm,
+        name: 'team_categories.create',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
           }
         },
-        name: 'team_categories.create',
       },
       {
         path: 'categories/update/:id(\\d+)',
-        components: {
-          hero: TeamCategoryFormHeader,
-          default: TeamCategoryForm
-        },
-        props: {
-          hero: {
-            creating: false
+        component: TeamCategoryForm,
+        props: true,
+        name: 'team_categories.update',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
           }
         },
-        name: 'team_categories.update',
       },
       {
         path: 'categories',
-        components: {
-          hero: TeamCategoriesHeader,
-          default: TeamCategoryBrowse
+        component: TeamCategoryBrowse,
+        name: 'team_categories.browse',
+        meta: {
+          auth: {
+            action: 'manage',
+            subject: 'teams'
+          }
         },
-        name: 'team_types.browse',
       },
       {
         path: '',
-        components: {
-          hero: TeamsHeader,
-          default: TeamBrowse
-        },
+        component: TeamBrowse,
         name: 'teams.browse',
+        meta: {
+          auth: {
+            action: 'read',
+            subject: 'teams'
+          }
+        },
       },
     ]
   },
