@@ -15,30 +15,30 @@
     >
     </div>
     <!-- CONTENT -->
-<!--
     <div class="container mx-auto flex flex-col p-3">
-      <div class="block">
-        <HeaderLine tag="h4" content="Nieuws in de kijker" />
-        <Spinner v-if="newsStore.load.isRunning" />
-        <div v-if="newsStore.fullCount === 0">
-          Momenteel is er geen belangrijk nieuws
-        </div>
-        <div v-if="newsStore.all.length > 0">
-          <NewsSlider :stories="newsStore.all" />
-        </div>
-      </div>
-      <div
-        v-if="application"
-        class="block mx-auto my-2"
-      >
-        <router-link
-          :to="moreNewsLink"
-          class="red-button"
-        >
-          Meer nieuws
-        </router-link>
-      </div>
--->
+    <!--
+            <div class="block">
+              <HeaderLine tag="h4" content="Nieuws in de kijker" />
+              <Spinner v-if="newsStore.load.isRunning" />
+              <div v-if="newsStore.fullCount === 0">
+                Momenteel is er geen belangrijk nieuws
+              </div>
+              <div v-if="newsStore.all.length > 0">
+                <NewsSlider :stories="newsStore.all" />
+              </div>
+            </div>
+            <div
+              v-if="application"
+              class="block mx-auto my-2"
+            >
+              <router-link
+                :to="moreNewsLink"
+                class="red-button"
+              >
+                Meer nieuws
+              </router-link>
+            </div>
+      -->
       <Spinner v-if="pageStore.load.isRunning" />
       <div
         class="block"
@@ -68,6 +68,7 @@ import Spinner from '@/components/Spinner';
 import useApplications from '@/site/composables/useApplications';
 // eslint-disable-next-line max-len
 import {providePageStore, usePageStore} from '@/apps/pages/composables/usePages';
+// eslint-disable-next-line max-len
 import {watch, reactive, computed, onMounted, getCurrentInstance} from '@vue/composition-api';
 import {provideNewsStore, useNewsStore} from '@/apps/news/composables/useNews';
 
