@@ -16,7 +16,7 @@
       </div>
       <div>
         <h4 class="mb-0">
-          {{ application.name }}
+          {{ application.title }}
         </h4>
         <div class="text-sm">
           {{ application.short_description }}
@@ -29,7 +29,6 @@
 <script>
 import InlineSvg from 'vue-inline-svg';
 
-import Category from '@/models/Category';
 import Application from '@/models/Application';
 import CoverLink from '@/components/CoverLink';
 
@@ -57,10 +56,7 @@ export default {
   computed: {
     linkToApplication() {
       return {
-        name: 'categories.read',
-        params: {
-          id: this.application.id
-        }
+        name: this.application.name
       };
     }
   }
