@@ -16,6 +16,7 @@ export default [
   {
     path: '/events',
     component: App,
+    name: 'events',
     meta: {
       html,
       icons
