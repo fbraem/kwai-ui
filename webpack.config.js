@@ -34,9 +34,10 @@ module.exports = (env, argv) => {
       site: resolve('src/site/main.js')
     },
     output: {
-      path: path.join(__dirname, 'build'),
+      path: path.join(__dirname, 'build/ui'),
       filename: '[name].[chunkhash].js',
-      chunkFilename: '[name].[chunkhash].js'
+      chunkFilename: '[name].[chunkhash].js',
+      publicPath: '/ui/'
     },
     optimization: {
       runtimeChunk: 'single',
@@ -190,7 +191,7 @@ module.exports = (env, argv) => {
         ]
       }),
       new HtmlPlugin({
-        filename: 'index.html',
+        filename: '../index.html',
         template: './src/index.template.html'
       }),
       new MinifyPlugin(),
