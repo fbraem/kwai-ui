@@ -90,7 +90,7 @@ export default class Transformer {
   }
 
   serialize(modelInstance) {
-    if (!modelInstance instanceof Model) return null;
+    if (!(modelInstance instanceof Model)) return null;
 
     const modelClass = modelInstance.constructor;
     let json = {
