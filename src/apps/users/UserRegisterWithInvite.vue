@@ -132,8 +132,8 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import Alert from '@/components/Alert.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import passwordComplexity from '@/js/passwordComplexity';
 import messages from './lang';
 import User from '@/models/users/User';

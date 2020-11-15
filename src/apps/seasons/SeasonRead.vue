@@ -96,11 +96,11 @@
 <script>
 import messages from './lang';
 
-import IconLink from '@/components/IconLink';
-import MegaMenu from '@/components/MegaMenu';
-import MegaMenuBlock from '@/components/MegaMenuBlock';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import PageHeader from '@/components/PageHeader';
+import IconLink from '@/components/IconLink.vue';
+import MegaMenu from '@/components/MegaMenu.vue';
+import MegaMenuBlock from '@/components/MegaMenuBlock.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import PageHeader from '@/components/PageHeader.vue';
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {reactive} from '@vue/composition-api';
 

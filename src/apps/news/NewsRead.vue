@@ -64,9 +64,9 @@
 <script>
 import messages from './lang';
 import config from 'config';
-import Page from '@/components/Page';
-import Sidebar from './Sidebar';
-import Spinner from '@/components/Spinner';
+import Page from '@/components/Page.vue';
+import Sidebar from './Sidebar.vue';
+import Spinner from '@/components/Spinner.vue';
 import {useNewsStore} from '@/apps/news/composables/useNews';
 import {reactive, computed, watch, onMounted, getCurrentInstance} from '@vue/composition-api';
 

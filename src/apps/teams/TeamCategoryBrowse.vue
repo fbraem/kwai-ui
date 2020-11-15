@@ -62,20 +62,20 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import Table from '@/components/table/Table';
-import TableHeader from '@/components/table/TableHeader';
-import TableCell from '@/components/table/TableCell';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import Table from '@/components/table/Table.vue';
+import TableHeader from '@/components/table/TableHeader.vue';
+import TableCell from '@/components/table/TableCell.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
 
 import TeamCategory from '@/models/TeamCategory';
 // eslint-disable-next-line max-len
 import {useTeamCategoryStore} from '@/apps/teams/composables/useTeamCategories';
 import {getCurrentInstance, reactive, computed, onMounted} from '@vue/composition-api';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconButton from '@/components/IconButton';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 export default {
   setup() {

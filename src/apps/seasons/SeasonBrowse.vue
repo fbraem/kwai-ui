@@ -66,14 +66,14 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import SeasonRow from './TheSeasonRow';
-import PageSection from '@/components/PageSection';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import SeasonRow from './TheSeasonRow.vue';
+import PageSection from '@/components/PageSection.vue';
 import Season from '@/models/Season';
-import PageHeader from '@/components/PageHeader';
-import IconButton from '@/components/IconButton';
-import ApplicationHeader from '@/components/ApplicationHeader';
+import PageHeader from '@/components/PageHeader.vue';
+import IconButton from '@/components/IconButton.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {reactive} from '@vue/composition-api';
 

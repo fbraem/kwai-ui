@@ -12,7 +12,7 @@
 
 <script>
 import messages from '../lang';
-import PageSummaryList from './PageSummaryList';
+import PageSummaryList from './PageSummaryList.vue';
 
 export default {
   props: {

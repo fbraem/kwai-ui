@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import Page from '@/components/Page';
-import Sidebar from './Sidebar';
+import Page from '@/components/Page.vue';
+import Sidebar from './Sidebar.vue';
 import NewsCard from './components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
 
 import messages from './lang';
 import {useNewsStore} from '@/apps/news/composables/useNews';

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import CoverLink from '@/components/CoverLink';
+import CoverLink from '@/components/CoverLink.vue';
 export default {
   components: {CoverLink},
   props: {

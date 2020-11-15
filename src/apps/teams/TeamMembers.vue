@@ -67,15 +67,15 @@
 <script>
 import messages from './lang';
 
-import Alert from '@/components/Alert';
+import Alert from '@/components/Alert.vue';
 
-import HeaderLine from '@/components/HeaderLine';
+import HeaderLine from '@/components/HeaderLine.vue';
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
 import {reactive, computed} from '@vue/composition-api';
-import MemberSummary from '@/apps/members/components/MemberSummary';
+import MemberSummary from '@/apps/members/components/MemberSummary.vue';
 import moment from 'moment';
-import IconButton from '@/components/IconButton';
-import IconLink from '@/components/IconLink';
+import IconButton from '@/components/IconButton.vue';
+import IconLink from '@/components/IconLink.vue';
 
 export default {
   setup() {

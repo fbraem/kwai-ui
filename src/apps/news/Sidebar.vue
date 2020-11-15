@@ -35,9 +35,9 @@
 
 <script>
 import messages from './lang';
-import CoverLink from '@/components/CoverLink';
-import HeaderLine from '@/components/HeaderLine';
-import Badge from '@/components/Badge';
+import CoverLink from '@/components/CoverLink.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import Badge from '@/components/Badge.vue';
 import {useNewsStore} from '@/apps/news/composables/useNews';
 import {reactive, onMounted, computed} from '@vue/composition-api';
 import moment from 'moment';

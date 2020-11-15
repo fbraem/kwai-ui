@@ -77,17 +77,17 @@ import 'flag-icon-css/css/flag-icon.css';
 import messages from './lang';
 import jump from 'jump.js';
 
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import MemberListItem from './MemberListItem';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import MemberListItem from './MemberListItem.vue';
 import {useMemberStore} from '@/apps/members/composables/useMembers';
 // eslint-disable-next-line max-len
 import {reactive, computed, onMounted, getCurrentInstance} from '@vue/composition-api';
 import Member from '@/models/Member';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconButton from '@/components/IconButton';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 /**
  * Page for browsing a member

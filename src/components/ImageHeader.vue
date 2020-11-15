@@ -88,7 +88,7 @@
 /**
  * Component for a header of a page
  */
-import IconButtons from './IconButtons';
+import IconButtons from './IconButtons.vue';
 
 export default {
   components: {

@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import VueFormulate from '@braid/vue-formulate';
 
-import KwaiRange from '@/components/forms/KwaiRange';
+import KwaiRange from '@/components/forms/KwaiRange.vue';
 Vue.component('KwaiRange', KwaiRange);
-import KwaiLabel from '@/components/forms/KwaiLabel';
+import KwaiLabel from '@/components/forms/KwaiLabel.vue';
 Vue.component('KwaiLabel', KwaiLabel);
-import KwaiAutoComplete from '@/components/forms/KwaiAutoComplete';
+import KwaiAutoComplete from '@/components/forms/KwaiAutoComplete.vue';
 Vue.component('KwaiAutoComplete', KwaiAutoComplete);
-import KwaiMultiSelect from '@/components/forms/KwaiMultiSelect';
+import KwaiMultiSelect from '@/components/forms/KwaiMultiSelect.vue';
 Vue.component('KwaiMultiSelect', KwaiMultiSelect);
 
 import moment from 'moment';

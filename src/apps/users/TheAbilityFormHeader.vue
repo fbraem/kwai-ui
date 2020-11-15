@@ -8,7 +8,7 @@
 <script>
 import messages from './lang';
 
-import Header from '@/components/Header';
+import Header from '@/components/Header.vue';
 import {computed, getCurrentInstance} from '@vue/composition-api';
 
 export default {

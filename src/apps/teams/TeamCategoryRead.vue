@@ -83,16 +83,16 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import Attributes from '@/components/Attributes';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import Attributes from '@/components/Attributes.vue';
 import useTeamCategoryStore from '@/apps/teams/composables/useTeamCategories';
 // eslint-disable-next-line max-len
 import {onMounted, watch, reactive, computed, getCurrentInstance} from '@vue/composition-api';
-import IconLink from '@/components/IconLink';
+import IconLink from '@/components/IconLink.vue';
 
 export default {
   props: {

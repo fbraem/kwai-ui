@@ -133,19 +133,19 @@ import Team from '@/models/Team';
 
 import messages from './lang';
 
-import PageHeader from '@/components/PageHeader';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import PageSection from '@/components/PageSection';
-import HeaderLine from '@/components/HeaderLine';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import Alert from '@/components/Alert';
+import PageHeader from '@/components/PageHeader.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import Alert from '@/components/Alert.vue';
 
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {useTeamCategoryStore} from '@/apps/teams/composables/useTeamCategories';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref} from '@vue/composition-api';
-import IconButton from '@/components/IconButton';
+import IconButton from '@/components/IconButton.vue';
 
 export default {
   props: {

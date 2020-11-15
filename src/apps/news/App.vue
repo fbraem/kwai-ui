@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import CategoryCards from '@/apps/categories/components/CategoryCards';
+import CategoryCards from '@/apps/categories/components/CategoryCards.vue';
 import {provideNewsStore} from '@/apps/news/composables/useNews';
 import {useApplicationStore} from '@/site/composables/useApplications';
 import {computed} from '@vue/composition-api';

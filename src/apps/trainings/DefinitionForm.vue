@@ -174,11 +174,11 @@ import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
 import {useOptions} from '@/js/useOptions';
 
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import Alert from '@/components/Alert';
-import ApplicationHeader from '@/components/ApplicationHeader';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import Alert from '@/components/Alert.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
 
 import Definition from '@/models/trainings/Definition';
 import Season from '@/models/Season';

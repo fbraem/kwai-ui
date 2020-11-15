@@ -75,7 +75,7 @@
 import Story from '@/models/Story';
 import Application from '@/models/Application';
 import messages from '../lang';
-import Badge from '@/components/Badge';
+import Badge from '@/components/Badge.vue';
 
 /**
  * Component for a news story card

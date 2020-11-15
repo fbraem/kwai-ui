@@ -29,7 +29,7 @@
 <script>
 import Application from '@/models/Application';
 import messages from '../lang';
-import NewsSummaryList from './NewsSummaryList';
+import NewsSummaryList from './NewsSummaryList.vue';
 
 export default {
   props: {

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert';
+import Alert from '@/components/Alert.vue';
 import Season from '@/models/Season';
 
 export default {

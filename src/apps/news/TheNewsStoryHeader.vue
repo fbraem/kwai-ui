@@ -121,7 +121,7 @@
 <script>
 import messages from './lang';
 
-import IconButtons from '@/components/IconButtons';
+import IconButtons from '@/components/IconButtons.vue';
 import {useNewsStore} from '@/apps/news/composables/useNews';
 import {reactive, computed} from '@vue/composition-api';
 

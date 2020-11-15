@@ -117,10 +117,10 @@
 </template>
 
 <script>
-import PageSection from '@/components/PageSection';
-import HeaderLine from '@/components/HeaderLine';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import Alert from '@/components/Alert';
+import PageSection from '@/components/PageSection.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import Alert from '@/components/Alert.vue';
 
 import Application from '@/models/Application';
 

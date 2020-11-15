@@ -18,8 +18,8 @@
 <script>
 import messages from './lang';
 
-import Attributes from '@/components/Attributes';
-import Alert from '@/components/Alert';
+import Attributes from '@/components/Attributes.vue';
+import Alert from '@/components/Alert.vue';
 
 export default {
   props: {

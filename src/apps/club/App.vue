@@ -52,11 +52,11 @@
 </template>
 
 <script>
-import HeaderLine from '@/components/HeaderLine';
-import NewsSlider from '@/apps/news/components/NewsSlider';
-import PageSummary from '@/apps/pages/components/PageSummary';
-import ImageHeader from '@/components/ImageHeader';
-import Spinner from '@/components/Spinner';
+import HeaderLine from '@/components/HeaderLine.vue';
+import NewsSlider from '@/apps/news/components/NewsSlider.vue';
+import PageSummary from '@/apps/pages/components/PageSummary.vue';
+import ImageHeader from '@/components/ImageHeader.vue';
+import Spinner from '@/components/Spinner.vue';
 import useApplications from '@/site/composables/useApplications';
 // eslint-disable-next-line max-len
 import {providePageStore, usePageStore} from '@/apps/pages/composables/usePages';

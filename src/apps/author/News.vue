@@ -148,14 +148,14 @@
 </style>
 
 <script>
-import PageSection from '@/components/PageSection';
-import PageSectionHeader from '@/components/PageSectionHeader';
-import IconButton from '@/components/IconButton';
+import PageSection from '@/components/PageSection.vue';
+import PageSectionHeader from '@/components/PageSectionHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 import lang from './lang';
-import Link from '@/components/Link';
-import Paginator from '@/components/Paginator';
-import Alert from '@/components/Alert';
+import Link from '@/components/Link.vue';
+import Paginator from '@/components/Paginator.vue';
+import Alert from '@/components/Alert.vue';
 
 import Story from '@/models/Story';
 import {useAuthorNewsStore} from '@/apps/author/composables/useNews';

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import IconLink from '@/components/IconLink';
+import IconLink from '@/components/IconLink.vue';
 import config from 'config';
 import createAuthenticationService from '@/site/composables/useAuthentication';
 import {computed, getCurrentInstance} from '@vue/composition-api';

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import NewsSummaryListItem from './NewsSummaryListItem';
+import NewsSummaryListItem from './NewsSummaryListItem.vue';
 
 export default {
   props: {

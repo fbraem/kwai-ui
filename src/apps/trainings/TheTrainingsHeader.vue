@@ -14,7 +14,7 @@ import Coach from '@/models/trainings/Coach';
 import Team from '@/models/Team';
 import Application from '@/models/Application';
 
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
 
 import messages from './lang';
 

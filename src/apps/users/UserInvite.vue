@@ -90,8 +90,8 @@
 <script>
 import messages from './lang';
 
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import Alert from '@/components/Alert';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import Alert from '@/components/Alert.vue';
 import {useInvitationStore} from '@/apps/users/composables/useInvitations';
 import {getCurrentInstance, reactive, ref} from '@vue/composition-api';
 import Invitation from '@/models/users/Invitation';

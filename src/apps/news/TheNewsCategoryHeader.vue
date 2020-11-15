@@ -13,7 +13,7 @@
 <script>
 import Story from '@/models/Story';
 import messages from './lang';
-import Header from '@/components/Header';
+import Header from '@/components/Header.vue';
 import useApplications from '@/site/composables/useApplications';
 import {computed} from '@vue/composition-api';
 /**

@@ -33,9 +33,9 @@
 <script>
 import messages from './lang';
 
-import PageSection from '@/components/PageSection';
+import PageSection from '@/components/PageSection.vue';
 
-import Attributes from '@/components/Attributes';
+import Attributes from '@/components/Attributes.vue';
 import { useTeamStore } from '@/apps/teams/composables/useTeams';
 import {reactive} from '@vue/composition-api';
 

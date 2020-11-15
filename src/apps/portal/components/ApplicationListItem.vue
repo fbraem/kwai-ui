@@ -30,7 +30,7 @@
 import InlineSvg from 'vue-inline-svg';
 
 import Application from '@/models/Application';
-import CoverLink from '@/components/CoverLink';
+import CoverLink from '@/components/CoverLink.vue';
 
 /**
  * Component for showing an application in the list of applications

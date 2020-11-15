@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import CategoryCards from '@/apps/categories/components/CategoryCards';
+import CategoryCards from '@/apps/categories/components/CategoryCards.vue';
 import {computed} from '@vue/composition-api';
 import {useApplicationStore} from '@/site/composables/useApplications';
 import {providePageStore} from '@/apps/pages/composables/usePages';

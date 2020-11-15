@@ -13,7 +13,12 @@
 <script>
 import Story from '@/models/Story';
 import messages from './lang';
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
+
+import img_lg from 'custom/news/images/exclamation_lg.jpg';
+import img_md from 'custom/news/images/exclamation_md.jpg';
+import img_sm from 'custom/news/images/exclamation_sm.jpg';
+console.log(img_lg);
 
 export default {
   components: {
@@ -23,9 +28,9 @@ export default {
   data() {
     return {
       pictures: {
-        '1024w': require('custom/news/images/exclamation_lg.jpg'),
-        '768w': require('custom/news/images/exclamation_md.jpg'),
-        '640w': require('custom/news/images/exclamation_sm.jpg')
+        '1024w': img_lg,
+        '768w': img_md,
+        '640w': img_sm
       }
     };
   },

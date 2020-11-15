@@ -71,18 +71,17 @@
 <script>
 import messages from './lang';
 
-import TrainingGeneratorForm from './TrainingGeneratorForm';
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import Attributes from '@/components/Attributes';
+import TrainingGeneratorForm from './TrainingGeneratorForm.vue';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import Attributes from '@/components/Attributes.vue';
 import {useDefinitionStore} from '@/apps/trainings/composables/useDefinitions';
 // eslint-disable-next-line max-len
 import {onMounted, reactive, computed, watch, getCurrentInstance} from '@vue/composition-api';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconLink from '@/components/IconLink';
-import {provideTrainingStore} from '@/apps/trainings/composables/useTrainings';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconLink from '@/components/IconLink.vue';
 
 export default {
   props: {

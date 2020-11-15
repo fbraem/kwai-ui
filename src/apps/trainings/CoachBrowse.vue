@@ -95,22 +95,22 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
 
 import messages from './lang';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 // eslint-disable-next-line max-len
 import {getCurrentInstance, onMounted, reactive, computed} from '@vue/composition-api';
 import Coach from '@/models/trainings/Coach';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconButton from '@/components/IconButton';
-import IconLink from '@/components/IconLink';
-import Table from '@/components/table/Table';
-import TableCell from '@/components/table/TableCell';
-import TableHeader from '@/components/table/TableHeader';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconButton from '@/components/IconButton.vue';
+import IconLink from '@/components/IconLink.vue';
+import Table from '@/components/table/Table.vue';
+import TableCell from '@/components/table/TableCell.vue';
+import TableHeader from '@/components/table/TableHeader.vue';
 
 export default {
   setup() {

@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import Calendar from './Calendar';
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
+import Calendar from './Calendar.vue';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
 
 import messages from './lang';
 import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';

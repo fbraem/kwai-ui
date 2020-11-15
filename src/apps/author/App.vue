@@ -37,9 +37,9 @@
 <script>
 import lang from './lang';
 
-import Hero from '@/components/Hero';
-import IconButton from '@/components/IconButton';
-import ApplicationHeader from '@/components/ApplicationHeader';
+import Hero from '@/components/Hero.vue';
+import IconButton from '@/components/IconButton.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
 import {provideAuthorNewsStore} from '@/apps/author/composables/useNews';
 import {provideAuthorPageStore} from '@/apps/author/composables/usePages';
 

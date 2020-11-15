@@ -7,7 +7,7 @@
 <script>
 import messages from './lang';
 
-import Header from '@/components/Header';
+import Header from '@/components/Header.vue';
 
 /**
  * Component for header of the browse page

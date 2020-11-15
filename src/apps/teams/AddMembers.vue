@@ -127,18 +127,18 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import HeaderLine from '@/components/HeaderLine';
-import PageSection from '@/components/PageSection';
+import Spinner from '@/components/Spinner.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import PageSection from '@/components/PageSection.vue';
 
 import {
   ref, reactive, onMounted, computed, set, getCurrentInstance
 } from '@vue/composition-api';
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
-import MemberSummary from '@/apps/members/components/MemberSummary';
+import MemberSummary from '@/apps/members/components/MemberSummary.vue';
 import moment from 'moment';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconButton from '@/components/IconButton';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 export default {
   props: {

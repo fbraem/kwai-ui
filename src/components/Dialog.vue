@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import DialogTitle from './DialogTitle';
+import DialogTitle from './DialogTitle.vue';
 
 export default {
   components: {

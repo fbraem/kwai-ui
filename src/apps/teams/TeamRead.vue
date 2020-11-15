@@ -94,11 +94,11 @@
 import lang from './lang';
 import { useTeamStore } from '@/apps/teams/composables/useTeams';
 
-import PageHeader from '@/components/PageHeader';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import MegaMenu from '@/components/MegaMenu';
-import MegaMenuBlock from '@/components/MegaMenuBlock';
-import IconLink from '@/components/IconLink';
+import PageHeader from '@/components/PageHeader.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import MegaMenu from '@/components/MegaMenu.vue';
+import MegaMenuBlock from '@/components/MegaMenuBlock.vue';
+import IconLink from '@/components/IconLink.vue';
 import {onMounted, reactive, ref, computed} from '@vue/composition-api';
 
 export default {

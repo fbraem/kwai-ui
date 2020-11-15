@@ -17,7 +17,7 @@ import moment from 'moment';
 
 import messages from './lang';
 
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
 
 /**
  * Component for header of archive page

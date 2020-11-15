@@ -30,7 +30,7 @@
 
 <script>
 import Season from '@/models/Season';
-import IconLink from '@/components/IconLink';
+import IconLink from '@/components/IconLink.vue';
 
 export default {
   components: {IconLink},

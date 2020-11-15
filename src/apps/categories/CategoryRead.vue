@@ -61,15 +61,15 @@
 <script>
 import messages from './lang';
 
-import NewsSlider from '@/apps/news/components/NewsSlider';
-import PageSummary from '@/apps/pages/components/PageSummary';
-import Spinner from '@/components/Spinner';
-import HeaderLine from '@/components/HeaderLine';
+import NewsSlider from '@/apps/news/components/NewsSlider.vue';
+import PageSummary from '@/apps/pages/components/PageSummary.vue';
+import Spinner from '@/components/Spinner.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
 import useApplications from '@/site/composables/useApplications';
 import {onMounted, computed, reactive, watch} from '@vue/composition-api';
 import {useNewsStore} from '@/apps/news/composables/useNews';
 import {usePageStore} from '@/apps/pages/composables/usePages';
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
 
 /**
  * Page for showing category news and information

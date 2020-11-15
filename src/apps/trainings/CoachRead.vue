@@ -20,13 +20,13 @@
 <script>
 import messages from './lang';
 
-import CoachCard from './components/CoachCard';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import Spinner from '@/components/Spinner';
+import CoachCard from './components/CoachCard.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import Spinner from '@/components/Spinner.vue';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 import {onMounted, reactive, watch, computed} from '@vue/composition-api';
-import ApplicationHeader from '@/components/ApplicationHeader';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
 
 export default {
   props: {

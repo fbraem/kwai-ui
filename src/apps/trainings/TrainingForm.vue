@@ -192,10 +192,10 @@ import {computed, getCurrentInstance, reactive, ref, onMounted} from '@vue/compo
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 import {useTeamStore} from '@/apps/teams/composables/useTeams';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import Training from '@/models/trainings/Training';
 import Season from '@/models/Season';
 import Coach from '@/models/trainings/Coach';

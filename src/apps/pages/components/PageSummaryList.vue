@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import PageSummaryListItem from './PageSummaryListItem';
+import PageSummaryListItem from './PageSummaryListItem.vue';
 
 export default {
   props: {

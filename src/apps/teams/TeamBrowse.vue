@@ -71,14 +71,14 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import Table from '@/components/table/Table';
-import TableCell from '@/components/table/TableCell';
-import TableHeader from '@/components/table/TableHeader';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import PageSection from '@/components/PageSection';
-import PageHeader from '@/components/PageHeader';
-import IconButton from '@/components/IconButton';
+import Spinner from '@/components/Spinner.vue';
+import Table from '@/components/table/Table.vue';
+import TableCell from '@/components/table/TableCell.vue';
+import TableHeader from '@/components/table/TableHeader.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 import { useTeamStore } from '@/apps/teams/composables/useTeams';
 import Team from '@/models/Team';

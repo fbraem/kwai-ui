@@ -166,30 +166,30 @@
 <script>
 import messages from './lang';
 
-import TrainingCard from './TrainingCard';
-import MemberSummary from '@/apps/members/components/MemberSummary';
+import TrainingCard from './TrainingCard.vue';
+import MemberSummary from '@/apps/members/components/MemberSummary.vue';
+import PageSection from '@/components/PageSection.vue';
 
-import PageSection from '@/components/PageSection';
 import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
 // eslint-disable-next-line max-len
 import {reactive, set, computed, onMounted, ref, getCurrentInstance} from '@vue/composition-api';
 import createMemberService from '@/apps/members/composables/useMembers';
 import createTeamService from '@/apps/teams/composables/useTeams';
-import HeaderLine from '@/components/HeaderLine';
+import HeaderLine from '@/components/HeaderLine.vue';
 import Presence from '@/models/trainings/Presence';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import PageHeader from '@/components/PageHeader';
-import IconLink from '@/components/IconLink';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import IconLink from '@/components/IconLink.vue';
 
 import Vue from 'vue';
 import VueFileAgent from 'vue-file-agent';
 // eslint-disable-next-line no-unused-vars
 import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css';
-import IconButton from '@/components/IconButton';
+import IconButton from '@/components/IconButton.vue';
 import {http_auth} from '@/js/http';
 import Transformer from '@/js/jsonapi/Transformer';
 import Member from '@/models/Member';
-import Alert from '@/components/Alert';
+import Alert from '@/components/Alert.vue';
 Vue.use(VueFileAgent);
 
 const PresenceState = {

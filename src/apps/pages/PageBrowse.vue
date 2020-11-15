@@ -40,12 +40,12 @@
 </template>
 
 <script>
-import Page from '@/components/Page';
-import PageSummary from './components/PageSummary';
-import Paginator from '@/components/Paginator';
-import Spinner from '@/components/Spinner';
-import Sidebar from './Sidebar';
-import Alert from '@/components/Alert';
+import Page from '@/components/Page.vue';
+import PageSummary from './components/PageSummary.vue';
+import Paginator from '@/components/Paginator.vue';
+import Spinner from '@/components/Spinner.vue';
+import Sidebar from './Sidebar.vue';
+import Alert from '@/components/Alert.vue';
 
 import messages from './lang';
 import {usePageStore} from '@/apps/pages/composables/usePages';

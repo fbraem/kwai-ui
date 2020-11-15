@@ -62,8 +62,8 @@
 
 <script>
 import lang from './lang';
-import Alert from '@/components/Alert';
-import Dialog from '@/components/Dialog';
+import Alert from '@/components/Alert.vue';
+import Dialog from '@/components/Dialog.vue';
 import {getCurrentInstance, ref} from '@vue/composition-api';
 import createAuthenticationService from '@/site/composables/useAuthentication';
 

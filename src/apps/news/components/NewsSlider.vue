@@ -41,7 +41,7 @@
 <script>
 import VueScreenSize from 'vue-screen-size';
 
-import NewsCard from './NewsCard';
+import NewsCard from './NewsCard.vue';
 
 export default {
   props: {

@@ -82,8 +82,8 @@ import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/compo
 import messages from './lang';
 import {useRuleStore} from '@/apps/users/composables/useRules';
 import {useAbilityStore} from '@/apps/users/composables/useAbilities';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import Alert from '@/components/Alert';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import Alert from '@/components/Alert.vue';
 import Ability from '@/models/users/Ability';
 import Rule from '@/models/users/Rule';
 

@@ -123,12 +123,12 @@
 <script>
 import messages from './lang';
 
-import Paginator from '@/components/Paginator';
-import Spinner from '@/components/Spinner';
-import HeaderLine from '@/components/HeaderLine';
+import Paginator from '@/components/Paginator.vue';
+import Spinner from '@/components/Spinner.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
 import {useUserStore} from '@/apps/users/composables/useUsers';
 import {reactive, onMounted, watch, computed} from '@vue/composition-api';
-import Alert from '@/components/Alert';
+import Alert from '@/components/Alert.vue';
 import {useNewsStore} from '@/apps/users/composables/useNews';
 import {usePageStore} from '@/apps/users/composables/usePages';
 

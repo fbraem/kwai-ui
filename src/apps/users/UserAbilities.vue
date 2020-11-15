@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import UserCard from './components/UserCard';
-import UserAbility from './TheUserAbility';
-import Page from '@/components/Page';
+import UserCard from './components/UserCard.vue';
+import UserAbility from './TheUserAbility.vue';
+import Page from '@/components/Page.vue';
 
 import messages from './lang';
 import {useUserStore} from '@/apps/users/composables/useUsers';

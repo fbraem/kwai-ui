@@ -19,7 +19,7 @@
 /**
  * Component that show an icon card
  */
-import CoverLink from '@/components/CoverLink';
+import CoverLink from '@/components/CoverLink.vue';
 
 export default {
   components: {

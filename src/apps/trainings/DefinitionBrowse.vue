@@ -151,15 +151,15 @@
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
-import Alert from '@/components/Alert';
-import Table from '@/components/table/Table';
-import TableCell from '@/components/table/TableCell';
-import TableHeader from '@/components/table/TableHeader';
-import PageSection from '@/components/PageSection';
-import PageHeader from '@/components/PageHeader';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconButton from '@/components/IconButton';
+import Spinner from '@/components/Spinner.vue';
+import Alert from '@/components/Alert.vue';
+import Table from '@/components/table/Table.vue';
+import TableCell from '@/components/table/TableCell.vue';
+import TableHeader from '@/components/table/TableHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import PageHeader from '@/components/PageHeader.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconButton from '@/components/IconButton.vue';
 
 import TrainingDefinition from '@/models/trainings/Definition';
 import {useDefinitionStore} from '@/apps/trainings/composables/useDefinitions';

@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import Alert from '@/components/Alert';
+import Alert from '@/components/Alert.vue';
 
 import messages from './lang';
 import {useMemberStore} from '@/apps/members/composables/useMembers';

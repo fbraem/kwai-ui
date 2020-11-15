@@ -85,10 +85,10 @@
 <script>
 import messages from './lang';
 
-import Alert from '@/components/Alert';
-import Table from '@/components/table/Table';
-import TableHeader from '@/components/table/TableHeader';
-import TableCell from '@/components/table/TableCell';
+import Alert from '@/components/Alert.vue';
+import Table from '@/components/table/Table.vue';
+import TableHeader from '@/components/table/TableHeader.vue';
+import TableCell from '@/components/table/TableCell.vue';
 
 export default {
   components: {

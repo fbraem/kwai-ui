@@ -95,7 +95,7 @@
 <script>
 import Member from '@/models/Member';
 
-import ProfileCard from '@/components/ProfileCard';
+import ProfileCard from '@/components/ProfileCard.vue';
 
 export default {
   props: {

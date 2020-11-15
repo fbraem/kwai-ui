@@ -96,7 +96,7 @@ import messages from './lang';
 
 import Training from '@/models/trainings/Training';
 
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import EventGenerate from './TrainingGenerate.vue';
 
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';

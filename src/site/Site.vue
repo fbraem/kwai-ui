@@ -1,6 +1,6 @@
 <!-- This template will receive the App component from the active app -->
 <template>
-  <div>
+  <div id="kwai">
     <Toolbar></Toolbar>
     <div class="bg-gray-100">
       <router-view></router-view>
@@ -12,12 +12,13 @@
 </template>
 
 <script>
-import Toolbar from '@/site/Toolbar';
+import Toolbar from '@/site/Toolbar.vue';
 // eslint-disable-next-line max-len
 import {provideApplicationStore, useApplicationStore} from '@/site/composables/useApplications';
 import {onMounted, reactive} from '@vue/composition-api';
 
 let html = {};
+
 const importAllHtml
   = requireContext => requireContext.keys().forEach(
     key => (html[key] = requireContext(key))

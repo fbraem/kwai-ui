@@ -13,7 +13,7 @@
 </style>
 
 <script>
-import PageSection from '@/components/PageSection';
+import PageSection from '@/components/PageSection.vue';
 
 export default {
   components: {

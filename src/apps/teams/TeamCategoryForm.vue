@@ -115,11 +115,11 @@
 
 <script>
 import messages from './lang';
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import HeaderLine from '@/components/HeaderLine';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import {useTeamCategoryStore} from '@/apps/teams/composables/useTeamCategories';
 // eslint-disable-next-line max-len
 import {computed, getCurrentInstance, onMounted, reactive, ref, watch} from '@vue/composition-api';

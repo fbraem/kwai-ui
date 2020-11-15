@@ -92,13 +92,13 @@
 </template>
 
 <script>
-import MemberProfileCard from './components/MemberProfileCard';
+import MemberProfileCard from './components/MemberProfileCard.vue';
 import {useMemberStore} from '@/apps/members/composables/useMembers';
 import {onMounted, reactive, computed, ref} from '@vue/composition-api';
 
-import PageHeader from '@/components/PageHeader';
-import MegaMenu from '@/components/MegaMenu';
-import MegaMenuBlock from '@/components/MegaMenuBlock';
+import PageHeader from '@/components/PageHeader.vue';
+import MegaMenu from '@/components/MegaMenu.vue';
+import MegaMenuBlock from '@/components/MegaMenuBlock.vue';
 
 export default {
   props: {

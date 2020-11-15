@@ -13,7 +13,7 @@
 
 <script>
 
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
 
 import messages from './lang';
 

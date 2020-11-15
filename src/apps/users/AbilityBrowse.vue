@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Ability from './TheUserAbility';
+import Ability from './TheUserAbility.vue';
 
 import messages from './lang';
 import {useAbilityStore} from '@/apps/users/composables/useAbilities';

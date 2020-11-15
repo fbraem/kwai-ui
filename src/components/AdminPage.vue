@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import IconButtons from './IconButtons';
+import IconButtons from './IconButtons.vue';
 
 export default {
   components: {

@@ -228,11 +228,12 @@ import 'moment-timezone';
 
 import lang from './lang';
 
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
-import HeaderLine from '@/components/HeaderLine';
-import PageSection from '@/components/PageSection';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
+import PageSection from '@/components/PageSection.vue';
+import Alert from '@/components/Alert.vue';
+
 import Application from '@/models/Application';
-import Alert from '@/components/Alert';
 import {useAuthorNewsStore} from '@/apps/author/composables/useNews';
 // eslint-disable-next-line max-len
 import {onMounted, reactive, ref, computed, getCurrentInstance} from '@vue/composition-api';

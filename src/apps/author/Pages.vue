@@ -147,13 +147,13 @@
 </template>
 
 <script>
-import PageSection from '@/components/PageSection';
-import PageSectionHeader from '@/components/PageSectionHeader';
-import IconButton from '@/components/IconButton';
-import Paginator from '@/components/Paginator';
+import PageSection from '@/components/PageSection.vue';
+import PageSectionHeader from '@/components/PageSectionHeader.vue';
+import IconButton from '@/components/IconButton.vue';
+import Paginator from '@/components/Paginator.vue';
 import Page from '@/models/Page';
-import Link from '@/components/Link';
-import Alert from '@/components/Alert';
+import Link from '@/components/Link.vue';
+import Alert from '@/components/Alert.vue';
 
 import lang from './lang';
 import {useAuthorPageStore} from '@/apps/author/composables/usePages';

@@ -62,18 +62,18 @@
 <script>
 import moment from 'moment';
 
-import NewsListCard from '@/apps/news/components/NewsListCard';
-import PageListCard from '@/apps/pages/components/PageListCard';
-import Calendar from '@/apps/trainings/Calendar';
-import CoachListCard from './components/CoachListCard';
-import HeaderLine from '@/components/HeaderLine';
+import NewsListCard from '@/apps/news/components/NewsListCard.vue';
+import PageListCard from '@/apps/pages/components/PageListCard.vue';
+import Calendar from '@/apps/trainings/Calendar.vue';
+import CoachListCard from './components/CoachListCard.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
 import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
 import {onMounted, reactive, ref, watch, computed} from '@vue/composition-api';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 import Training from '@/models/trainings/Training';
 import Team from '@/models/Team';
 import Coach from '@/models/trainings/Coach';
-import ImageHeader from '@/components/ImageHeader';
+import ImageHeader from '@/components/ImageHeader.vue';
 import {useNewsStore} from '@/apps/news/composables/useNews';
 import {usePageStore} from '@/apps/pages/composables/usePages';
 import useApplications from '@/site/composables/useApplications';

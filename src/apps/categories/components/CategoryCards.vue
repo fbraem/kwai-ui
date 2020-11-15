@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CategoryCard from './CategoryCard';
+import CategoryCard from './CategoryCard.vue';
 
 export default {
   components: {

@@ -20,7 +20,7 @@
 import messages from '../lang';
 
 import ApplicationListItem from './ApplicationListItem.vue';
-import HeaderLine from '@/components/HeaderLine';
+import HeaderLine from '@/components/HeaderLine.vue';
 
 /**
  * Component for showing a list of applications

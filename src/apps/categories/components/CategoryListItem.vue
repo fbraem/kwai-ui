@@ -29,7 +29,7 @@
 
 <script>
 import InlineSvg from 'vue-inline-svg';
-import CoverLink from '@/components/CoverLink';
+import CoverLink from '@/components/CoverLink.vue';
 
 import Category from '@/models/Category';
 import Application from '@/models/Application';

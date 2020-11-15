@@ -12,7 +12,7 @@
 <script>
 import Page from '@/models/Page';
 import messages from './lang';
-import Header from '@/components/Header';
+import Header from '@/components/Header.vue';
 /**
  * Component for header of pages
  */

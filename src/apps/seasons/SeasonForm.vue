@@ -91,10 +91,10 @@
 import moment from 'moment';
 
 import messages from './lang';
-import PageSection from '@/components/PageSection';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import PageSection from '@/components/PageSection.vue';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import Season from '@/models/Season';
-import HeaderLine from '@/components/HeaderLine';
+import HeaderLine from '@/components/HeaderLine.vue';
 import {useSeasonStore} from '@/apps/seasons/composables/useSeasons';
 import {reactive} from '@vue/composition-api';
 

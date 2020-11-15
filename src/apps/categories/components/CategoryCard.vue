@@ -18,7 +18,7 @@
 
 <script>
 import InlineSvg from 'vue-inline-svg';
-import IconCard from '@/components/IconCard';
+import IconCard from '@/components/IconCard.vue';
 
 /**
  * Component that show a category Card

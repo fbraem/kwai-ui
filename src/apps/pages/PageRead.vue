@@ -106,7 +106,7 @@ blockquote {
 <script>
 import messages from './lang';
 
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/Spinner.vue';
 import {onMounted, reactive, computed} from '@vue/composition-api';
 import {usePageStore} from '@/apps/pages/composables/usePages';
 

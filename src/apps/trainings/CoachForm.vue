@@ -100,11 +100,11 @@
 
 <script>
 
-import PageSection from '@/components/PageSection';
-import HeaderLine from '@/components/HeaderLine';
+import PageSection from '@/components/PageSection.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
 
 import messages from './lang';
-import KwaiFieldset from '@/components/forms/KwaiFieldset';
+import KwaiFieldset from '@/components/forms/KwaiFieldset.vue';
 import {useCoachStore} from '@/apps/trainings/composables/useCoaches';
 import createMemberService from '@/apps/members/composables/useMembers';
 // eslint-disable-next-line max-len

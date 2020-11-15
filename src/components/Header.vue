@@ -115,7 +115,7 @@
 
 <script>
 import InlineSvg from 'vue-inline-svg';
-import IconButtons from './IconButtons';
+import IconButtons from './IconButtons.vue';
 
 /**
  * Component for a header of a page

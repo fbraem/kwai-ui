@@ -77,11 +77,11 @@
 import NewsCard from '@/apps/news/components/NewsCard.vue';
 import Paginator from '@/components/Paginator.vue';
 import Spinner from '@/components/Spinner.vue';
-import ApplicationCard from './components/ApplicationCard';
-import ApplicationList from '@/apps/portal/components/ApplicationList';
+import ApplicationCard from './components/ApplicationCard.vue';
+import ApplicationList from '@/apps/portal/components/ApplicationList.vue';
+import HeaderLine from '@/components/HeaderLine.vue';
 
 import messages from '../../site/lang';
-import HeaderLine from '@/components/HeaderLine';
 import {useApplicationStore} from '@/site/composables/useApplications';
 import {computed, onMounted, reactive} from '@vue/composition-api';
 import {useNewsStore} from '@/apps/news/composables/useNews';

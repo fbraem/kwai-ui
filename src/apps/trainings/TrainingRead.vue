@@ -86,15 +86,15 @@ import messages from './lang';
 
 import Presence from '@/models/trainings/Presence';
 
-import TrainingCard from './TrainingCard';
-import Alert from '@/components/Alert';
+import TrainingCard from './TrainingCard.vue';
+import Alert from '@/components/Alert.vue';
 import {useTrainingStore} from '@/apps/trainings/composables/useTrainings';
 import {computed, onMounted, reactive, watch} from '@vue/composition-api';
 
-import PageHeader from '@/components/PageHeader';
-import PageSection from '@/components/PageSection';
-import ApplicationHeader from '@/components/ApplicationHeader';
-import IconLink from '@/components/IconLink';
+import PageHeader from '@/components/PageHeader.vue';
+import PageSection from '@/components/PageSection.vue';
+import ApplicationHeader from '@/components/ApplicationHeader.vue';
+import IconLink from '@/components/IconLink.vue';
 
 export default {
   props: {
