@@ -3,22 +3,26 @@ import App from '../App.vue';
 import moment from 'moment';
 
 const CoachBrowse = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "coaches_chunk" */
     '@/apps/trainings/CoachBrowse.vue'
   );
 
 const CoachRead = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "coaches_chunk" */
     '@/apps/trainings/CoachRead.vue'
   );
 
 const CoachTrainings = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "coaches_chunk" */
     '@/apps/trainings/CoachTrainings.vue'
   );
 
 const CoachForm = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "coaches_chunk" */
     '@/apps/trainings/CoachForm.vue'
   );
 

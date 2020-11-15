@@ -3,37 +3,38 @@ import App from '@/apps/users/App.vue';
 import abilitiesRouter from './abilities';
 
 const UserRead = () => import(
-  /* webpackChunkName: "user_chunk" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/UserRead.vue'
 );
 const UserHeader = () => import(
-  /* webpackChunkName: "user_chunk" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/TheUserHeader.vue'
 );
 const UsersHeader = () => import(
-  /* webpackChunkName: "user_chunk" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/TheUsersHeader.vue'
 );
 const UserBrowse = () => import(
-  /* webpackChunkName: "user_chunk" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/UserBrowse.vue'
 );
 
 const UserInviteHeader = () => import(
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/TheUserInviteHeader.vue'
 );
 
 const UserInvite = () => import(
-  /* webpackChunkName: "user_admin" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/UserInvite.vue'
 );
 
 const UserRegisterWithInviteHeader = () => import(
-  /* webpackChunkName: "user_chunk" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/TheUserRegisterWithInviteHeader.vue'
 );
 const UserRegisterWithInvite = () => import(
-  /* webpackChunkName: "user_admin" */
+  /* webpackChunkName: "users_chunk" */
   '@/apps/users/UserRegisterWithInvite.vue'
 );
 

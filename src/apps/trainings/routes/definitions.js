@@ -1,15 +1,18 @@
 import App from '../App.vue';
 
 const DefinitionBrowse = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "definitions_chunk" */
     '@/apps/trainings/DefinitionBrowse.vue');
 
 const DefinitionForm = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "definitions_chunk" */
     '@/apps/trainings/DefinitionForm.vue');
 
 const DefinitionRead = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "definitions_chunk" */
     '@/apps/trainings/DefinitionRead.vue');
 
 export default [

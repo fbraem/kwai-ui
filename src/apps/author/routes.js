@@ -1,10 +1,10 @@
 const App = () => import(
   /* webpackChunkName: "author_chunk" */
-  './App'
+  './App.vue'
 );
 const News = () => import(
   /* webpackChunkName: "author_chunk" */
-  './News'
+  './News.vue'
 );
 const NewsForm = () => import(
   /* webpackChunkName: "author_chunk" */
@@ -12,7 +12,7 @@ const NewsForm = () => import(
 );
 const Pages = () => import(
   /* webpackChunkName: "author_chunk" */
-  './Pages'
+  './Pages.vue'
 );
 const PageForm = () => import(
   /* webpackChunkName: "author_chunk" */

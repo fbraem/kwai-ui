@@ -5,23 +5,23 @@ const SeasonRead = () => import(
   '@/apps/seasons/SeasonRead.vue'
 );
 const SeasonForm = () => import(
-  /* webpackChunkName: "seasons_admin" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonForm.vue'
 );
 const SeasonTeams = () => import(
-  /* webpackChunkName: "seasons_admin" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonTeams.vue'
 );
 const SeasonDefinitions = () => import(
-  /* webpackChunkName: "seasons_admin" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/NotImplemented.vue'
 );
 const SeasonTrainings = () => import(
-  /* webpackChunkName: "seasons_admin" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/NotImplemented.vue'
 );
 const SeasonDetail = () => import(
-  /* webpackChunkName: "seasons_admin" */
+  /* webpackChunkName: "seasons_chunk" */
   '@/apps/seasons/SeasonDetail.vue'
 );
 const SeasonBrowse = () => import(

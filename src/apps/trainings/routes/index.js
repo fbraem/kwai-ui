@@ -6,27 +6,33 @@ import definitionsRouter from './definitions';
 import coachesRouter from './coaches';
 
 const TrainingRead = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingRead.vue'
   );
 const TrainingsHeader = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TheTrainingsHeader.vue'
   );
 const TrainingBrowse = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingBrowse.vue'
   );
 const TrainingIndex = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/Index.vue'
   );
 const TrainingForm = () =>
-  import(/* webpackChunkName: "trainings_admin_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/TrainingForm.vue'
   );
 const Presences = () =>
-  import(/* webpackChunkName: "trainings_chunk" */
+  import(
+    /* webpackChunkName: "trainings_chunk" */
     '@/apps/trainings/Presences.vue'
   );
 

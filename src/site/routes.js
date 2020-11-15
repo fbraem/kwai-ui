@@ -1,13 +1,4 @@
-import Site from './Site';
-
-let routes = {
-  path: '/',
-  component: Site
-};
-
 import makeRoutes from '@/apps/routes';
-routes.children = makeRoutes();
+const routes = makeRoutes();
 
-export default [
-  routes,
-];
+export default routes;

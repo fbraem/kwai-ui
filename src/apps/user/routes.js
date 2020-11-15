@@ -1,5 +1,5 @@
-import App from './App';
-import Login from './Login';
+import App from './App.vue';
+import Login from './Login.vue';
 
 export default [
   {

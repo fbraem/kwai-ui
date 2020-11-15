@@ -1,31 +1,39 @@
 import App from '@/apps/users/App.vue';
 
 const UserAbilitiesHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/TheUserAbilitiesHeader.vue');
 const UserAbilities = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/UserAbilities.vue');
 
 const AbilitiesHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/TheAbilitiesHeader.vue');
 const AbilityBrowse = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/AbilityBrowse.vue');
 
 const AbilityHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/TheAbilityHeader.vue');
 const AbilityRead = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/AbilityRead.vue');
 
 const AbilityFormHeader = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/TheAbilityFormHeader.vue');
 const AbilityForm = () =>
-  import(/* webpackChunkName: "user_admin_chunk" */
+  import(
+    /* webpackChunkName: "abilities_chunk" */
     '@/apps/users/AbilityForm.vue');
 
 export default [

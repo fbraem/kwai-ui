@@ -1,27 +1,27 @@
-import App from './App';
+import App from './App.vue';
 
 const MemberRead = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/MemberRead.vue'
 );
 const MemberDetail = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/MemberDetail.vue'
 );
 const NotImplemented = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/NotImplemented.vue'
 );
 const MemberTeams = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/MemberTeams.vue'
 );
 const MemberUpload = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/MemberUpload.vue'
 );
 const MemberBrowse = () => import(
-  /* webpackChunkName: "member_admin" */
+  /* webpackChunkName: "members_chunk" */
   '@/apps/members/MemberBrowse.vue'
 );
 

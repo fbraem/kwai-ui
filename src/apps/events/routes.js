@@ -1,4 +1,4 @@
-import App from './App';
+import App from './App.vue';
 
 let html = {};
 const importAllHtml = requireContext => requireContext.keys().forEach(

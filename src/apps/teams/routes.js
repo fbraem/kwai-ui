@@ -17,7 +17,7 @@ const TeamMembers = () => import(
   './TeamMembers.vue'
 );
 const AddMembers = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
+  /* webpackChunkName: "teams_chunk" */
   './AddMembers.vue'
 );
 const TeamTournaments = () => import(
@@ -29,20 +29,20 @@ const TeamBrowse = () => import(
   './TeamBrowse.vue'
 );
 const TeamForm = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamForm.vue'
 );
 
 const TeamCategoryRead = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamCategoryRead.vue'
 );
 const TeamCategoryBrowse = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamCategoryBrowse.vue'
 );
 const TeamCategoryForm = () => import(
-  /* webpackChunkName: "teams_admin_chunk" */
+  /* webpackChunkName: "teams_chunk" */
   './TeamCategoryForm.vue'
 );
 
