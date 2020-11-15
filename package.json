@@ -1,8 +1,7 @@
 {
   "name": "kwai",
   "version": "0.0.2-rok-kyu",
-  "description": "ClubManagement UI",
-  "main": "index.js",
+  "description": "UI for KWAI",
   "engines": {
     "node": ">=12.0.0"
   },
