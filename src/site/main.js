@@ -78,8 +78,10 @@ Vue.use(VueScrollBehavior, { router: router });
  */
 import vueCustomElement from 'vue-custom-element';
 Vue.use(vueCustomElement);
-import MessageCard from '@/apps/portal/MessageCard';
+import MessageCard from '@/apps/portal/MessageCard.vue';
 Vue.customElement('message-card', MessageCard);
+
+import Site from './Site.vue';
 
 /**
  * Create Vue
@@ -87,4 +89,5 @@ Vue.customElement('message-card', MessageCard);
 new Vue({
   router,
   i18n,
+  render: h => h(Site)
 }).$mount('#kwai');
