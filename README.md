@@ -1,3 +1,6 @@
+> Kwai-ui is superseded by [kwai-vite](https://github.com/fbraem/kwai-vite). Kwai-vite builds
+> on the experencies we have learned here, but uses [vite](https://vitejs.dev/) instead of webpack.
+
 Kwai-ui
 =======
 Kwai-ui is a part of the kwai system. The ultimate goal of Kwai is to manage 
